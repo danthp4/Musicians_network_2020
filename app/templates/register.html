@@ -23,19 +23,38 @@
 <body class="bg-gradient-primary">
 
   <div class="container">
-
+      <!-- Displays flashed messages on a page -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
     <div class="card o-hidden border-0 shadow-lg my-5">
       <div class="card-body p-0">
+
         <!-- Nested Row within Card Body -->
         <div class="row">
           <div class="col-lg-5 d-none d-lg-block bg-register-image"></div>
           <div class="col-lg-7">
             <div class="p-5">
               <div class="text-center">
-                <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
+                <h1 class="h4 text-gray-900 mb-4">Create an account!</h1>
+                  {% if form.errors %}
+                    <ul class="list-group-item-action">
+                        {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                            {% for error in field_errors %}
+                                <li>{{ form[field_name].label }}: {{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                  {% endif %}
               </div>
 
-              <form class="user" method="POST" novalidate>
+              <form class="user" method="POST" action="" novalidate>
                 {{ form.hidden_tag() }}
                 <div class="form-group row">
                   <div class="col-sm-6 mb-3 mb-sm-0">
