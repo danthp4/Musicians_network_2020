@@ -33,7 +33,16 @@ def register():
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        # flash('Signup requested for {}'.format(form.last_name.data))
-    # Code to add the student to the database goes here
-        return redirect(url_for('main.index'))
+        conn = db.make_connector()
+        email = form.email.data
+        password = form.password.data
+
+        user = Profile.query.filter_by(email=email).first()
+        if user:
+            if user.check_password(password=password):
+                # login_user(user)
+                # next = request.args.get('next')
+                return redirect(url_for('main.index'))
+        # no email found
+        flash('Invalid username/password combination', 'error')
     return render_template('login.html', form=form)
