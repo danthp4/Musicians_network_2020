@@ -23,16 +23,6 @@
 <body class="bg-gradient-primary">
 
   <div class="container">
-    <!-- Displays flashed messages on a page -->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-            </ul>
-        {% endif %}
-    {% endwith %}
     <div class="card o-hidden border-0 shadow-lg my-5">
       <div class="card-body p-0">
 
@@ -43,15 +33,26 @@
             <div class="p-5">
               <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">Create an account!</h1>
-                  {% if form.errors %}
-                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                <!-- Displays flashed messages on a page -->
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
                     <div class="alert alert-danger" role="alert">
-                      {% for error in field_errors %}
-                        {{ form[field_name].label }}: {{ error }}
+                      {% for message in messages %}
+                        {{ message }}
                       {% endfor %}
                     </div>
-                    {% endfor %}
                   {% endif %}
+                {% endwith %}
+
+                {% if form.errors %}
+                  {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                  <div class="alert alert-danger" role="alert">
+                    {% for error in field_errors %}
+                      {{ form[field_name].label }}: {{ error }}
+                    {% endfor %}
+                  </div>
+                  {% endfor %}
+                {% endif %}
               </div>
 
               <form class="user" method="POST" action="" novalidate>

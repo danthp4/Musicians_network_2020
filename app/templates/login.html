@@ -23,17 +23,6 @@
 <body class="bg-gradient-primary">
 
   <div class="container">
-    <!-- Displays flashed messages on a page -->
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        <ul>
-        {% for message in messages %}
-            <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-    {% endif %}
-    {% endwith %}
-
     <!-- Outer Row -->
     <div class="row justify-content-center">
 
@@ -48,6 +37,17 @@
                 <div class="p-5">
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                    <!-- Displays flashed messages on a page -->
+                    {% with messages = get_flashed_messages() %}
+                      {% if messages %}
+                        <div class="alert alert-danger" role="alert">
+                          {% for message in messages %}
+                            {{ message }}
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    {% endwith %}
+
                     {% if form.errors %}
                     {% for field_name, field_errors in form.errors|dictsort if field_errors %}
                     <div class="alert alert-danger" role="alert">
