@@ -18,7 +18,7 @@ def create_app(config_class=DevConfig):
     db.init_app(app)
     # from app.models import Teacher, Student, Course, Grade
     with app.app_context():
-        db.create_all()
+        db.Model.metadata.reflect(db.engine)
 
     # Register Blueprints
     from app.routes import bp_main
