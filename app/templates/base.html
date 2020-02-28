@@ -92,8 +92,12 @@
             <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Login Screens:</h6>
-                    <a class="collapse-item" href="{{ url_for('main.login') }}">Login</a>
-                    <a class="collapse-item" href="{{ url_for('main.register') }}">Register</a>
+                    {% if current_user.is_anonymous %}
+                        <a class="collapse-item" href="{{ url_for('auth.login') }}">Login</a>
+                    {% else %}
+                        <a class="collapse-item" href="{{ url_for('auth.logout') }}">Logout</a>
+                    {% endif %}
+                    <a class="collapse-item" href="{{ url_for('auth.register') }}">Register</a>
                     <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                     <div class="collapse-divider"></div>
                     <h6 class="collapse-header">Other Pages:</h6>

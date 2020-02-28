@@ -1,10 +1,11 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 from app.config import DevConfig
 
 db = SQLAlchemy()
-
+login_manager = LoginManager()
 
 def create_app(config_class=DevConfig):
     """
@@ -13,6 +14,8 @@ def create_app(config_class=DevConfig):
     """
     app = Flask(__name__)
     app.config.from_object(config_class)
+    login_manager.init_app(app)
+
 
     # Initialise the database and create tables
     db.init_app(app)
@@ -21,7 +24,10 @@ def create_app(config_class=DevConfig):
         db.Model.metadata.reflect(db.engine)
 
     # Register Blueprints
-    from app.routes import bp_main
+    from app.main.routes import bp_main
     app.register_blueprint(bp_main)
+
+    from app.auth.routes import bp_auth
+    app.register_blueprint(bp_auth)
 
     return app
