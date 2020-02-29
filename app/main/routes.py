@@ -6,11 +6,12 @@ from sqlalchemy.exc import IntegrityError
 
 bp_main = Blueprint('main', __name__)
 
-
+# landing page: accessible before logging in
 @bp_main.route('/')
 def landing():
     return render_template('landing.html')
 
+# only accessible after logging in
 @bp_main.route('/home')
 def index():
     return render_template('index.html')
