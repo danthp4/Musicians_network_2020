@@ -12,6 +12,11 @@ def index():
     return render_template('index.html')
 
 
+@bp_main.route('/userprofile/')
+def signed_in_index():
+    return render_template('index_after_login.html')
+
+
 @bp_main.route('/register/', methods=['POST', 'GET'])
 def register():
     form = SignupForm(request.form)
@@ -22,7 +27,7 @@ def register():
         try:
             db.session.add(user)
             db.session.commit()
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.signed_in_index'))
         except IntegrityError:
             db.session.rollback()
             flash('Unable to register {}. Please try again.'.format(form.username.data), 'error')
@@ -42,7 +47,9 @@ def login():
             if user.check_password(password=password):
                 # login_user(user)
                 # next = request.args.get('next')
-                return redirect(url_for('main.index'))
+                return redirect(url_for('main.signed_in_index'))
         # no email found
         flash('Invalid username/password combination', 'error')
     return render_template('login.html', form=form)
+
+

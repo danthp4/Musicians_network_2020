@@ -1,5 +1,31 @@
 {% extends "base.html" %}
 {% block title %} Home {% endblock %}
+{% block navbar_dropdown_title %}Signup/Register{% endblock %}
+{% block nav_dropdown_options %}
+    <a class="dropdown-item" href="{{ url_for('main.login') }}">
+        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+        Login
+    </a>
+    <a class="dropdown-item" href="{{ url_for('main.register') }}">
+        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+        Sign up
+    </a>
+    <a class="dropdown-item" href="#">
+        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+        Option 3
+    </a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+        Option 4
+    </a>
+{% endblock %}
+{% block pages_collapse_name %}About{% endblock %}
+{% block pages_collapse_options %}
+    <a class="collapse-item" href="#">For musicians</a>
+    <a class="collapse-item" href="#">For bands</a>
+    <a class="collapse-item" href="#">For venue operators</a>
+{% endblock %}
 {% block content %}
     <!-- Begin Page Content -->
     <div class="container-fluid">
