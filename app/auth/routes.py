@@ -42,7 +42,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             response = make_response(redirect(url_for('main.home')))
-            response.set_cookie("name", form.name.data)
+            response.set_cookie("username", form.username.data)
             return response
         except IntegrityError:
             db.session.rollback()
