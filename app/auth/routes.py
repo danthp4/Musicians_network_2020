@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from app.auth.forms import SignupForm, LoginForm
 from app.models import Profile
 from app import db, login_manager
-from flask_login import login_required, login_user, logout_user
+from flask_login import login_required, login_user, logout_user, current_user
 from datetime import timedelta
 from urllib.parse import urlparse, urljoin
 
@@ -19,17 +19,17 @@ def login():
             flash('Invalid email/password combination', 'error')
             return redirect(url_for('auth.login'))
         login_user(user)
-        next = url_for('main.index')
+        next = request.args.get('next')
         if not is_safe_url(next):
             return abort(400)
-        return render_template('index.html')
+        return redirect(next or url_for('main.home'))
     return render_template('login.html', form=form)
 
 @bp_auth.route('/logout/')
 @login_required
 def logout():
     logout_user()
-    return render_template('landing.html')
+    return redirect(url_for('main.index'))
 
 @bp_auth.route('/register/', methods=['POST', 'GET'])
 def register():
@@ -41,7 +41,7 @@ def register():
         try:
             db.session.add(user)
             db.session.commit()
-            response = make_response(redirect(url_for('main.index')))
+            response = make_response(redirect(url_for('main.home')))
             response.set_cookie("name", form.name.data)
             return response
         except IntegrityError:

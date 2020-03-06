@@ -15,7 +15,7 @@ def create_app(config_class=DevConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
     login_manager.init_app(app)
-
+    login_manager.login_view = "login"
 
     # Initialise the database and create tables
     db.init_app(app)
