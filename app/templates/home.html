@@ -120,7 +120,7 @@
 {% endblock %}
 {% block navbar_dropdown_title %}Account{% endblock %}
 {% block nav_dropdown_options %}
-    <a class="dropdown-item" href="#">
+    <a class="dropdown-item" href="{{ url_for('main.profile') }}">
         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
         Profile
     </a>
@@ -181,8 +181,9 @@
                     </div>
                 </div>
                 <!-- Card Body -->
-                <div class="card-body">
-                    {{ user.profile_description}}
+                <br class="card-body">
+                    <iframe width="100%" height="350" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/124056887&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+                    <br>{{ user.profile_description}}
                 </div>
             </div>
             {% endfor %}

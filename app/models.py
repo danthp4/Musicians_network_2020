@@ -26,3 +26,4 @@ class Profile(UserMixin, db.Model):
 
     def get_id(self):
         return self.username
+
