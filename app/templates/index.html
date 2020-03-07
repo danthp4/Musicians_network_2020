@@ -1,18 +1,32 @@
 {% extends "base.html" %}
 {% block title %} Home {% endblock %}
-{% block pages_collapse_name %}About{% endblock %}
-{% block pages_collapse_options %}
-    <a class="collapse-item" href="#">For musicians</a>
-    <a class="collapse-item" href="#">For bands</a>
-    <a class="collapse-item" href="#">For venue operators</a>
+
+{% block pages_collapse %}
+<!-- Nav Item - Pages Collapse Menu -->
+<li class="nav-item">
+    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+        aria-expanded="true" aria-controls="collapsePages">
+        <i class="fas fa-fw fa-folder"></i>
+        <span>About</span>
+    </a>
+    <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+        <div class="bg-white py-2 collapse-inner rounded">
+            <a class="collapse-item" href="#">For musicians</a>
+            <a class="collapse-item" href="#">For bands</a>
+            <a class="collapse-item" href="#">For venue operators</a>
+            <div class="collapse-divider"></div>
+        </div>
+    </div>
+</li>
 {% endblock %}
+
 {% block content %}
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Profiles</h1>
+            <h1 class="h3 mb-0 text-gray-800">About</h1>
         </div>
 
 

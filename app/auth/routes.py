@@ -22,13 +22,15 @@ def login():
         next = request.args.get('next')
         if not is_safe_url(next):
             return abort(400)
-        return redirect(next or url_for('main.home'))
+        profiles = Profile.query.filter(Profile.username != current_user.username).all()
+        return render_template('home.html', profiles=profiles)
     return render_template('login.html', form=form)
 
 @bp_auth.route('/logout/')
 @login_required
 def logout():
     logout_user()
+    print(current_user.is_anonymous)
     return redirect(url_for('main.index'))
 
 @bp_auth.route('/register/', methods=['POST', 'GET'])
@@ -41,7 +43,7 @@ def register():
         try:
             db.session.add(user)
             db.session.commit()
-            response = make_response(redirect(url_for('main.home')))
+            response = make_response(redirect(url_for('main.index')))
             response.set_cookie("username", form.username.data)
             return response
         except IntegrityError:

@@ -8,16 +8,13 @@ from flask_login import login_required, login_user, logout_user, current_user
 
 bp_main = Blueprint('main', __name__)
 
-# landing page: accessible before logging in
 @bp_main.route('/')
 def index():
-    return render_template('index.html')
-
-# only accessible after logging in
-@bp_main.route('/home')
-def home():
-    profiles = Profile.query.all()
-    return render_template('home.html', profiles=profiles)
+    if current_user.is_anonymous:
+        return render_template('index.html')
+    else:
+        profiles = Profile.query.filter(Profile.username != current_user.username).all()
+        return render_template('home.html', profiles=profiles)
 
 @bp_main.route('/search', methods=['POST', 'GET'])
 def search():
@@ -31,4 +28,4 @@ def search():
             return redirect('/')
         return render_template('search_results.html', results=results)
     else:
-        return redirect(url_for('main.home')) 
+        return redirect(url_for('main.index')) 
