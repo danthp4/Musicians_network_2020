@@ -1852,6 +1852,10 @@ textarea.form-control {
   margin-bottom: 1rem;
 }
 
+.form-genre {
+  margin-bottom: 1rem;
+  width: 71.45pc;
+}
 .form-text {
   display: block;
   margin-top: 0.25rem;

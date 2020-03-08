@@ -176,11 +176,29 @@
                     {{ form.profile_name.label }}{{ form.profile_name(class_="form-control form-control-user") }}
                     {{ form.description.label }}{{ form.description(class_="form-control form-control-user") }}
                     {{ form.location.label }}{{ form.location(class_="form-control form-control-user") }}
-                    {{ form.genre.label }}{{ form.genre(class_="form-check-input") }}
                 </div>
-                <br>{{ form.submit(class_="btn btn-primary") }}
+                <div class="form-genre">
+                    {{ form.genre.label }}<br>{{ form.genre() }}
+                </div>
+                <br>
+                <div class="form-group">
+                    {{ form.username.label }}{{ form.username(class_="form-control form-control-user") }}
+                </div>
+                <div class="form-group">
+                    {{ form.email.label }}{{ form.email(class_="form-control form-control-user") }}
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-6 mb-3 mb-sm-0">
+                        {{ form.password.label }}{{ form.password(class_="form-control form-control-user") }}
+                    </div>
+                    <div class="col-sm-6">
+                        {{ form.confirm.label }}{{ form.confirm(class_="form-control form-control-user") }}
+                    </div>
+                </div>
+                {{ form.submit(class_="btn btn-primary") }}
             </form>
-            <!-- /.container-fluid -->
-        </div>
-        <!-- End of Main Content -->
+            <!-- profile preview -->
+        <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
 {% endblock %}
