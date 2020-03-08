@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response
 from app.auth.forms import SignupForm, LoginForm
+=======
+from flask import Blueprint, render_template, request, flash, redirect, url_for
+from app.main.forms import ProfileForm
+>>>>>>> Dan
 from app.models import Profile
 from app import db
 from sqlalchemy.exc import IntegrityError
@@ -28,4 +33,13 @@ def search():
             return redirect('/')
         return render_template('search_results.html', results=results)
     else:
+<<<<<<< HEAD
         return redirect(url_for('main.index')) 
+=======
+        return redirect(url_for('main.home'))
+
+@bp_main.route('/profile', methods=['GET', 'POST'])
+def profile():
+    form = ProfileForm()
+    return render_template('profile.html', form=form)
+>>>>>>> Dan
