@@ -7412,6 +7412,10 @@ button.bg-dark:focus {
   min-height: 100vh !important;
 }
 
+.min-vh-50 {
+  min-height: 50vh !important;
+}
+
 .vw-100 {
   width: 100vw !important;
 }
@@ -11003,4 +11007,11 @@ body.sidebar-toggled footer.sticky-footer {
 
 .feed {
   width: 100%;
+}
+
+.mainimage {
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
 }
