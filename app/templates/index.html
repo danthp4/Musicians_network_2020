@@ -24,43 +24,25 @@
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
-        <!-- Page Heading -->
-        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">About</h1>
-        </div>
-
-
         <div class="feed">
             <!-- Dropdown Card Example -->
-            <div class="card shadow mb-4">
+            <div class="card shadow card-img mb-4 min-vh-100"  style="background-image: url('../static/img/184569401422.jpg')">
                 <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
-                                                                       style="max-height: 6vh"
-                                                                       src="../static/img/blank_user.png">
-                        About</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                             aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Options:</div>
-                            <a class="dropdown-item" href="#">Visit profile</a>
-                            <a class="dropdown-item" href="#">Contact user</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Rate user</a>
-                        </div>
-                    </div>
-                </div>
+                <div class="py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h1 class="col-12 h1 font-weight-bold text-white">Musician's Network</h1></div>
+                    <div class="py-3 d-flex flex-row align-items-center justify-content-between">
+                        <p class="text-white col-12" style="font-size: x-large"><b>Welcome to Musician's Network!</b><br>
+                        We are the world's first social networking site for musicians, bands and venue operators. This is the
+                    perfect platform for musicians to find other musicians or find a venue to perform
+                    at and kick-start your career. Or if you own a venue and are looking for live entertainment, a huge
+                    range of artists and bands are waiting for you!</p>
+                                    </div>
+
                 <!-- Card Body -->
                 <!-- Card Body -->
-                <div class="card-body">
-                    This will be an introduction of what the website is for. No profiles are shown in this page.
-                    Users can initially Login or Signup from this page by clicking the page on the left.
-                    Profile icon and notification icon on top right will be removed later as it should not exist
-                    in landing page.
+                <div class="py-3 d-flex flex-row align-items-center justify-content-between text-white col-12">
+                    <a href="{{ url_for('auth.register') }}"> <h4 class="h4 text-white font-weight-bold">Start your journey here</h4>
+                    </a>
                 </div>
             </div>
 
