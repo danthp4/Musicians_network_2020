@@ -10,7 +10,34 @@ from sqlalchemy.exc import IntegrityError
 
 bp_auth = Blueprint('auth', __name__)
 
-@bp_auth.route('/login/', methods=['GET', 'POST'])
+def is_safe_url(target):
+    host_url = urlparse(request.host_url)
+    redirect_url = urlparse(urljoin(request.host_url, target))
+    return redirect_url.scheme in ('http', 'https') and host_url.netloc == redirect_url.netloc 
+
+def get_safe_redirect():
+    url = request.args.get('next')
+    if url and is_safe_url(url):
+        return url
+    url = request.referrer
+    if url and is_safe_url(url):
+        return url
+    return '/'
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Check if user is logged-in on every page load."""
+    if user_id is not None:
+        return Profile.query.get(user_id)
+    return None
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    """Redirect unauthorized users to Login page."""
+    flash('You must be logged in to view that page.')
+    return redirect(url_for('auth.login'))
+
+@bp_auth.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if request.method == 'POST' and form.validate():
@@ -23,7 +50,7 @@ def login():
         if not is_safe_url(next):
             return abort(400)
         profiles = Profile.query.filter(Profile.username != current_user.username).all()
-        return render_template('home.html', profiles=profiles)
+        return redirect(next or url_for('main.index'))
     return render_template('login.html', form=form)
 
 @bp_auth.route('/logout/')
@@ -50,30 +77,3 @@ def register():
             db.session.rollback()
             flash('Unable to register {}. Please try again.'.format(form.username.data), 'error')
     return render_template('register.html', form=form)
-
-@login_manager.user_loader
-def load_user(username):
-    """Check if user is logged-in on every page load."""
-    if username is not None:
-        return Profile.query.get(username)
-    return None
-
-def is_safe_url(target):
-    host_url = urlparse(request.host_url)
-    redirect_url = urlparse(urljoin(request.host_url, target))
-    return redirect_url.scheme in ('http', 'https') and host_url.netloc == redirect_url.netloc 
-
-def get_safe_redirect():
-    url = request.args.get('next')
-    if url and is_safe_url(url):
-        return url
-    url = request.referrer
-    if url and is_safe_url(url):
-        return url
-    return '/'   
-
-@login_manager.unauthorized_handler
-def unauthorized():
-    """Redirect unauthorized users to Login page."""
-    flash('You must be logged in to view that page.')
-    return redirect(url_for('auth.login'))

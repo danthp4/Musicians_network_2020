@@ -16,6 +16,8 @@ class Administrator(db.Model):
 
 
 class Profile(UserMixin, db.Model):
+    __tablename__ = "user"
+
     __table__ = db.Model.metadata.tables['Profile']
 
     def set_password(self, password):
@@ -25,5 +27,5 @@ class Profile(UserMixin, db.Model):
         return check_password_hash(self.password, password)
 
     def get_id(self):
-        return self.username
+        return self.profile_id
 
