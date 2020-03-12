@@ -26,6 +26,7 @@ class Profile(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password, password)
 
+    # have to use primary key
     def get_id(self):
         return self.profile_id
 
