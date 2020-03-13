@@ -23,8 +23,9 @@ def create_app(config_class=DevConfig):
         db.Model.metadata.reflect(db.engine)
 
     # Register Blueprints
-    from app.main.routes import bp_main
+    from app.main.routes import bp_main, bp_about
     app.register_blueprint(bp_main)
+    app.register_blueprint(bp_about)
 
     from app.auth.routes import bp_auth
     app.register_blueprint(bp_auth)
