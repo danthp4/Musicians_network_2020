@@ -6,36 +6,43 @@ from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 
 bp_main = Blueprint('main', __name__)
-
+bp_about = Blueprint('about', __name__, url_prefix='/about')
 
 @bp_main.route('/')
 def index():
     if current_user.is_authenticated:
         profiles = Profile.query.filter(Profile.username != current_user.username).all()
-        return render_template('home.html', profiles=profiles, search=search)
+        return render_template('home.html', profiles=profiles)
     else:
-        return render_template('index.html', search=search)
+        return render_template('index.html')
+
+
+@bp_about.route('/musicians')
+def musicians():
+    return render_template('about_musicians.html')
+
+
+@bp_about.route('/bands')
+def bands():
+    return render_template('about_bands.html')
+
+
+@bp_about.route('/venues')
+def venues():
+    return render_template('about_venues.html')
+
 
 @bp_main.route('/search', methods=['POST', 'GET'])
 @login_required
 def search():
     if request.method == 'POST':
         term = request.form['search_term']
-        category = request.form['category']
         if term == "":
             return redirect('/')
-        elif category == 'Name':
-            results = Profile.query.filter(Profile.username.contains(term)).all()
-            msg = 'with'
-        elif category == 'Location':
-            results = Profile.query.filter(Profile.location.contains(term)).all()
-            msg = 'in'
-        elif category == 'Genre':
-            results = Profile.query.filter(Profile.genre.contains(term)).all()
-            msg = 'with'
-
+        results = Profile.query.filter(Profile.username.contains(term)).all()
         if not results:
-            flash('No user found {} that {}.'.format(msg, category))
+            flash("No students found with that name.")
+            return redirect('/')
         return render_template('search_results.html', results=results)
     else:
         return redirect(url_for('main.index'))
@@ -43,7 +50,7 @@ def search():
 
 @bp_main.route('/profile', methods=['GET', 'POST'])
 @login_required
-def edit_profile():
+def profile():
     form = ProfileForm()
     if request.method == 'POST' and form.validate():
         user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
