@@ -124,13 +124,9 @@
         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
         Profile
     </a>
-    <a class="dropdown-item" href="#">
+    <a class="dropdown-item" href="{{ url_for('main.settings') }}">
         <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
         Settings
-    </a>
-    <a class="dropdown-item" href="#">
-        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-        Activity Log
     </a>
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -179,21 +175,6 @@
                 </div>
                 <div class="form-genre">
                     {{ form.genre.label }}<br>{{ form.genre() }}
-                </div>
-                <br>
-                <div class="form-group">
-                    {{ form.username.label }}{{ form.username(class_="form-control form-control-user") }}
-                </div>
-                <div class="form-group">
-                    {{ form.email.label }}{{ form.email(class_="form-control form-control-user") }}
-                </div>
-                <div class="form-group row">
-                    <div class="col-sm-6 mb-3 mb-sm-0">
-                        {{ form.password.label }}{{ form.password(class_="form-control form-control-user") }}
-                    </div>
-                    <div class="col-sm-6">
-                        {{ form.confirm.label }}{{ form.confirm(class_="form-control form-control-user") }}
-                    </div>
                 </div>
                 {{ form.submit(class_="btn btn-primary") }}
             </form>

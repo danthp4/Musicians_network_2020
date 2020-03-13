@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response, abort
 from app.auth.forms import SignupForm, LoginForm
-from app.models import Profile
+from app.models import Profile, Musician, Venue
 from app import db, login_manager
 from flask_login import login_required, login_user, logout_user, current_user
 from datetime import timedelta
@@ -39,6 +39,9 @@ def unauthorized():
 
 @bp_auth.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        flash('You are logged in')
+        return redirect(url_for('main.index'))
     form = LoginForm()
     if request.method == 'POST' and form.validate():
         user = Profile.query.filter_by(email=form.email.data).first()
@@ -57,11 +60,13 @@ def login():
 @login_required
 def logout():
     logout_user()
-    print(current_user.is_anonymous)
     return redirect(url_for('main.index'))
 
 @bp_auth.route('/register/', methods=['POST', 'GET'])
 def register():
+    if current_user.is_authenticated:
+        flash('You are logged in')
+        return redirect(url_for('main.index'))
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         user = Profile(username=form.username.data, email=form.email.data, profile_name=None,
@@ -72,8 +77,33 @@ def register():
             db.session.commit()
             response = make_response(redirect(url_for('main.index')))
             response.set_cookie("username", form.username.data)
+            user = Profile.query.filter_by(email=form.email.data).first()
+            login_user(user)
+            print(form.option.data)
+            if form.option.data == 'm':
+                print('entered musician radio type')
+                user = Musician(name=None, gender=None, profile_id = current_user.profile_id,
+                                birthdate=None, availability=None)
+                db.session.add(user)
+                db.session.commit()
+            else:
+                user = Venue(venue_name=None, venue_capacity=None, profile_id = current_user.profile_id,
+                                venue_type=None)
+                db.session.add(user)
+                db.session.commit()
             return response
         except IntegrityError:
             db.session.rollback()
             flash('Unable to register {}. Please try again.'.format(form.username.data), 'error')
     return render_template('register.html', form=form)
+
+    # function that returns account type (musician/venue)
+    def account_type(user_id):
+        musician = Musician.query.filter_by(profile_id=user_id).first()
+        venue = Venue.query.filter_by(profile_id=user_id).first()
+        if musician is not None and venue is None:
+            return print('musician')
+        elif venue is not None and musician is None:
+            return print('venue')
+        else:
+            return print('not found')
