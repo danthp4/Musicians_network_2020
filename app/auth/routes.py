@@ -74,23 +74,20 @@ def register():
         user.set_password(form.password.data)
         try:
             db.session.add(user)
-            db.session.commit()
             response = make_response(redirect(url_for('main.index')))
             response.set_cookie("username", form.username.data)
             user = Profile.query.filter_by(email=form.email.data).first()
             login_user(user)
-            print(form.option.data)
             if form.option.data == 'm':
                 print('entered musician radio type')
                 user = Musician(name=None, gender=None, profile_id = current_user.profile_id,
                                 birthdate=None, availability=None)
                 db.session.add(user)
-                db.session.commit()
             else:
                 user = Venue(venue_name=None, venue_capacity=None, profile_id = current_user.profile_id,
                                 venue_type=None)
                 db.session.add(user)
-                db.session.commit()
+            db.session.commit()
             return response
         except IntegrityError:
             db.session.rollback()

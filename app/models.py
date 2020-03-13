@@ -9,11 +9,12 @@ class Musician(db.Model):
 
 class Venue(db.Model):
     __table__ = db.Model.metadata.tables['Venue']
-
+    
+class Genre(db.Model):
+    __table__ = db.Model.metadata.tables['Genre']
 
 class Administrator(db.Model):
     __table__ = db.Model.metadata.tables['Administrator']
-
 
 class Profile(UserMixin, db.Model):
     __tablename__ = "user"
@@ -30,3 +31,8 @@ class Profile(UserMixin, db.Model):
     def get_id(self):
         return self.profile_id
 
+class Profile_Genre(db.Model):
+    __tablename__ = 'profile/genre'
+
+    profile_id = db.Column(db.Integer, db.ForeignKey(Profile.profile_id), nullable=False, primary_key=True)
+    genre_id = db.Column(db.Integer, db.ForeignKey(Genre.genre_id), nullable=False, primary_key=True)

@@ -7,9 +7,9 @@ class ProfileForm(FlaskForm):
     description = TextAreaField('Profile description', validators=[DataRequired()])
     profile_name = StringField('Profile Name', validators=[DataRequired()])
     location = SelectField(u'City', choices=[('London', 'London'), ('Machester', 'Manchester'), ('Berlin', 'Berlin')])
-    genre = SelectMultipleField(label='Genre', choices=[(1, 'Rock'), (2, 'Drum and Bass'), (3, 'Techno'),
-                                                        (4, 'Funk'), (5, 'Disco'), (6, 'Metal'),
-                                                        (7, 'Hip-Hop'), (8, 'Indie')], validators=[DataRequired()])
+    genre = SelectMultipleField(label='Genre', choices=[('1', 'Rock'), ('2', 'Drum and Bass'), ('3', 'Techno'),
+                                                        ('4', 'Funk'), ('5', 'Disco'), ('6', 'Metal'),
+                                                        ('7', 'Hip-Hop'), ('8', 'Indie')], validators=[DataRequired()])
     submit = SubmitField('Save')
 
 class SettingsForm(FlaskForm):

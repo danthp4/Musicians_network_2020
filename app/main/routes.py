@@ -1,13 +1,14 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from app.main.forms import ProfileForm, SettingsForm
-from app.models import Profile
+from app.models import Profile, Profile_Genre
 from app import db, login_manager
 from flask_login import login_required, current_user
+from sqlalchemy.exc import IntegrityError
 
 bp_main = Blueprint('main', __name__)
 
 
-@bp_main.route('/', methods=['GET', 'POST'])
+@bp_main.route('/')
 def index():
     if current_user.is_authenticated:
         profiles = Profile.query.filter(Profile.username != current_user.username).all()
@@ -46,14 +47,23 @@ def edit_profile():
     form = ProfileForm()
     if request.method == 'POST' and form.validate():
         user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
-        # conn.execute(user.update().values(profile_name=form.profile_name.data))
-        user.profile_name = form.profile_name.data
-        user.profile_description = form.description.data
-        user.genre_id = form.genre.data
-        user.location = form.location.data
-        db.session.commit()
-        choices = form.genre.data
-        return redirect(url_for('main.index'))
+        try:
+            # Update user information
+            user.profile_name = form.profile_name.data
+            user.profile_description = form.description.data
+            user.location = form.location.data
+            # Delete existing record with current profile_id then update with new one
+            Profile_Genre.query.filter_by(profile_id=current_user.profile_id).delete()
+            # Iterate over chosen Genre and update Musician/Genre table
+            genre_list = form.genre.data
+            for genre in genre_list:
+                relation = Profile_Genre(profile_id=current_user.profile_id, genre_id=int(genre))
+                db.session.add(relation)
+                db.session.commit()
+            return redirect(url_for('main.index'))
+        except IntegrityError:
+            db.session.rollback()
+            flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
     return render_template('edit_profile.html', form=form, search=search)
 
 # A place to edit personal information (username, email, password)
