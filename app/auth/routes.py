@@ -79,7 +79,6 @@ def register():
             user = Profile.query.filter_by(email=form.email.data).first()
             login_user(user)
             if form.option.data == 'm':
-                print('entered musician radio type')
                 user = Musician(name=None, gender=None, profile_id = current_user.profile_id,
                                 birthdate=None, availability=None)
                 db.session.add(user)
