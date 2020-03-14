@@ -168,29 +168,32 @@
                                                                            style="max-height: 6vh"
                                                                            src="../static/img/blank_user.png">
                             {{ user.username }}</h6>
-
-
-                        <div class="rating">
-                            {% for i in range( 5 - user.rating|int) %}
-                                <span class="fa fa-star"></span>
-                            {% endfor %}
-                            {% for i in range(user.rating|int) %}
-                                <span class="fa fa-star checked"></span>
-                            {% endfor %}
+                        <div class="location">
+                            <p>{{ user.location }}</p>
                         </div>
-                        <div class="dropdown no-arrow">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                               data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                 aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Options:</div>
-                                <a class="dropdown-item" href="#">Visit profile</a>
-                                <a class="dropdown-item" href="#">Contact user</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Rate user</a>
+                        <div>
+                            <div class="rating">
+                                {% for i in range( 5 - user.rating|int) %}
+                                    <span class="fa fa-star"></span>
+                                {% endfor %}
+                                {% for i in range(user.rating|int) %}
+                                    <span class="fa fa-star checked"></span>
+                                {% endfor %}
+                            </div>
+                            <div class="dropdown no-arrow" style="display:inline-block">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                     aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown-header">Options:</div>
+                                    <a class="dropdown-item" href="#">Visit profile</a>
+                                    <a class="dropdown-item" href="#">Contact user</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">Rate user</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -198,7 +201,7 @@
 
                     <!-- Card Body -->
                     <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
-                            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/{{ user.sc_user_id }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true"></iframe>
+                            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/{{ user.sc_user_id }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=flase&show_reposts=false&show_teaser=flase"></iframe>
                     <div class="description-container">
                         <div class="description-title">
                             <p>Artist description</p>
@@ -209,8 +212,8 @@
                     </div>
                 </div>
             {% endfor %}
-    </div>
-    <!-- /.container-fluid -->
+        </div>
+        <!-- /.container-fluid -->
     </div>
     <!-- End of Main Content -->
 {% endblock %}

@@ -11836,8 +11836,13 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .rating {
+  display: inline-block;
+  padding-right: 2.5pc;
 }
 
+.location {
+  display: inline-block;
+}
 .checked {
     color: orange;
 }
