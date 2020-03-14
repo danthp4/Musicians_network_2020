@@ -50,7 +50,7 @@ def search():
 
 @bp_main.route('/profile', methods=['GET', 'POST'])
 @login_required
-def profile():
+def edit_profile():
     form = ProfileForm()
     if request.method == 'POST' and form.validate():
         user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
