@@ -37,20 +37,31 @@ def venues():
 def search():
     if request.method == 'POST':
         term = request.form['search_term']
+        category = request.form['category']
         if term == "":
             return redirect('/')
-        results = Profile.query.filter(Profile.username.contains(term)).all()
+        elif category == 'Name':
+            results = Profile.query.filter(Profile.username.contains(term)).all()
+            msg = 'with'
+        elif category == 'Location':
+            results = Profile.query.filter(Profile.location.contains(term)).all()
+            msg = 'in'
+        elif category == 'Genre':
+            # results = Profile.query.filter(Profile.genre.contains(term)).all()
+            # msg = 'with'
+            pass
+
         if not results:
-            flash("No students found with that name.")
-            return redirect('/')
+            flash('No user found {} that {}.'.format(msg, category))
+            return render_template('search_results.html', results=results)
         return render_template('search_results.html', results=results)
     else:
         return redirect(url_for('main.index'))
 
 
-@bp_main.route('/profile', methods=['GET', 'POST'])
+@bp_main.route('/edit_profile', methods=['GET', 'POST'])
 @login_required
-def profile():
+def edit_profile():
     form = ProfileForm()
     if request.method == 'POST' and form.validate():
         user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
@@ -80,11 +91,14 @@ def settings():
     form = SettingsForm()
     if request.method == 'POST' and form.validate():
         user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
-        user.set_password(form.password.data)
-        user.username = form.username.data
-        user.email = form.email.data
-        db.session.commit()
-        return redirect(url_for('main.index'))
+        try:
+            user.set_password(form.password.data)
+            user.username = form.username.data
+            user.email = form.email.data
+            db.session.commit()
+            return redirect(url_for('main.index'))
+        except IntegrityError:
+            flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
     return render_template('settings.html', form=form, search=search)
 
 

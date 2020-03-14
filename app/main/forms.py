@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import SubmitField, StringField, SelectField, TextAreaField, SelectMultipleField, PasswordField
-from wtforms.validators import DataRequired, Email, EqualTo
+from wtforms.validators import DataRequired, Email, EqualTo, EqualTo, ValidationError
+from app.models import Profile
 
 
 class ProfileForm(FlaskForm):
@@ -18,3 +19,13 @@ class SettingsForm(FlaskForm):
     password = PasswordField('New Password', validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])
     confirm = PasswordField('Repeat New Password')
     submit = SubmitField('Save')
+
+    def validate_username(self, username):
+        user = Profile.query.filter_by(username=username.data).first()
+        if user is not None:
+            raise ValidationError('An account is already registered for that username.')
+    
+    def validate_email(self, email):
+        user = Profile.query.filter_by(email=email.data).first()
+        if user is not None:
+            raise ValidationError('An account is already registered for that email.')

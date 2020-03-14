@@ -140,7 +140,7 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Profile constructor</h1>
+            <h1 class="h3 mb-0 text-gray-800">Profile Editor</h1>
         </div>
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -156,16 +156,15 @@
             <br>
             {# Display the form validation errors #}
             {% if form.errors %}
-                <ul class="alert-warning list-unstyled">
-                    {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                {% for field_name, field_errors in form.errors|dictsort if field_errors %}
+                    <div class="alert alert-danger" role="alert">
                         {% for error in field_errors %}
-                            <li>{{ form[field_name].label }}: {{ error }}</li>
+                            {{ form[field_name].label }}: {{ error }}
                         {% endfor %}
-                    {% endfor %}
-                </ul>
+                    </div>
+                {% endfor %}
             {% endif %}
-            {# Display the form, turn off HTML validation #}
-            {# The (class="") after a form field is used to apply css style to the element, in this case a bootstrap style #}
+            
             <form method="post" novalidate>
                 {{ form.hidden_tag() }}
                 <div class="form-group">
