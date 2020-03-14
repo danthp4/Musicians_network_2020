@@ -172,14 +172,16 @@
                     {{ form.profile_name.label }}{{ form.profile_name(class_="form-control form-control-user") }}
                     {{ form.description.label }}{{ form.description(class_="form-control form-control-user") }}
                     {{ form.location.label }}{{ form.location(class_="form-control form-control-user") }}
+                    {{ form.sc_user_id.label }}{{ form.sc_user_id(class_="form-control form-control-user") }}
                 </div>
                 <div class="form-genre">
                     {{ form.genre.label }}<br>{{ form.genre() }}
                 </div>
+                <br>
                 {{ form.submit(class_="btn btn-primary") }}
             </form>
             <!-- profile preview -->
-        <!-- /.container-fluid -->
-    </div>
-    <!-- End of Main Content -->
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
 {% endblock %}

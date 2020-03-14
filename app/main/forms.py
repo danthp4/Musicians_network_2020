@@ -10,6 +10,7 @@ class ProfileForm(FlaskForm):
     genre = SelectMultipleField(label='Genre', choices=[('1', 'Rock'), ('2', 'Drum and Bass'), ('3', 'Techno'),
                                                         ('4', 'Funk'), ('5', 'Disco'), ('6', 'Metal'),
                                                         ('7', 'Hip-Hop'), ('8', 'Indie')], validators=[DataRequired()])
+    sc_user_id = StringField('Soundcloud User ID', validators=[DataRequired()])
     submit = SubmitField('Save')
 
 class SettingsForm(FlaskForm):

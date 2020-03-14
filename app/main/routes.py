@@ -59,6 +59,7 @@ def edit_profile():
             user.profile_name = form.profile_name.data
             user.profile_description = form.description.data
             user.location = form.location.data
+            user.sc_user_id = form.sc_user_id.data
             # Delete existing record with current profile_id then update with new one
             Profile_Genre.query.filter_by(profile_id=current_user.profile_id).delete()
             # Iterate over chosen Genre and update Musician/Genre table
