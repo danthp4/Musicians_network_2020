@@ -143,18 +143,18 @@
                 <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
                 action="search" method="post" novalidate>
                     <div class="input-group">
-                        <input type="search" class="form-control bg-light border-0 small" name="search_term" 
+                        <input type="search" class="form-control bg-light border-1 small" name="search_term"
                             placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                         <div class="input-group-append">
+                            <select class="form-control form-control-user rounded-0" name="category">
+                                <option>Name</option>
+                                <option>Location</option>
+                                <option>Genre</option>
+                            </select>
                             <button class="btn btn-primary" type="submit">
                                 <i class="fas fa-search fa-sm"></i>
                             </button>
                         </div>
-                        <select class="form-control form-control-user" name="category">
-                            <option>Name</option>
-                            <option>Location</option>
-                            <option>Genre</option>
-                        </select>
                     </div>
                 </form>
 
