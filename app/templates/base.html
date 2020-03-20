@@ -18,7 +18,11 @@
 
     <!-- Custom styles for this template-->
     <link href="../../static/style_bootstrap.css" rel="stylesheet">
-
+<style>
+    html{
+        scroll-behavior: smooth;
+    }
+</style>
 </head>
 
 <body id="page-top">
@@ -93,7 +97,7 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <a class="collapse-item" href="{{ url_for('about.musicians') }}">For musicians</a>
                 <a class="collapse-item" href="{{ url_for('about.bands') }}">For bands</a>
-                <a class="collapse-item" href="{{ url_for('about.venues') }}">For venue operators</a>
+                <a class="collapse-item" href="{{ url_for('about.venues') }}">For venues</a>
                 <div class="collapse-divider"></div>
             </div>
         </div>
