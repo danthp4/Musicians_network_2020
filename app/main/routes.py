@@ -103,3 +103,6 @@ def settings():
     return render_template('settings.html', form=form, search=search)
 
 
+@bp_main.route('/soundcloud_id')
+def soundcloud_id():
+    return render_template('soundcloud_id.html')

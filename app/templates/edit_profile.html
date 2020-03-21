@@ -164,14 +164,21 @@
                     </div>
                 {% endfor %}
             {% endif %}
-            
+
             <form method="post" novalidate>
                 {{ form.hidden_tag() }}
                 <div class="form-group">
                     {{ form.profile_name.label }}{{ form.profile_name(class_="form-control form-control-user") }}
                     {{ form.description.label }}{{ form.description(class_="form-control form-control-user") }}
                     {{ form.location.label }}{{ form.location(class_="form-control form-control-user") }}
+                    <div>
+                    <div style = "max-width:10%;display:inline-block;">
                     {{ form.sc_user_id.label }}{{ form.sc_user_id(class_="form-control form-control-user") }}
+                    </div>
+                    <a href="{{ url_for('main.soundcloud_id') }}" target="_blank" class="btn btn-info btn-circle display:inline-block;">
+                    <i class="fas fa-info-circle"></i>
+                  </a>
+                    </div>
                 </div>
                 <div class="form-genre">
                     {{ form.genre.label }}<br>{{ form.genre() }}
