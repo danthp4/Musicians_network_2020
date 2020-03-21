@@ -209,6 +209,21 @@
                         <div class="description">
                             {{ user.profile_description }}
                         </div>
+
+                        <div class="description-title">
+                            <p>Profile Genre:</p>
+                        </div>
+                        {% for relation in relations %}
+                            {% if relation.profile_id == user.profile_id %}
+                                {% for genre in genres %}
+                                    {% if genre.genre_id == relation.genre_id %}
+                                        <div class="description">
+                                            {{ genre.genre_name }}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             {% endfor %}

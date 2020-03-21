@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from app.main.forms import ProfileForm, SettingsForm
-from app.models import Profile, Profile_Genre
+from app.models import Profile, Profile_Genre, Genre
 from app import db, login_manager
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
@@ -12,7 +12,9 @@ bp_about = Blueprint('about', __name__, url_prefix='/about')
 def index():
     if current_user.is_authenticated:
         profiles = Profile.query.filter(Profile.username != current_user.username).all()
-        return render_template('home.html', profiles=profiles)
+        relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
+        genres = Genre.query.all()
+        return render_template('home.html', profiles=profiles, relations=relations, genres=genres)
     else:
         return render_template('index.html')
 
@@ -47,8 +49,8 @@ def search():
             results = Profile.query.filter(Profile.location.contains(term)).all()
             msg = 'in'
         elif category == 'Genre':
-            # results = Profile.query.filter(Profile.genre.contains(term)).all()
-            # msg = 'with'
+            results = Profile.query.join(Profile_Genre).join(Genre).filter(Genre.genre_name.contains(term)).all()
+            msg = 'with'
             pass
 
         if not results:
