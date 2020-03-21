@@ -18,6 +18,13 @@ def index():
     else:
         return render_template('index.html')
 
+@bp_main.route('/<username>')
+@login_required
+def profile(username):
+    user = Profile.query.filter_by(username=username).first()
+    genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
+    return render_template('profile.html', user=user, genres=genres)
+
 
 @bp_about.route('/musicians')
 def musicians():
@@ -51,7 +58,6 @@ def search():
         elif category == 'Genre':
             results = Profile.query.join(Profile_Genre).join(Genre).filter(Genre.genre_name.contains(term)).all()
             msg = 'with'
-            pass
 
         if not results:
             flash('No user found {} that {}.'.format(msg, category))
