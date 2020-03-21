@@ -11842,6 +11842,10 @@ body.sidebar-toggled footer.sticky-footer {
 
 .location {
     display: inline-block;
+    color: slategrey;
+    font-size: 14px;
+    font-weight: normal;
+    padding-left: 3px;
 }
 
 .checked {
@@ -11883,3 +11887,16 @@ body.sidebar-toggled footer.sticky-footer {
     background-position: center;
 }
 
+.genre {
+    display:inline-block;
+    padding-left: 10px;
+}
+
+.genre-title {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.genre-group {
+    display:inline-block;
+}
