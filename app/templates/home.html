@@ -120,7 +120,7 @@
 {% endblock %}
 {% block navbar_dropdown_title %}Account{% endblock %}
 {% block nav_dropdown_options %}
-    <a class="dropdown-item" href="#">
+    <a class="dropdown-item" href="{{ url_for('main.profile', username=current_user.username) }}">
         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
         Profile
     </a>
@@ -208,7 +208,7 @@
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                      aria-labelledby="dropdownMenuLink">
                                     <div class="dropdown-header">Options:</div>
-                                    <a class="dropdown-item" href="#">Visit profile</a>
+                                    <a class="dropdown-item" href="{{ url_for('main.profile', username=user.username) }}">Visit profile</a>
                                     <a class="dropdown-item" href="#">Contact user</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">Rate user</a>
