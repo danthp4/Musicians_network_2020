@@ -11836,13 +11836,14 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .rating {
-  display: inline-block;
-  padding-right: 2.5pc;
+    display: inline-block;
+    padding-right: 2.5pc;
 }
 
 .location {
-  display: inline-block;
+    display: inline-block;
 }
+
 .checked {
     color: orange;
 }
@@ -11875,7 +11876,10 @@ body.sidebar-toggled footer.sticky-footer {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.sc_id_img {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+.sc_id_container {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     border-radius: 1pc;
+    object-fit: cover;
+    width:75%;
+
 }
