@@ -11877,9 +11877,9 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .sc_id_container {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 1pc;
-    object-fit: cover;
-    width:75%;
-
+    height: 400px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
+
