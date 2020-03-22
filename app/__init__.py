@@ -30,4 +30,7 @@ def create_app(config_class=DevConfig):
     from app.auth.routes import bp_auth
     app.register_blueprint(bp_auth)
 
+    from app.prof.routes import bp_prof
+    app.register_blueprint(bp_prof)
+
     return app
