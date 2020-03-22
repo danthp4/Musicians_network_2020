@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from app.main.forms import ProfileForm, SettingsForm
-from app.models import Profile, Profile_Genre, Genre
+from app.models import Profile, Profile_Genre, Genre, Musician, Venue
 from app import db, login_manager
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
@@ -18,26 +18,21 @@ def index():
     else:
         return render_template('index.html')
 
-@bp_main.route('/<username>')
+@bp_main.route('/profile/<username>')
 @login_required
 def profile(username):
     user = Profile.query.filter_by(username=username).first()
     genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
-    return render_template('view_profile.html', user=user, genres=genres)
-
-@bp_main.route('/musician/<username>')
-@login_required
-def musician_profile(username):
-    user = Profile.query.filter_by(username=username).first()
-    genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
-    return render_template('musicians_profile.html', user=user, genres=genres)
-
-@bp_main.route('/venue/<username>')
-@login_required
-def venue_profile(username):
-    user = Profile.query.filter_by(username=username).first()
-    genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
-    return render_template('venue_profile.html', user=user, genres=genres)
+    # check if it's musician
+    musician = Musician.query.filter_by(profile_id=user.profile_id).first()
+    venue = Venue.query.filter_by(profile_id=user.profile_id).first()
+    if musician:
+        return render_template('musicians_profile.html', user=user, genres=genres)
+    elif venue:
+        return render_template('venue_profile.html', user=user, genres=genres)
+    else:
+        flash('User with username {} is not found.'.format(username))
+        return render_template('view_profile.html', user=user, genres=genres)
 
 @bp_about.route('/musicians')
 def musicians():

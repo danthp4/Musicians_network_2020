@@ -148,6 +148,11 @@
             <h1 class="h3 mb-0 text-gray-800">Profiles</h1>
         </div>
 
+        <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link" href="{{ url_for('main.index') }}">Musicians</a></li>
+            <li class="page-item"><a class="page-link" href="#">Venues</a></li>
+        </ul>
+
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="alert alert-danger" role="alert">
@@ -181,9 +186,9 @@
                                 {% if relation.profile_id == user.profile_id %}
                                     {% for genre in genres %}
                                         {% if genre.genre_id == relation.genre_id %}
-                                            <div class="genre">
-                                                <p>{{ genre.genre_name }}</p>
-                                            </div>
+                                            <span class="badge badge-primary">
+                                                {{ genre.genre_name }}
+                                            </span>
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}

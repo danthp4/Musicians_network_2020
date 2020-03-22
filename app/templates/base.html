@@ -227,14 +227,6 @@
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="{{ url_for('main.musician_profile', username=current_user.username) }}">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    View profile as musician
-                                </a>
-                                <a class="dropdown-item" href="{{ url_for('main.venue_profile', username=current_user.username) }}">
-                                    <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    View profile as venue
-                                </a>
                                 <a class="dropdown-item" href="{{ url_for('main.edit_profile') }}">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Edit Profile
