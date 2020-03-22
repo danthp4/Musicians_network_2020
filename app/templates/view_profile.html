@@ -159,13 +159,34 @@
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
-                                                                        style="max-height: 6vh"
-                                                                        src="../static/img/blank_user.png">
-                        {{ user.username }}</h6>
-                    <div class="location">
-                        <p>{{ user.location }}</p>
+                    <div class="profile-user-location">
+                        <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                           style="max-height: 6vh"
+                                                                           src="../static/img/blank_user.png">
+                            {{ user.username }}
+                            <div class="location">
+                                <p>- {{ user.location }}</p>
+                            </div>
+                        </h6>
+
                     </div>
+                    <div class="genre-group">
+                        <div class="genre-title">
+                            <p>Genre:</p>
+                        </div>
+                        {% for relation in relations %}
+                            {% if relation.profile_id == user.profile_id %}
+                                {% for genre in genres %}
+                                    {% if genre.genre_id == relation.genre_id %}
+                                        <div class="genre">
+                                            <p>{{ genre.genre_name }}</p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+
                     <div>
                         <div class="rating">
                             {% for i in range( 5 - user.rating|int) %}
@@ -177,14 +198,15 @@
                         </div>
                         <div class="dropdown no-arrow" style="display:inline-block">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+                               data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                             </a>
                             <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                    aria-labelledby="dropdownMenuLink">
+                                 aria-labelledby="dropdownMenuLink">
                                 <div class="dropdown-header">Options:</div>
-                                <a class="dropdown-item" href="#">Visit profile</a>
+                                <a class="dropdown-item" href="{{ url_for('main.profile', username=user.username) }}">Visit
+                                    profile</a>
                                 <a class="dropdown-item" href="#">Contact user</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Rate user</a>
@@ -205,14 +227,7 @@
                         {{ user.profile_description }}
                     </div>
 
-                    <div class="description-title">
-                        <p>Profile Genre:</p>
-                    </div>
-                    {% for genre in genres %}
-                        <div class="description">
-                            {{ genre.genre_name }}
-                        </div>
-                    {% endfor %}
+
                 </div>
             </div>
         </div>

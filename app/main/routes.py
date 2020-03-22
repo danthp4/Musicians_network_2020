@@ -23,7 +23,7 @@ def index():
 def profile(username):
     user = Profile.query.filter_by(username=username).first()
     genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
-    return render_template('profile.html', user=user, genres=genres)
+    return render_template('view_profile.html', user=user, genres=genres)
 
 
 @bp_about.route('/musicians')
