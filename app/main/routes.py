@@ -25,6 +25,19 @@ def profile(username):
     genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
     return render_template('view_profile.html', user=user, genres=genres)
 
+@bp_main.route('/musician/<username>')
+@login_required
+def musician_profile(username):
+    user = Profile.query.filter_by(username=username).first()
+    genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
+    return render_template('musicians_profile.html', user=user, genres=genres)
+
+@bp_main.route('/venue/<username>')
+@login_required
+def venue_profile(username):
+    user = Profile.query.filter_by(username=username).first()
+    genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
+    return render_template('venue_profile.html', user=user, genres=genres)
 
 @bp_about.route('/musicians')
 def musicians():

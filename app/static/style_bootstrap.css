@@ -11900,3 +11900,7 @@ body.sidebar-toggled footer.sticky-footer {
 .genre-group {
     display:inline-block;
 }
+
+.gallery-containter {
+    padding: 1pc 1pc 0pc 1pc;
+}
