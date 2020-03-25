@@ -25,7 +25,12 @@ class ProdConfig(Config):
 
 
 class TestConfig(Config):
+    DEBUG = True
     TESTING = True
+    #  In memory database
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///:memory:'
+    #  To allow forms to be submitted from the tests without the CSRF token
+    WTF_CSRF_ENABLED = False
 
 
 class DevConfig(Config):
