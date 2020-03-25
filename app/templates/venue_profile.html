@@ -172,18 +172,12 @@
                     </div>
                     <div class="genre-group">
                         <div class="genre-title">
-                            <p>Artist genre:</p>
+                            <p>Genre:</p>
                         </div>
-                        {% for relation in relations %}
-                            {% if relation.profile_id == user.profile_id %}
-                                {% for genre in genres %}
-                                    {% if genre.genre_id == relation.genre_id %}
-                                        <div class="genre">
-                                            <p>{{ genre.genre_name }}</p>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
+                        {% for genre in genres %}
+                            <span class="badge badge-primary">
+                                {{ genre.genre_name }}
+                            </span>
                         {% endfor %}
                     </div>
 

@@ -18,9 +18,9 @@ def profile(username):
         musician = Musician.query.filter_by(profile_id=user.profile_id).first()
         venue = Venue.query.filter_by(profile_id=user.profile_id).first()
         if musician is not None:
-            return render_template('musicians_profile.html', user=user, relations=relations, genres=genres)
+            return render_template('musicians_profile.html', user=user, genres=genres)
         elif venue is not None:
-            return render_template('venue_profile.html', user=user, relations=relations, genres=genres)
+            return render_template('venue_profile.html', user=user, genres=genres)
         else:
             flash('User {} is not properly registered.'.format(username))
             return redirect(url_for('main.index'))
