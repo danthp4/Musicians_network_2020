@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for, make_response, abort
 from app.auth.forms import SignupForm, LoginForm
-from app.models import Profile
+from app.models import Profile, Musician, Venue
 from app import db, login_manager
 from flask_login import login_required, login_user, logout_user, current_user
 from datetime import timedelta
@@ -9,55 +9,6 @@ from urllib.parse import urlparse, urljoin
 from sqlalchemy.exc import IntegrityError
 
 bp_auth = Blueprint('auth', __name__)
-
-@bp_auth.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if request.method == 'POST' and form.validate():
-        user = Profile.query.filter_by(email=form.email.data).first()
-        if user is None or not user.check_password(form.password.data):
-            flash('Invalid email/password combination', 'error')
-            return redirect(url_for('auth.login'))
-        login_user(user)
-        print(current_user.is_authenticated)
-        next = request.args.get('next')
-        if not is_safe_url(next):
-            return abort(400)
-        profiles = Profile.query.filter(Profile.username != current_user.username).all()
-        return render_template('home.html', profiles=profiles)
-    return render_template('login.html', form=form)
-
-@bp_auth.route('/logout/')
-@login_required
-def logout():
-    logout_user()
-    print(current_user.is_anonymous)
-    return redirect(url_for('main.index'))
-
-@bp_auth.route('/register/', methods=['POST', 'GET'])
-def register():
-    form = SignupForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user = Profile(username=form.username.data, email=form.email.data, profile_name=None,
-                        profile_description=None, genre_id=None, profile_url=None, location=None, rating=None)
-        user.set_password(form.password.data)
-        try:
-            db.session.add(user)
-            db.session.commit()
-            response = make_response(redirect(url_for('main.index')))
-            response.set_cookie("username", form.username.data)
-            return response
-        except IntegrityError:
-            db.session.rollback()
-            flash('Unable to register {}. Please try again.'.format(form.username.data), 'error')
-    return render_template('register.html', form=form)
-
-@login_manager.user_loader
-def load_user(username):
-    """Check if user is logged-in on every page load."""
-    if username is not None:
-        return Profile.query.get(username)
-    return None
 
 def is_safe_url(target):
     host_url = urlparse(request.host_url)
@@ -71,10 +22,85 @@ def get_safe_redirect():
     url = request.referrer
     if url and is_safe_url(url):
         return url
-    return '/'   
+    return '/'
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Check if user is logged-in on every page load."""
+    if user_id is not None:
+        return Profile.query.get(user_id)
+    return None
 
 @login_manager.unauthorized_handler
 def unauthorized():
     """Redirect unauthorized users to Login page."""
     flash('You must be logged in to view that page.')
     return redirect(url_for('auth.login'))
+
+@bp_auth.route('/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        flash('You are logged in')
+        return redirect(url_for('main.index'))
+    form = LoginForm()
+    if request.method == 'POST' and form.validate():
+        user = Profile.query.filter_by(email=form.email.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid email/password combination', 'error')
+            return redirect(url_for('auth.login'))
+        login_user(user)
+        next = request.args.get('next')
+        if not is_safe_url(next):
+            return abort(400)
+        profiles = Profile.query.filter(Profile.username != current_user.username).all()
+        return redirect(next or url_for('main.index'))
+    return render_template('login.html', form=form)
+
+@bp_auth.route('/logout/')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('main.index'))
+
+@bp_auth.route('/register/', methods=['POST', 'GET'])
+def register():
+    if current_user.is_authenticated:
+        flash('You are logged in')
+        return redirect(url_for('main.index'))
+    form = SignupForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = Profile(username=form.username.data, email=form.email.data, profile_name=None,
+                        profile_description=None, profile_image=None, location=None, rating=None,
+                        sc_user_id=None)
+        user.set_password(form.password.data)
+        try:
+            db.session.add(user)
+            response = make_response(redirect(url_for('main.index')))
+            response.set_cookie("username", form.username.data)
+            user = Profile.query.filter_by(email=form.email.data).first()
+            login_user(user)
+            if form.option.data == 'm':
+                user = Musician(name=None, gender=None, profile_id = current_user.profile_id,
+                                birthdate=None, availability=None)
+                db.session.add(user)
+            else:
+                user = Venue(venue_name=None, venue_capacity=None, profile_id = current_user.profile_id,
+                                venue_type=None)
+                db.session.add(user)
+            db.session.commit()
+            return response
+        except IntegrityError:
+            db.session.rollback()
+            flash('Unable to register {}. Please try again.'.format(form.username.data), 'error')
+    return render_template('register.html', form=form)
+
+    # function that returns account type (musician/venue)
+    def account_type(user_id):
+        musician = Musician.query.filter_by(profile_id=user_id).first()
+        venue = Venue.query.filter_by(profile_id=user_id).first()
+        if musician is not None and venue is None:
+            return print('musician')
+        elif venue is not None and musician is None:
+            return print('venue')
+        else:
+            return print('not found')

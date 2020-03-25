@@ -171,8 +171,8 @@
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                         <div class="profile-user-location">
                             <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
-                                                                            style="max-height: 6vh"
-                                                                            src="../static/img/blank_user.png">
+                                                                               style="max-height: 6vh"
+                                                                               src="../static/img/blank_user.png">
                                 {{ user.username }}
                                 <div class="location">
                                     <p>- {{ user.location }}</p>
@@ -182,7 +182,7 @@
                         </div>
                         <div class="genre-group">
                             <div class="genre-title">
-                                <p>Genre:</p>
+                                <p>Venue genres:</p>
                             </div>
                             {% for relation in relations %}
                                 {% if relation.profile_id == user.profile_id %}
@@ -208,14 +208,15 @@
                             </div>
                             <div class="dropdown no-arrow" style="display:inline-block">
                                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                data-toggle="dropdown"
-                                aria-haspopup="true" aria-expanded="false">
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                    aria-labelledby="dropdownMenuLink">
+                                     aria-labelledby="dropdownMenuLink">
                                     <div class="dropdown-header">Options:</div>
-                                    <a class="dropdown-item" href="{{ url_for('prof.profile', username=user.username) }}">Visit
+                                    <a class="dropdown-item"
+                                       href="{{ url_for('prof.profile', username=user.username) }}">Visit
                                         profile</a>
                                     <a class="dropdown-item" href="#">Contact user</a>
                                     <div class="dropdown-divider"></div>
@@ -237,8 +238,8 @@
 
                                 <!--Modal: Name-->
                                 <div class="modal fade" id="modal2" tabindex="-1" role="dialog"
-                                    aria-labelledby="myModalLabel"
-                                    aria-hidden="true">
+                                     aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
                                     <div class="modal-dialog modal-lg" role="document">
 
                                         <!--Content-->
@@ -249,7 +250,7 @@
 
                                                 <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
                                                     <iframe class="embed-responsive-item"
-                                                            src="https://www.youtube.com/embed/GUEZCxBcM78"
+                                                            src="https://www.youtube.com/embed/H3Yh993_Efs"
                                                             allowfullscreen></iframe>
                                                 </div>
 
@@ -296,8 +297,8 @@
 
                                 <!--Modal: Name-->
                                 <div class="modal fade" id="modal5" tabindex="-1" role="dialog"
-                                    aria-labelledby="myModalLabel"
-                                    aria-hidden="true">
+                                     aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
                                     <div class="modal-dialog modal-lg" role="document">
 
                                         <!--Content-->
@@ -355,8 +356,8 @@
 
                                 <!--Modal: Name-->
                                 <div class="modal fade" id="modal3" tabindex="-1" role="dialog"
-                                    aria-labelledby="myModalLabel"
-                                    aria-hidden="true">
+                                     aria-labelledby="myModalLabel"
+                                     aria-hidden="true">
                                     <div class="modal-dialog modal-lg" role="document">
 
                                         <!--Content-->
@@ -414,7 +415,7 @@
                     </div>
                     <div class="description-container">
                         <div class="description-title">
-                            <p>Artist description:</p>
+                            <p>Venue description:</p>
                         </div>
                         <div class="description">
                             {{ user.profile_description }}

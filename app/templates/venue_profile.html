@@ -162,7 +162,7 @@
                     <div class="profile-user-location">
                         <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
                                                                            style="max-height: 6vh"
-                                                                           src="../static/img/blank_user.png">
+                                                                           src="{{ user.profile_image }}">
                             {{ user.username }}
                             <div class="location">
                                 <p>- {{ user.location }}</p>
@@ -174,16 +174,10 @@
                         <div class="genre-title">
                             <p>Genre:</p>
                         </div>
-                        {% for relation in relations %}
-                            {% if relation.profile_id == user.profile_id %}
-                                {% for genre in genres %}
-                                    {% if genre.genre_id == relation.genre_id %}
-                                        <div class="genre">
-                                            <p>{{ genre.genre_name }}</p>
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
+                        {% for genre in genres %}
+                            <span class="badge badge-primary">
+                                {{ genre.genre_name }}
+                            </span>
                         {% endfor %}
                     </div>
 

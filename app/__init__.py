@@ -1,10 +1,12 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_uploads import UploadSet, IMAGES, configure_uploads
 
 from app.config import DevConfig
 
 db = SQLAlchemy()
+images = UploadSet('images', IMAGES)
 login_manager = LoginManager()
 
 def create_app(config_class=DevConfig):
@@ -15,10 +17,11 @@ def create_app(config_class=DevConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
     login_manager.init_app(app)
+    
 
     # Initialise the database and create tables
     db.init_app(app)
-    # from app.models import Teacher, Student, Course, Grade
+    configure_uploads(app, images)
     with app.app_context():
         db.Model.metadata.reflect(db.engine)
 
