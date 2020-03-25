@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Home {% endblock %}
+{% block title %} Musician's Network {% endblock %}
 {% block navbar_items %}
     <!-- Nav Item - Alerts -->
     <li class="nav-item dropdown no-arrow mx-1">
@@ -120,12 +120,12 @@
 {% endblock %}
 {% block navbar_dropdown_title %}Account{% endblock %}
 {% block nav_dropdown_options %}
-    <a class="dropdown-item" href="#">
-        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-        Profile
+    <a class="dropdown-item" href="{{ url_for('prof.edit_profile') }}">
+        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+        Edit Profile
     </a>
     <a class="dropdown-item" href="{{ url_for('prof.settings') }}">
-        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
         Settings
     </a>
     <div class="dropdown-divider"></div>
@@ -134,14 +134,16 @@
         Logout
     </a>
 {% endblock %}
+
 {% block content %}
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Profile Editor</h1>
+            <h1 class="h3 mb-0 text-gray-800">Profiles</h1>
         </div>
+
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <div class="alert alert-danger" role="alert">
@@ -153,41 +155,83 @@
         {% endwith %}
 
         <div class="feed">
-            <br>
-            {# Display the form validation errors #}
-            {% if form.errors %}
-                {% for field_name, field_errors in form.errors|dictsort if field_errors %}
-                    <div class="alert alert-danger" role="alert">
-                        {% for error in field_errors %}
-                            {{ form[field_name].label }}: {{ error }}
+            <!-- Dropdown Card Example -->
+            <div class="card shadow mb-4">
+                <!-- Card Header - Dropdown -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="profile-user-location">
+                        <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                           style="max-height: 6vh"
+                                                                           src="../static/img/blank_user.png">
+                            {{ user.username }}
+                            <div class="location">
+                                <p>- {{ user.location }}</p>
+                            </div>
+                        </h6>
+
+                    </div>
+                    <div class="genre-group">
+                        <div class="genre-title">
+                            <p>Genre:</p>
+                        </div>
+                        {% for relation in relations %}
+                            {% if relation.profile_id == user.profile_id %}
+                                {% for genre in genres %}
+                                    {% if genre.genre_id == relation.genre_id %}
+                                        <div class="genre">
+                                            <p>{{ genre.genre_name }}</p>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
                         {% endfor %}
                     </div>
-                {% endfor %}
-            {% endif %}
 
-            <form method="post" novalidate>
-                {{ form.hidden_tag() }}
-                <div class="form-group">
-                    {{ form.profile_name.label }}{{ form.profile_name(class_="form-control form-control-user") }}
-                    {{ form.description.label }}{{ form.description(class_="form-control form-control-user") }}
-                    {{ form.location.label }}{{ form.location(class_="form-control form-control-user") }}
                     <div>
-                    <div style = "max-width:10%;display:inline-block;">
-                    {{ form.sc_user_id.label }}{{ form.sc_user_id(class_="form-control form-control-user") }}
-                    </div>
-                    <a href="{{ url_for('main.soundcloud_id') }}" target="_blank" class="btn btn-info btn-circle display:inline-block;">
-                    <i class="fas fa-info-circle"></i>
-                  </a>
+                        <div class="rating">
+                            {% for i in range( 5 - user.rating|int) %}
+                                <span class="fa fa-star"></span>
+                            {% endfor %}
+                            {% for i in range(user.rating|int) %}
+                                <span class="fa fa-star checked"></span>
+                            {% endfor %}
+                        </div>
+                        <div class="dropdown no-arrow" style="display:inline-block">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                               data-toggle="dropdown"
+                               aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                 aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Options:</div>
+                                <a class="dropdown-item" href="{{ url_for('prof.profile', username=user.username) }}">Visit
+                                    profile</a>
+                                <a class="dropdown-item" href="#">Contact user</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Rate user</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="form-genre">
-                    {{ form.genre.label }}<br>{{ form.genre() }}
+
+
+                <!-- Card Body -->
+                <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/{{ user.sc_user_id }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=flase&show_reposts=false&show_teaser=flase"></iframe>
+                <div class="description-container">
+                    <div class="description-title">
+                        <p>Artist description:</p>
+                    </div>
+                    <div class="description">
+                        {{ user.profile_description }}
+                    </div>
+
+
                 </div>
-                <br>
-                {{ form.submit(class_="btn btn-primary") }}
-            </form>
-            <!-- profile preview -->
-            <!-- /.container-fluid -->
+            </div>
         </div>
-        <!-- End of Main Content -->
+        <!-- /.container-fluid -->
+    </div>
+    <!-- End of Main Content -->
 {% endblock %}

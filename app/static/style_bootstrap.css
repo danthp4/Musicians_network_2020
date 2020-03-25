@@ -11836,13 +11836,18 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .rating {
-  display: inline-block;
-  padding-right: 2.5pc;
+    display: inline-block;
+    padding-right: 2.5pc;
 }
 
 .location {
-  display: inline-block;
+    display: inline-block;
+    color: slategrey;
+    font-size: 14px;
+    font-weight: normal;
+    padding-left: 3px;
 }
+
 .checked {
     color: orange;
 }
@@ -11869,23 +11874,33 @@ body.sidebar-toggled footer.sticky-footer {
 
 .description-container {
     display: inline-block;
+    background-color: white;
+    border-radius: 0.5pc;
+    margin: 0.25pc;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.arrowi {
-  border: solid white;
-  border-width: 0 3px 3px 0;
-  display: inline-block;
-  padding: 3px;
+.sc_id_container {
+    height: 400px;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
 
-.down {
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-  align-items: center;
-  position: center;
-  align-content: center;
+.genre {
+    display:inline-block;
+    padding-left: 10px;
 }
 
-html {
-  scroll-behavior: smooth;
+.genre-title {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.genre-group {
+    display:inline-block;
+}
+
+.gallery-containter {
+    padding: 1pc 1pc 0pc 1pc;
 }

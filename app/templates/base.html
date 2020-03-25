@@ -82,7 +82,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Favourites
+            Information
         </div>
 
         {% block pages_collapse %}
@@ -103,21 +103,6 @@
         </div>
     </li>
 {% endblock %}
-
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Charts</span></a>
-        </li>
-
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
-        </li>
-
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
@@ -225,15 +210,15 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                  aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="{{ url_for('prof.profile', username=current_user.username) }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
-                                <a class="dropdown-item" href="{{ url_for('main.edit_profile') }}">
+                                <a class="dropdown-item" href="{{ url_for('prof.edit_profile') }}">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Edit Profile
                                 </a>
-                                <a class="dropdown-item" href="{{ url_for('main.settings') }}">
+                                <a class="dropdown-item" href="{{ url_for('prof.settings') }}">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
