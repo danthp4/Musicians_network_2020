@@ -6,7 +6,6 @@ from app import db
 class Musician(db.Model):
     __table__ = db.Model.metadata.tables['Musician']
 
-
 class Venue(db.Model):
     __table__ = db.Model.metadata.tables['Venue']
     
@@ -36,3 +35,12 @@ class Profile_Genre(db.Model):
 
     profile_id = db.Column(db.Integer, db.ForeignKey(Profile.profile_id), nullable=False, primary_key=True)
     genre_id = db.Column(db.Integer, db.ForeignKey(Genre.genre_id), nullable=False, primary_key=True)
+
+class Media(db.Model):
+    __tablename__ = 'media'
+
+    media_id = db.Column(db.Integer, primary_key=True)
+    venue_id = db.Column(db.Integer, db.ForeignKey(Venue.venue_id), nullable=False)
+    media_title = db.Column(db.Text)
+    media_content = db.Column(db.Text)
+

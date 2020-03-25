@@ -70,7 +70,7 @@ def register():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         user = Profile(username=form.username.data, email=form.email.data, profile_name=None,
-                        profile_description=None, profile_url=None, location=None, rating=None,
+                        profile_description=None, profile_image=None, location=None, rating=None,
                         sc_user_id=None)
         user.set_password(form.password.data)
         try:

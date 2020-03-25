@@ -165,23 +165,38 @@
                 {% endfor %}
             {% endif %}
 
-            <form method="post" novalidate>
+            <form method="post" enctype="multipart/form-data" novalidate>
                 {{ form.hidden_tag() }}
                 <div class="form-group">
+                    {{ form.profile_image.label }}{{ form.profile_image() }}
                     {{ form.profile_name.label }}{{ form.profile_name(class_="form-control form-control-user") }}
-                    {{ form.description.label }}{{ form.description(class_="form-control form-control-user") }}
+                    {{ form.description.label }}{{ form.description(class_="form-control form-control-user", maxlength=150) }}
                     {{ form.location.label }}{{ form.location(class_="form-control form-control-user") }}
-                    <div>
-                    <div style = "max-width:10%;display:inline-block;">
-                    {{ form.sc_user_id.label }}{{ form.sc_user_id(class_="form-control form-control-user") }}
+                    <div class="form-genre">
+                        {{ form.genre.label }}<br>{{ form.genre() }}
                     </div>
-                    <a href="{{ url_for('main.soundcloud_id') }}" target="_blank" class="btn btn-info btn-circle display:inline-block;">
-                    <i class="fas fa-info-circle"></i>
-                  </a>
-                    </div>
-                </div>
-                <div class="form-genre">
-                    {{ form.genre.label }}<br>{{ form.genre() }}
+
+                    <br>
+                    <hr class="sidebar-divider d-none d-md-block">
+
+                    {% if account == "musician" %}
+                        {{ account_form.gender.label }}{{ account_form.gender(class_="form-control form-control-user") }}
+                        {{ account_form.birthdate.label }}{{ account_form.birthdate(class_="form-control form-control-user") }}
+                        {{ account_form.availability.label }}{{ account_form.availability(class_="form-control form-control-user") }}
+                        <div>
+                            <div style = "max-width:10%;display:inline-block;">
+                            {{ account_form.sc_id.label }}{{ account_form.sc_id(class_="form-control form-control-user") }}
+                            </div>
+                            <a href="{{ url_for('main.soundcloud_id') }}" target="_blank" class="btn btn-info btn-circle display:inline-block;">
+                                <i class="fas fa-info-circle"></i>
+                            </a>
+                        </div>
+                    {% else %}
+                        {{ account_form.capacity.label }}{{ account_form.capacity(class_="form-control form-control-user") }}
+                        {{ account_form.venue_type.label }}{{ account_form.venue_type(class_="form-control form-control-user") }}
+                        {{ account_form.venue_image.label }}{{ account_form.venue_image() }}
+                        {{ account_form.youtube.label }}{{ account_form.youtube(class_="form-control form-control-user") }}
+                    {% endif %}
                 </div>
                 <br>
                 {{ form.submit(class_="btn btn-primary") }}
