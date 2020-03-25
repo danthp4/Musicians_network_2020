@@ -10,7 +10,7 @@ class ProfileForm(FlaskForm):
     location = SelectField(u'City', choices=[('London', 'London'), ('Machester', 'Manchester'), ('Berlin', 'Berlin')])
     genre = SelectMultipleField(label='Genre', choices=[('1', 'Rock'), ('2', 'Drum and Bass'), ('3', 'Techno'),
                                                         ('4', 'Funk'), ('5', 'Disco'), ('6', 'Metal'),
-                                                        ('7', 'Hip-Hop'), ('8', 'Indie')], validators=[DataRequired()])
+                                                        ('7', 'Hip-Hop'), ('8', 'Indie'), ('9', 'Reggae')], validators=[DataRequired()])
     sc_user_id = StringField('Soundcloud User ID', validators=[DataRequired()])
     submit = SubmitField('Save')
 
