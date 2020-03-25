@@ -82,7 +82,7 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Favourites
+            Information
         </div>
 
         {% block pages_collapse %}
@@ -103,21 +103,6 @@
         </div>
     </li>
 {% endblock %}
-
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Charts</span></a>
-        </li>
-
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
-        </li>
-
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
 
@@ -144,21 +129,23 @@
                 </button>
 
                 <!-- Topbar Search -->
-                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
+                <form class="form-inline navbar-search"
                 action="search" method="post" novalidate>
-                    <div class="input-group">
-                        <input type="search" class="form-control bg-light border-1 small" name="search_term"
+                    <div class="input-group mb-2 mr-sm-2">
+                        <input type="search" class="form-control" name="search_term"
                             placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <select class="form-control form-control-user rounded-0" name="category">
-                                <option>Name</option>
-                                <option>Location</option>
-                                <option>Genre</option>
-                            </select>
-                            <button class="btn btn-primary" type="submit">
-                                <i class="fas fa-search fa-sm"></i>
-                            </button>
-                        </div>
+                    </div>
+                    <div class="input-group mb-2 mr-sm-2">
+                        <select class="form-control" name="category">
+                            <option>Name</option>
+                            <option>Location</option>
+                            <option>Genre</option>
+                        </select>
+                    </div>
+                    <div class="input-group form-group">
+                        <button class="btn btn-primary mb-2" type="submit">
+                            <i class="fas fa-search fa-sm"></i>
+                        </button>
                     </div>
                 </form>
 
@@ -256,7 +243,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2019</span>
+                        <span>Copyright &copy; Musicians network 2020 - Coronavirus sucks</span>
                     </div>
                 </div>
             </footer>
