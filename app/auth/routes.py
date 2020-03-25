@@ -92,14 +92,3 @@ def register():
             db.session.rollback()
             flash('Unable to register {}. Please try again.'.format(form.username.data), 'error')
     return render_template('register.html', form=form)
-
-    # function that returns account type (musician/venue)
-    def account_type(user_id):
-        musician = Musician.query.filter_by(profile_id=user_id).first()
-        venue = Venue.query.filter_by(profile_id=user_id).first()
-        if musician is not None and venue is None:
-            return print('musician')
-        elif venue is not None and musician is None:
-            return print('venue')
-        else:
-            return print('not found')
