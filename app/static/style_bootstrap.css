@@ -11904,3 +11904,18 @@ body.sidebar-toggled footer.sticky-footer {
 .gallery-containter {
     padding: 1pc 1pc 0pc 1pc;
 }
+
+.venue-information {
+    padding-top: 0%;
+    padding-right: 2.5%;
+    padding-left: 2.5%;
+    padding-bottom: 2.5%;
+    text-align: center;
+}
+
+.venue-container {
+    display: inline-block;
+    background-color: white;
+    border-radius: 0.5pc;
+    margin: 0.25pc;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

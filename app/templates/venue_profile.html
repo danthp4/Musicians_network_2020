@@ -209,8 +209,16 @@
                     </div>
                 </div>
 
+                <div class="venue-container">
+
+                    <div class="venue-information">
+                        <p>{{ user.venue_type }}</p>
+                        <p>{{ user.venue_capacity }}</p>
+                    </div>
+                </div>
 
                 <!-- Card Body -->
+
                 <div class="gallery-containter">
                     <!-- Grid row -->
 
@@ -398,13 +406,11 @@
                 </div>
                 <div class="description-container">
                     <div class="description-title">
-                        <p>Artist description:</p>
+                        <p>Venue description:</p>
                     </div>
                     <div class="description">
                         {{ user.profile_description }}
                     </div>
-
-
                 </div>
             </div>
         </div>

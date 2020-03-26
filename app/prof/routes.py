@@ -81,6 +81,10 @@ def edit_profile():
         except IntegrityError:
             db.session.rollback()
             flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
+### BRYAN This is the form get from the database to show users their current information
+    elif request.method == "GET":
+        form.profile_name.data = user.profile_name
+### ends here
     return render_template('edit_profile.html', form=form, account=account, account_form=adaptive_form)
 
 # A place to edit personal information (username, email, password)
