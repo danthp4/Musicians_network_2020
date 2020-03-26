@@ -226,13 +226,6 @@
                         </div>
                     </div>
 
-                    <div class="venue-container">
-
-                        <div class="venue-information">
-                            <p>{{ user.venue_type }}</p>
-                            <p>{{ user.venue_capacity }}</p>
-                        </div>
-                    </div>
                     <!-- Card Body -->
                     <div class="gallery-containter">
                         <!-- Grid row -->
@@ -420,6 +413,22 @@
                         <!-- Grid row -->
                     </div>
                     <div class="description-container">
+                        <div class="venue-container">
+                        <span>
+                            <div class="venue-title">Venue type:</div>
+                            <div class="venue-information">
+                                <span class="badge badge-primary"
+                                      style="background-color: lightslategray;">{{ user.venue_type }}</span>
+                            </div>
+                        </span>
+                            <span>
+                            <div class="venue-title">Venue Capacity:</div>
+                                <div class="venue-information">
+                                    <span class="badge badge-primary"
+                                          style="background-color: lightslategray;">{{ user.venue_capacity }}</span>
+                                </div>
+                        </span>
+                        </div>
                         <div class="description-title">
                             <p>Venue description:</p>
                         </div>

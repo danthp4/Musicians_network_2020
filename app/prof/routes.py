@@ -20,7 +20,7 @@ def profile(username):
         if musician is not None:
             return render_template('musicians_profile.html', user=user, genres=genres, musician=musician)
         elif venue is not None:
-            return render_template('venue_profile.html', user=user, genres=genres)
+            return render_template('venue_profile.html', user=user, genres=genres, venue=venue)
         else:
             flash('User {} is not properly registered.'.format(username))
             return redirect(url_for('main.index'))

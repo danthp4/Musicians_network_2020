@@ -7,25 +7,31 @@ from sqlalchemy.exc import IntegrityError
 bp_main = Blueprint('main', __name__)
 bp_about = Blueprint('about', __name__, url_prefix='/about')
 
+
 @bp_main.route('/')
 def index():
     if current_user.is_authenticated:
         # show musicians only
-        profiles = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id).with_entities(Profile.username, 
-        Profile.location, Profile.profile_id, Profile.rating, Musician.sc_id, Profile.profile_description)
+        profiles = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id).with_entities(
+            Profile.username,
+            Profile.location, Profile.profile_id, Profile.rating, Musician.sc_id, Profile.profile_description)
         relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
         genres = Genre.query.all()
         return render_template('home.html', profiles=profiles, relations=relations, genres=genres)
     else:
         return render_template('index.html')
 
+
 @bp_main.route('/venues')
 @login_required
 def venues():
-    profiles = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
+    profiles = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).with_entities(
+        Venue.venue_capacity, Profile.username, Profile.location, Profile.rating,
+        Profile.profile_description, Profile.profile_id, Venue.venue_type)
     relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
     genres = Genre.query.all()
     return render_template('venues.html', profiles=profiles, relations=relations, genres=genres)
+
 
 @bp_about.route('/musicians')
 def musicians():
@@ -66,6 +72,7 @@ def search():
         return render_template('search_results.html', results=results)
     else:
         return redirect(url_for('main.index'))
+
 
 @bp_main.route('/soundcloud_id')
 def soundcloud_id():
