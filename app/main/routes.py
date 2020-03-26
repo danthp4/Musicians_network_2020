@@ -11,7 +11,8 @@ bp_about = Blueprint('about', __name__, url_prefix='/about')
 def index():
     if current_user.is_authenticated:
         # show musicians only
-        profiles = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id).all()
+        profiles = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id).with_entities(Profile.username, 
+        Profile.location, Profile.profile_id, Profile.rating, Musician.sc_id, Profile.profile_description)
         relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
         genres = Genre.query.all()
         return render_template('home.html', profiles=profiles, relations=relations, genres=genres)
