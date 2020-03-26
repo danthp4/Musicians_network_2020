@@ -1,11 +1,12 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
-from app.prof.forms import images, ProfileForm, SettingsForm, MusicianForm, VenueForm
+from app import db
 from app.models import Profile, Profile_Genre, Genre, Musician, Venue, Media
-from app import db, login_manager
+from app.prof.forms import images, ProfileForm, SettingsForm, MusicianForm, VenueForm
+from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 
 bp_prof = Blueprint('prof', __name__)
+
 
 @bp_prof.route('/profile/<username>')
 @login_required
@@ -13,10 +14,12 @@ def profile(username):
     user = Profile.query.filter_by(username=username).first()
     if user is not None:
         relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
-        genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(Genre.genre_name)
+        genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(
+            Genre.genre_name)
         # check if it's musician
         musician = Musician.query.filter_by(profile_id=user.profile_id).first()
         venue = Venue.query.filter_by(profile_id=user.profile_id).first()
+
         if musician is not None:
             return render_template('musicians_profile.html', user=user, genres=genres, musician=musician)
         elif venue is not None:
@@ -53,7 +56,7 @@ def edit_profile():
         account = 'venue'
     else:
         flash('User with username is not registered properly.')
-        return redirect(url_for('main.index')) 
+        return redirect(url_for('main.index'))
 
     if request.method == 'POST' and form.validate_on_submit():
         try:
@@ -72,7 +75,7 @@ def edit_profile():
                 relation = Profile_Genre(profile_id=current_user.profile_id, genre_id=int(genre))
                 db.session.add(relation)
                 db.session.commit()
-            
+
             if musician is not None:
                 musician.gender = int(adaptive_form.gender.data)
                 musician.birthdate = adaptive_form.birthdate.data
@@ -92,6 +95,7 @@ def edit_profile():
             flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
 
     return render_template('edit_profile.html', form=form, account=account, account_form=adaptive_form)
+
 
 # A place to edit personal information (username, email, password)
 @bp_prof.route('/settings', methods=['POST', 'GET'])

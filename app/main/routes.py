@@ -22,7 +22,7 @@ def index():
         return render_template('index.html')
 
 
-@bp_main.route('/venues')
+@bp_main.route('/venues', methods=['GET', 'POST'])
 @login_required
 def venues():
     profiles = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).with_entities(
@@ -30,7 +30,20 @@ def venues():
         Profile.profile_description, Profile.profile_id, Venue.venue_type)
     relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
     genres = Genre.query.all()
-    return render_template('venues.html', profiles=profiles, relations=relations, genres=genres)
+
+    from app.prof.forms import RatingForm
+    form = RatingForm()
+    user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
+    form.rating.data = user.rating
+    if request.method == 'POST' and form.validate():
+        user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
+        try:
+            user.rating(form.rating.data)
+            db.session.commit()
+        except IntegrityError:
+            flash('error')
+
+    return render_template('venues.html', profiles=profiles, relations=relations, genres=genres, form=form)
 
 
 @bp_about.route('/musicians')
