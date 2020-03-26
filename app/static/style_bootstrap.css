@@ -11906,11 +11906,13 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .venue-information {
-    padding-top: 0%;
-    padding-right: 2.5%;
-    padding-left: 2.5%;
-    padding-bottom: 2.5%;
-    text-align: center;
+    padding: 0.5%;
+    display: inline-block;
+}
+
+.venue-title {
+    padding: 0.5%;
+    display: inline-block;
 }
 
 .venue-container {
@@ -11919,3 +11921,5 @@ body.sidebar-toggled footer.sticky-footer {
     border-radius: 0.5pc;
     margin: 0.25pc;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    text-align: center
+}
