@@ -625,6 +625,8 @@ pre code {
     flex-basis: 0;
     flex-grow: 1;
     max-width: 100%;
+    justify-content: space-evenly;
+    display: flex;
 }
 
 .col-auto {
@@ -11873,11 +11875,12 @@ body.sidebar-toggled footer.sticky-footer {
 
 
 .description-container {
-    display: inline-block;
     background-color: white;
     border-radius: 0.5pc;
     margin: 0.25pc;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    max-width: 100%;
+    width: inherit;
 }
 
 .sc_id_container {
@@ -11902,7 +11905,7 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .gallery-containter {
-    padding: 1pc 1pc 0pc 1pc;
+    padding: 1pc;
 }
 
 .venue-pic-col{
@@ -11928,5 +11931,13 @@ body.sidebar-toggled footer.sticky-footer {
     display: flex !important;
 }
 
-.venue-row {
+.img-fluid-venue {
+    max-width: 100%;
+    max-height: 27pc;
+    border-radius: 1pc;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.venue-row{
+
 }
