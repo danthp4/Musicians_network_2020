@@ -19,11 +19,12 @@ def profile(username):
         # check if it's musician
         musician = Musician.query.filter_by(profile_id=user.profile_id).first()
         venue = Venue.query.filter_by(profile_id=user.profile_id).first()
-
+        
         if musician is not None:
             return render_template('musicians_profile.html', user=user, genres=genres, musician=musician)
         elif venue is not None:
-            return render_template('venue_profile.html', user=user, genres=genres, venue=venue)
+            medias = Media.query.filter_by(venue_id=venue.venue_id).all()
+            return render_template('venue_profile.html', user=user, genres=genres, venue=venue, medias=medias)
         else:
             flash('User {} is not properly registered.'.format(username))
             return redirect(url_for('main.index'))
@@ -37,36 +38,37 @@ def profile(username):
 def edit_profile():
     form = ProfileForm()
     user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
-    # displays default input
-    form.profile_name.data = user.profile_name
-    form.description.data = user.profile_description
-    form.location.data = user.location
-
     musician = Musician.query.filter_by(profile_id=user.profile_id).first()
     venue = Venue.query.filter_by(profile_id=user.profile_id).first()
-    if musician is not None:
-        adaptive_form = MusicianForm()
-        adaptive_form.birthdate.data = musician.birthdate
-        adaptive_form.sc_id.data = musician.sc_id
-        account = 'musician'
-    elif venue is not None:
-        adaptive_form = VenueForm()
-        adaptive_form.capacity.data = venue.venue_capacity
-        adaptive_form.venue_type.data = venue.venue_type
-        account = 'venue'
-    else:
-        flash('User with username is not registered properly.')
-        return redirect(url_for('main.index'))
-
-    if request.method == 'POST' and form.validate_on_submit():
+    if request.method == 'GET':
+        ## displays default input
+        form.profile_name.data = user.profile_name
+        form.description.data = user.profile_description
+        form.location.data = user.location
+        if musician is not None:
+            adaptive_form = MusicianForm()
+            adaptive_form.birthdate.data = musician.birthdate
+            adaptive_form.sc_id.data = musician.sc_id
+            account = 'musician'
+        elif venue is not None:
+            adaptive_form = VenueForm()
+            adaptive_form.capacity.data = venue.venue_capacity
+            adaptive_form.venue_type.data = venue.venue_type
+            account = 'venue'
+        else:
+            flash('User with username is not registered properly.')
+            return redirect(url_for('main.index'))
+        return render_template('edit_profile.html', form=form, account=account, account_form=adaptive_form)
+    elif request.method == 'POST' and form.validate():
         try:
-            filename = images.save(request.files['profile_image'])
-            url = images.url(filename)
-            # Update user information
+            ## Update user information
+            if form.profile_image.data is not None:
+                filename = images.save(request.files['profile_image'])
+                url = images.url(filename)
+                user.profile_image = url
             user.profile_name = form.profile_name.data
             user.profile_description = form.description.data
             user.location = form.location.data
-            user.profile_image = url
             # Delete existing record with current profile_id then update with new one
             Profile_Genre.query.filter_by(profile_id=current_user.profile_id).delete()
             # Iterate over chosen Genre and update Musician/Genre table
@@ -77,24 +79,43 @@ def edit_profile():
                 db.session.commit()
 
             if musician is not None:
+                adaptive_form = MusicianForm()
                 musician.gender = int(adaptive_form.gender.data)
                 musician.birthdate = adaptive_form.birthdate.data
                 musician.availability = int(adaptive_form.availability.data)
                 musician.sc_id = adaptive_form.sc_id.data
             elif venue is not None:
+                adaptive_form = VenueForm()
                 venue.venue_capacity = adaptive_form.capacity.data
                 venue.venue_type = adaptive_form.venue_type.data
-                filename = images.save(request.files['venue_image'])
-                url = images.url(filename)
-                media = Media(venue_id=venue.venue_id, media_title=None, media_content=url)
-                db.session.add(media)
+
+                if adaptive_form.venue_image.data is not None:
+                    if media_counter(Media, 'image', venue.venue_id) >= 1:
+                        # delete image and replace
+                        import os
+                        venue_image = Media.query.filter_by(venue_id=venue.venue_id, media_type='image')
+                        file_path = images.path(os.path.basename(venue_image.first().media_content))
+                        os.remove(file_path)
+                        venue_image.delete()
+                    filename = images.save(request.files['venue_image'])
+                    url = images.url(filename)
+                    media = Media(venue_id=venue.venue_id, media_type='image', media_content=url)
+                    db.session.add(media)
+
+                if adaptive_form.youtube.data != '':
+                    if media_counter(Media, 'youtube', venue.venue_id) < 3:
+                        url = adaptive_form.youtube.data
+                        media = Media(venue_id=venue.venue_id, media_type='youtube', media_content=url)
+                        db.session.add(media)
+                    else:
+                        # delete youtube link and replace
+                        Media.query.filter_by(venue_id=venue.venue_id, media_type='youtube').delete()
             db.session.commit()
-            return redirect(url_for('main.index'))
+            return redirect(url_for('prof.profile', username=user.username))
         except IntegrityError:
             db.session.rollback()
             flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
-
-    return render_template('edit_profile.html', form=form, account=account, account_form=adaptive_form)
+    return redirect(url_for('main.index'))
 
 
 # A place to edit personal information (username, email, password)
@@ -113,3 +134,10 @@ def settings():
         except IntegrityError:
             flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
     return render_template('settings.html', form=form)
+
+def media_counter(Media_table, media_type, venue_id):
+    medias = Media_table.query.filter_by(venue_id=venue_id, media_type=media_type).all()
+    count = 0
+    for media in medias:
+        count += 1
+    return count
