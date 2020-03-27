@@ -37,3 +37,10 @@ class TestConfig(Config):
 
 class DevConfig(Config):
     DEBUG = True
+
+
+app_config = {
+    'development': DevConfig,
+    'production': ProdConfig,
+    'testing': TestConfig
+}
