@@ -5,6 +5,7 @@ from app import db, login_manager
 from flask_login import login_required, login_user, logout_user, current_user
 from datetime import timedelta
 from urllib.parse import urlparse, urljoin
+from datetime import timedelta
 
 from sqlalchemy.exc import IntegrityError
 
@@ -48,7 +49,7 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid email/password combination', 'error')
             return redirect(url_for('auth.login'))
-        login_user(user)
+        login_user(user, remember=form.remember_me.data, duration=timedelta(minutes=1))
         next = request.args.get('next')
         if not is_safe_url(next):
             return abort(400)
@@ -70,7 +71,8 @@ def register():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         user = Profile(username=form.username.data, email=form.email.data, profile_name=None,
-                        profile_description=None, profile_image=None, location=None, rating=None)
+                        profile_description=None, profile_image=None, location=None, rating=None,
+                        block=0)
         user.set_password(form.password.data)
         try:
             db.session.add(user)
