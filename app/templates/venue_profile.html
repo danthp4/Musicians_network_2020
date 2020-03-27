@@ -156,7 +156,7 @@
 
         <div class="feed">
             <!-- Dropdown Card Example -->
-            <div class="card shadow mb-4">
+            <span class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <div class="profile-user-location">
@@ -209,8 +209,8 @@
                     </div>
                 </div>
 
-
                 <!-- Card Body -->
+
                 <div class="gallery-containter">
                     <!-- Grid row -->
 
@@ -397,18 +397,33 @@
                     <!-- Grid row -->
                 </div>
                 <div class="description-container">
+                    <div class="venue-container">
+                        <span>
+                            <div class="venue-title">Venue type:</div>
+                            <div class="venue-information">
+                                <span class="badge badge-primary"
+                                      style="background-color: lightslategray;">{{ venue.venue_type }}</span>
+                            </div>
+                        </span>
+                        <span>
+                            <div class="venue-title">Venue Capacity:</div>
+                                <div class="venue-information">
+                                    <span class="badge badge-primary"
+                                          style="background-color: lightslategray;">{{ venue.venue_capacity }}</span>
+                                </div>
+                        </span>
+                    </div>
                     <div class="description-title">
-                        <p>Artist description:</p>
+                        <p>Venue description:</p>
                     </div>
                     <div class="description">
                         {{ user.profile_description }}
                     </div>
-
-
                 </div>
-            </div>
+
         </div>
-        <!-- /.container-fluid -->
+    </div>
+    <!-- /.container-fluid -->
     </div>
     <!-- End of Main Content -->
 {% endblock %}

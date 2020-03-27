@@ -11862,7 +11862,7 @@ body.sidebar-toggled footer.sticky-footer {
 
 .description-title {
     text-align: center;
-    padding-top: 2%;
+    padding-top: 1%;
     padding-right: 0%;
     padding-left: 0%;
     padding-bottom: 0%;
@@ -11903,4 +11903,27 @@ body.sidebar-toggled footer.sticky-footer {
 
 .gallery-containter {
     padding: 1pc 1pc 0pc 1pc;
+}
+
+.venue-information {
+    display: inline-block;
+    font-size: 13px;
+}
+
+.venue-title {
+    display: inline-block;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.venue-container {
+    background-color: white;
+    border-radius: 0.5pc;
+    background-color: #cccccc;
+    text-align: center;
+    justify-content: space-evenly;
+    display: flex !important;
+}
+
+.venue-row {
 }

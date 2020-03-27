@@ -70,8 +70,7 @@ def register():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         user = Profile(username=form.username.data, email=form.email.data, profile_name=None,
-                        profile_description=None, profile_image=None, location=None, rating=None,
-                        sc_user_id=None)
+                        profile_description=None, profile_image=None, location=None, rating=None)
         user.set_password(form.password.data)
         try:
             db.session.add(user)
@@ -80,11 +79,11 @@ def register():
             user = Profile.query.filter_by(email=form.email.data).first()
             login_user(user)
             if form.option.data == 'm':
-                user = Musician(name=None, gender=None, profile_id = current_user.profile_id,
-                                birthdate=None, availability=None)
+                user = Musician(gender=None, profile_id = current_user.profile_id,
+                                birthdate=None, availability=None, sc_id=None)
                 db.session.add(user)
             else:
-                user = Venue(venue_name=None, venue_capacity=None, profile_id = current_user.profile_id,
+                user = Venue(venue_capacity=None, profile_id = current_user.profile_id,
                                 venue_type=None)
                 db.session.add(user)
             db.session.commit()
@@ -93,14 +92,3 @@ def register():
             db.session.rollback()
             flash('Unable to register {}. Please try again.'.format(form.username.data), 'error')
     return render_template('register.html', form=form)
-
-    # function that returns account type (musician/venue)
-    def account_type(user_id):
-        musician = Musician.query.filter_by(profile_id=user_id).first()
-        venue = Venue.query.filter_by(profile_id=user_id).first()
-        if musician is not None and venue is None:
-            return print('musician')
-        elif venue is not None and musician is None:
-            return print('venue')
-        else:
-            return print('not found')

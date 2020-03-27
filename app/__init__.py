@@ -9,6 +9,7 @@ db = SQLAlchemy()
 images = UploadSet('images', IMAGES)
 login_manager = LoginManager()
 
+
 def create_app(config_class=DevConfig):
     """
     Creates an application instance to run using settings from config.py
@@ -17,13 +18,14 @@ def create_app(config_class=DevConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
     login_manager.init_app(app)
-    
 
     # Initialise the database and create tables
     db.init_app(app)
     configure_uploads(app, images)
+    from app.models import Profile, Musician, Venue, Media, Administrator, Genre, Profile_Genre
     with app.app_context():
-        db.Model.metadata.reflect(db.engine)
+        db.drop_all()
+        db.create_all()
 
     # Register Blueprints
     from app.main.routes import bp_main, bp_about

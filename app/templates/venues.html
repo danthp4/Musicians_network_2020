@@ -186,13 +186,13 @@
                             </div>
                             {% for relation in relations %}
                                 {% if relation.profile_id == user.profile_id %}
+                                    <span class="badge badge-primary">
                                     {% for genre in genres %}
                                         {% if genre.genre_id == relation.genre_id %}
-                                            <div class="genre">
-                                                <p>{{ genre.genre_name }}</p>
-                                            </div>
+                                            {{ genre.genre_name }}
                                         {% endif %}
                                     {% endfor %}
+                                     </span>
                                 {% endif %}
                             {% endfor %}
                         </div>
@@ -225,7 +225,6 @@
                             </div>
                         </div>
                     </div>
-
 
                     <!-- Card Body -->
                     <div class="gallery-containter">
@@ -414,6 +413,22 @@
                         <!-- Grid row -->
                     </div>
                     <div class="description-container">
+                        <div class="venue-container">
+                        <span>
+                            <div class="venue-title">Venue type:</div>
+                            <div class="venue-information">
+                                <span class="badge badge-primary"
+                                      style="background-color: lightslategray;">{{ user.venue_type }}</span>
+                            </div>
+                        </span>
+                            <span>
+                            <div class="venue-title">Venue Capacity:</div>
+                                <div class="venue-information">
+                                    <span class="badge badge-primary"
+                                          style="background-color: lightslategray;">{{ user.venue_capacity }}</span>
+                                </div>
+                        </span>
+                        </div>
                         <div class="description-title">
                             <p>Venue description:</p>
                         </div>

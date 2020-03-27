@@ -18,9 +18,9 @@ def profile(username):
         musician = Musician.query.filter_by(profile_id=user.profile_id).first()
         venue = Venue.query.filter_by(profile_id=user.profile_id).first()
         if musician is not None:
-            return render_template('musicians_profile.html', user=user, genres=genres)
+            return render_template('musicians_profile.html', user=user, genres=genres, musician=musician)
         elif venue is not None:
-            return render_template('venue_profile.html', user=user, genres=genres)
+            return render_template('venue_profile.html', user=user, genres=genres, venue=venue)
         else:
             flash('User {} is not properly registered.'.format(username))
             return redirect(url_for('main.index'))
@@ -34,13 +34,22 @@ def profile(username):
 def edit_profile():
     form = ProfileForm()
     user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
+    # displays default input
+    form.profile_name.data = user.profile_name
+    form.description.data = user.profile_description
+    form.location.data = user.location
+
     musician = Musician.query.filter_by(profile_id=user.profile_id).first()
     venue = Venue.query.filter_by(profile_id=user.profile_id).first()
     if musician is not None:
         adaptive_form = MusicianForm()
+        adaptive_form.birthdate.data = musician.birthdate
+        adaptive_form.sc_id.data = musician.sc_id
         account = 'musician'
     elif venue is not None:
         adaptive_form = VenueForm()
+        adaptive_form.capacity.data = venue.venue_capacity
+        adaptive_form.venue_type.data = venue.venue_type
         account = 'venue'
     else:
         flash('User with username is not registered properly.')
@@ -81,6 +90,7 @@ def edit_profile():
         except IntegrityError:
             db.session.rollback()
             flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
+
     return render_template('edit_profile.html', form=form, account=account, account_form=adaptive_form)
 
 # A place to edit personal information (username, email, password)
