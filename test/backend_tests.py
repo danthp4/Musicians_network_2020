@@ -34,7 +34,7 @@ class BaseTestCase(TestCase):
 
     def login(self, email, password):
         return self.client.post(
-            '/login/',
+            '/login',
             data=dict(email=email, password=password),
             follow_redirects=True
         )
@@ -53,8 +53,8 @@ class BaseTestCase(TestCase):
         )
 
     # Provides the details for a musician.
-    musician_data = dict(musician_id='1', email='cs123456@ucl.ac.uk',
-                         password='test', confirm='test')
+    musician_data = dict(username='dan', email='dan@ucl.ac.uk',
+                         password='dan', confirm='dan', option='m', submit='Register')
 
     # Provides the details for a venue.
     venue_data = dict(venue_id='1', email="ct123456@ucl.ac.uk", password="test", confirm="test")
@@ -86,8 +86,27 @@ class TestMain(BaseTestCase):
         WHEN the '/musicians' about musicians page is requested (GET)
         THEN check the response is valid (200 status code)
         """
-        response = self.client.get('/bands')
+        response = self.client.get('about/musicians')
         self.assertEqual(response.status_code, 200)
+
+    def test_about_bands_page_valid(self):
+        """
+        GIVEN a Flask application
+        WHEN the '/bands' about musicians page is requested (GET)
+        THEN check the response is valid (200 status code)
+        """
+        response = self.client.get('about/bands')
+        self.assertEqual(response.status_code, 200)
+
+    def test_about_venues_page_valid(self):
+        """
+        GIVEN a Flask application
+        WHEN the '/musicians' about musicians page is requested (GET)
+        THEN check the response is valid (200 status code)
+        """
+        response = self.client.get('about/venues')
+        self.assertEqual(response.status_code, 200)
+
 
     def test_profile_not_allowed_when_user_not_logged_in(self):
         """
@@ -126,34 +145,39 @@ class TestMain(BaseTestCase):
 class TestAuth(BaseTestCase):
 
     def test_registration_form_displays(self):
-        target_url = url_for('auth.signup')
+        target_url = url_for('auth.register')
         response = self.client.get(target_url)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Signup', response.data)
+        self.assertIn(b'Create an account!', response.data)
 
-    def test_register_student_success(self):
-        count = Student.query.count()
-        response = self.client.post(url_for('auth.signup'), data=dict(
-            email=self.student_data.get('email'),
-            password=self.student_data.get('password'),
-            name=self.student_data.get('name'),
-            title=self.student_data.get('title'),
-            role=self.student_data.get('role'),
-            uni_id=self.student_data.get('uni_id'),
-            confirm=self.student_data.get('confirm')
+    def test_register_musician_success(self):
+        count = Profile.query.count()
+        response = self.client.post(url_for('auth.register'), data=dict(
+            username=self.musician_data.get('username'),
+            email=self.musician_data.get('email'),
+            password=self.musician_data.get('password'),
+            confirm=self.musician_data.get('confirm'),
+            option=self.musician_data.get('option'),
+            submit=self.musician_data.get('submit')
         ), follow_redirects=True)
-        count2 = Student.query.count()
+        count2 = Profile.query.count()
         self.assertEqual(count2 - count, 1)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Welcome', response.data)
+        self.assertIn(b'Profiles', response.data)
 
     def test_login_fails_with_invalid_details(self):
-        response = self.login(email='john@john.com', password='Fred')
-        self.assertIn(b'Invalid username or password', response.data)
+        response = self.login(email='bryan@ucl.com', password='bryan')
+        self.assertIn(b'Invalid email/password combination', response.data)
 
     def test_login_succeeds_with_valid_details(self):
-        response = self.login(email='cs1234567@ucl.ac.uk', password='cs1234567')
-        self.assertIn(b'Welcome Ahmet Roth', response.data)
+        response = self.login(email='vizon@ucl.ac.uk', password='vizon')
+        self.assertIn(b'Profiles', response.data)
+
+    def test_logout_valid(self):
+        self.login(email='vizon@ucl.ac.uk', password='vizon')
+        redirect_url = url_for('main.index')
+        response = self.client.get('/logout/')
+        self.assertRedirects(response, redirect_url, b"Welcome to Musician's Network!.")
 
 
 if __name__ == '__main__':

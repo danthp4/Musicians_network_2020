@@ -192,9 +192,9 @@
                             </a>
                         </div>
                     {% else %}
+                        {{ account_form.venue_image.label }}<br>{{ account_form.venue_image() }}<br><br>
                         {{ account_form.capacity.label }}{{ account_form.capacity(class_="form-control form-control-user") }}
                         {{ account_form.venue_type.label }}{{ account_form.venue_type(class_="form-control form-control-user") }}
-                        {{ account_form.venue_image.label }}<br>{{ account_form.venue_image() }}<br><br>
                         {{ account_form.youtube.label }}{{ account_form.youtube(class_="form-control form-control-user") }}
                     {% endif %}
                 </div>
