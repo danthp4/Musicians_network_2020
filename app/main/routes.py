@@ -78,6 +78,14 @@ def bands():
 def venues():
     return render_template('about_venues.html')
 
+@bp_main.route('/soundcloud_id')
+def soundcloud_id():
+    return render_template('soundcloud_id.html')
+
+@bp_main.route('/youtube_id')
+def youtube_id():
+    return render_template('youtube_id.html')
+
 
 @bp_main.route('/search', methods=['POST', 'GET'])
 @login_required
@@ -105,6 +113,4 @@ def search():
         return redirect(url_for('main.index'))
 
 
-@bp_main.route('/soundcloud_id')
-def soundcloud_id():
-    return render_template('soundcloud_id.html')
+
