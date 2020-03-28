@@ -14,6 +14,7 @@ class Profile(UserMixin, db.Model):
     location = db.Column(db.Text)
     rating = db.Column(db.REAL)
     profile_image = db.Column(db.VARCHAR)
+    block = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return '<User Email: {}, Username: {}>'.format(self.email, self.username)
@@ -68,7 +69,7 @@ class Media(db.Model):
     __tablename__ = 'Media'
     media_id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
     venue_id = db.Column(db.Integer, db.ForeignKey('Venue.venue_id'), nullable=False)
-    media_title = db.Column(db.Text)
+    media_type = db.Column(db.Text, nullable=False)
     media_content = db.Column(db.VARCHAR)
 
 
