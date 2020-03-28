@@ -105,8 +105,6 @@ def edit_profile():
                 if adaptive_form.youtube.data != '':
                     if media_counter(Media, 'youtube', venue.venue_id) < 3:
                         url = adaptive_form.youtube.data
-                        # Now remove unnecessary characters from string
-                        url = url.lstrip('https://www.youtube.com/watch?v ').split("&", 1)[0].lstrip('=')
                         media = Media(venue_id=venue.venue_id, media_type='youtube', media_content=url)
                         db.session.add(media)
                     else:
@@ -143,5 +141,3 @@ def media_counter(Media_table, media_type, venue_id):
     for media in medias:
         count += 1
     return count
-
-

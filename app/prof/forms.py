@@ -31,7 +31,7 @@ class VenueForm(FlaskForm):
     venue_type = StringField('Venue Type')
     # user can enter image file and/or embed youtube link
     venue_image = FileField('Image', validators=[FileAllowed(images, 'Images only')])
-    youtube = StringField('YouTube video URL')
+    youtube = StringField('YouTube Embed ID')
 
 
 class SettingsForm(FlaskForm):
