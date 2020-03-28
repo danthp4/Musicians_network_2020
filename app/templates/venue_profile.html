@@ -203,7 +203,9 @@
                                     profile</a>
                                 <a class="dropdown-item" href="#">Contact user</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Rate user</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ratingModal">
+                                        Rate user
+                                    </a>
                             </div>
                         </div>
                     </div>
@@ -344,13 +346,6 @@
                     </div>
                     <div class="description-title">
                         <p>Venue description:</p>
-                    </div>
-                                     <!-- image by description -->
-                    <div>
-                        {% for media in medias %}
-                            {% if media.media_type == 'image' %}
-                            {% endif %}
-                        {% endfor %}
                     </div>
                     <div class="description">
                         {{ user.profile_description }}

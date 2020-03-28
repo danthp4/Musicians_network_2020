@@ -45,7 +45,7 @@ def venues():
         except IntegrityError:
             flash('error')
 
-    return render_template('venues.html', profiles=profiles, relations=relations, genres=genres, form=form)
+    return render_template('venues.html', profiles=profiles, relations=relations, genres=genres, form=form, media=media)
 
 
 @bp_about.route('/musicians')
