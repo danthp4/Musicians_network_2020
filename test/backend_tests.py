@@ -19,12 +19,19 @@ class BaseTestCase(TestCase):
         db.create_all()
 
         # create test data
-        self.user = Profile(profile_id='1', email='vizon@ucl.ac.uk', username='vizon', profile_name=None,
+        self.user_musician = Profile(profile_id='2', email='bryan@ucl.ac.uk', username='bryan', profile_name=None,
+                            profile_description=None, location=None, rating=None, profile_image=None)
+        self.user_venue = Profile(profile_id='1', email='vizon@ucl.ac.uk', username='vizon', profile_name=None,
                              profile_description=None, location=None, rating=None, profile_image=None)
         self.venue = Venue(venue_id='1', venue_capacity=None, venue_type=None, profile_id='1')
-        self.user.set_password('vizon')
-        db.session.add(self.user)
+        self.musician = Musician(musician_id='1', gender='1', profile_id='2', birthdate=None, availability=None,
+                                 sc_id=None)
+        self.user_venue.set_password('vizon')
+        self.user_musician.set_password('bryan')
+        db.session.add(self.user_musician)
+        db.session.add(self.user_venue)
         db.session.add(self.venue)
+        db.session.add(self.musician)
         db.session.commit()
 
     def tearDown(self):
@@ -58,6 +65,9 @@ class BaseTestCase(TestCase):
 
     # Provides the details for a venue.
     venue_data = dict(venue_id='1', email="ct123456@ucl.ac.uk", password="test", confirm="test")
+    setting_data = dict(username='daniel', email='daniel@ucl.ac.uk', password='daniel', confirm='daniel',
+                        submit='Save')
+    profile_data = dict()
 
 
 class TestMain(BaseTestCase):
@@ -154,6 +164,33 @@ class TestAuth(BaseTestCase):
     def test_login_succeeds_with_valid_details(self):
         response = self.login(email='cs1234567@ucl.ac.uk', password='cs1234567')
         self.assertIn(b'Welcome Ahmet Roth', response.data)
+
+
+class TestProf(BaseTestCase):
+    def test_setting_form_displays(self):
+        self.login(email='vizon@ucl.ac.uk', password='vizon')
+        target_url = url_for('prof.settings')
+        response = self.client.get(target_url)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Edit Personal Information', response.data)
+
+    def test_setting_edit_success(self):
+        self.login(email='vizon@ucl.ac.uk', password='vizon')
+        count = Profile.query.count()
+        response = self.client.post(url_for('prof.settings'), data=dict(
+            username=self.setting_data.get('username'),
+            email=self.setting_data.get('email'),
+            password=self.setting_data.get('password'),
+            confirm=self.setting_data.get('confirm'),
+            submit=self.setting_data.get('submit')
+        ), follow_redirects=True)
+        count2 = Profile.query.count()
+        self.assertEqual(count2 - count, 0)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Profiles', response.data)
+
+
+
 
 
 if __name__ == '__main__':
