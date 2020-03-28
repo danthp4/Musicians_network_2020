@@ -32,7 +32,6 @@ def venues():
     genres = Genre.query.all()
     media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
 
-
     from app.prof.forms import RatingForm
     form = RatingForm()
     user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
