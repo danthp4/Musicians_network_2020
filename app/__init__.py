@@ -9,7 +9,6 @@ db = SQLAlchemy()
 images = UploadSet('images', IMAGES)
 login_manager = LoginManager()
 
-
 def create_app(config_class=DevConfig):
     """
     Creates an application instance to run using settings from config.py
@@ -18,6 +17,7 @@ def create_app(config_class=DevConfig):
     app = Flask(__name__)
     app.config.from_object(config_class)
     login_manager.init_app(app)
+
 
     # Initialise the database and create tables
     db.init_app(app)

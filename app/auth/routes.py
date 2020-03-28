@@ -71,7 +71,8 @@ def register():
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         user = Profile(username=form.username.data, email=form.email.data, profile_name=None,
-                        profile_description=None, profile_image=None, location=None, rating=None)
+                        profile_description=None, profile_image=None, location=None, rating=None,
+                        block=0)
         user.set_password(form.password.data)
         try:
             db.session.add(user)
