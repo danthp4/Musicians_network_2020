@@ -19,7 +19,7 @@ def profile(username):
         # check if it's musician
         musician = Musician.query.filter_by(profile_id=user.profile_id).first()
         venue = Venue.query.filter_by(profile_id=user.profile_id).first()
-
+        
         if musician is not None:
             return render_template('musicians_profile.html', user=user, genres=genres, musician=musician)
         elif venue is not None:
