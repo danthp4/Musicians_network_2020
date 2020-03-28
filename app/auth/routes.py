@@ -49,6 +49,9 @@ def login():
         if user is None or not user.check_password(form.password.data):
             flash('Invalid email/password combination', 'error')
             return redirect(url_for('auth.login'))
+        elif user.block == 1:
+            flash("You are blocked from Musician's Network")
+            return redirect(url_for('main.index'))
         login_user(user, remember=form.remember_me.data, duration=timedelta(minutes=1))
         next = request.args.get('next')
         if not is_safe_url(next):

@@ -168,6 +168,9 @@
                                 <p>- {{ user.location }}</p>
                             </div>
                         </h6>
+                        {% if user.block|int == 1 %}
+                            <span class="badge badge-danger">Blocked</span>
+                        {% endif %}
 
                     </div>
                     <div class="genre-group">
@@ -201,7 +204,7 @@
                                 <div class="dropdown-header">Options:</div>
                                 <a class="dropdown-item" href="{{ url_for('prof.profile', username=user.username) }}">Visit
                                     profile</a>
-                                <a class="dropdown-item" href="#">Contact user</a>
+                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">Rate user</a>
                             </div>

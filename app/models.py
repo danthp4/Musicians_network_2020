@@ -43,4 +43,3 @@ class Media(db.Model):
     venue_id = db.Column(db.Integer, db.ForeignKey(Venue.venue_id), nullable=False)
     media_type = db.Column(db.Text)
     media_content = db.Column(db.Text)
-
