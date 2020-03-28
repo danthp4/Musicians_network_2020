@@ -24,7 +24,6 @@ def create_app(config_class=DevConfig):
     configure_uploads(app, images)
     from app.models import Profile, Musician, Venue, Media, Administrator, Genre, Profile_Genre
     with app.app_context():
-        db.drop_all()
         db.create_all()
 
     # Register Blueprints
