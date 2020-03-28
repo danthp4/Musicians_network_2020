@@ -11939,6 +11939,7 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .embed-id {
-    max-width:15%;
+    max-width:25%;
     display:inline-block;
+    min-width: 25pc;
 }
