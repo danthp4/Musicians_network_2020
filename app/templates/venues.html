@@ -171,9 +171,15 @@
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <div class="profile-user-location">
+                        {% if user.profile_image = '' %}
+                        <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                            style="max-height: 6vh"
+                                                                            src=".../static/img/blank_user.png">
+                        {% else %}
                         <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
                                                                            style="max-height: 6vh"
                                                                            src="{{ user.profile_image }}">
+                        {% endif %}
                             {{ user.username }}
                             <div class="location">
                                 <p>- {{ user.location }}</p>
