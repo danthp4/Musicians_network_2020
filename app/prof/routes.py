@@ -1,5 +1,5 @@
 from app import db
-from app.models import Profile, Profile_Genre, Genre, Musician, Venue, Media
+from app.models import Profile, Profile_Genre, Genre, Musician, Venue, Media, Administrator
 from app.prof.forms import images, ProfileForm, SettingsForm, MusicianForm, VenueForm
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
@@ -8,11 +8,16 @@ from sqlalchemy.exc import IntegrityError
 bp_prof = Blueprint('prof', __name__)
 
 
-@bp_prof.route('/profile/<username>')
+@bp_prof.route('/profile/<username>', methods=['GET', 'POST'])
 @login_required
 def profile(username):
     user = Profile.query.filter_by(username=username).first()
-    if user is not None:
+    if user is not None and request.method == 'GET':
+        admin = Administrator.query.join(Profile).filter(Administrator.profile_id == 
+            current_user.profile_id).first()
+        if user.block == 1 and admin is None:
+            flash('User {} is blocked by Administrators'.format(username))
+            return redirect(url_for('main.index'))
         relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
         genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(
             Genre.genre_name)
@@ -28,9 +33,12 @@ def profile(username):
         else:
             flash('User {} is not properly registered.'.format(username))
             return redirect(url_for('main.index'))
-    else:
+    elif user is None:
         flash('User with username {} is not found.'.format(username))
         return redirect(url_for('main.index'))
+    else:
+        flash('Please search through main index.')
+        return redirect(url_for('main.search'))
 
 
 @bp_prof.route('/edit_profile', methods=['GET', 'POST'])
@@ -47,7 +55,8 @@ def edit_profile():
         form.location.data = user.location
         if musician is not None:
             adaptive_form = MusicianForm()
-            adaptive_form.birthdate.data = musician.birthdate
+            # y, m, d = musician.birthdate[:4], musician.birthdate[5:7], musician.birthdate[8:]
+            # adaptive_form.birthdate.data = str(y+'/'+m+'/'+d)
             adaptive_form.sc_id.data = musician.sc_id
             account = 'musician'
         elif venue is not None:
@@ -58,7 +67,7 @@ def edit_profile():
         else:
             flash('User with username is not registered properly.')
             return redirect(url_for('main.index'))
-        return render_template('edit_profile.html', form=form, account=account, account_form=adaptive_form)
+        return render_template('edit_profile.html', form=form, user_type=account, account_form=adaptive_form)
     elif request.method == 'POST' and form.validate():
         try:
             ## Update user information
@@ -81,6 +90,7 @@ def edit_profile():
             if musician is not None:
                 adaptive_form = MusicianForm()
                 musician.gender = int(adaptive_form.gender.data)
+                print(adaptive_form.birthdate.data)
                 musician.birthdate = adaptive_form.birthdate.data
                 musician.availability = int(adaptive_form.availability.data)
                 musician.sc_id = adaptive_form.sc_id.data
@@ -116,8 +126,9 @@ def edit_profile():
             return redirect(url_for('prof.profile', username=user.username))
         except IntegrityError:
             db.session.rollback()
-            flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
-    return redirect(url_for('main.index'))
+            flash('Unable to update {}. Please try again.'.format(current_user.username), 'error')
+    flash('Something went wrong. Please try again later.', 'error')
+    return redirect(url_for('prof.edit_profile'))
 
 
 # A place to edit personal information (username, email, password)

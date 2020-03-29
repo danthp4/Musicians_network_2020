@@ -2,8 +2,8 @@ from app import images
 from app.models import Profile
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
-from wtforms import SubmitField, StringField, SelectField, TextAreaField, SelectMultipleField, PasswordField, DateField, \
-    IntegerField
+from wtforms import SubmitField, StringField, SelectField, TextAreaField, SelectMultipleField, PasswordField, \
+    DateField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
 
 
@@ -20,7 +20,7 @@ class ProfileForm(FlaskForm):
 
 class MusicianForm(FlaskForm):
     gender = SelectField(u'Gender', choices=[('1', 'Male'), ('0', 'Female')], validators=[DataRequired()])
-    birthdate = DateField('Birthdate', format='%Y/%m/%d')
+    birthdate = DateField('Birthdate (YYYY/MM/DD)', format='%Y/%m/%d')
     availability = SelectField(u'Availability', choices=[('1', 'Available'), ('0', 'Unavailable')],
                                validators=[DataRequired()])
     sc_id = StringField('Soundcloud User ID')
