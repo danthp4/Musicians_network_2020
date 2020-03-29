@@ -204,7 +204,11 @@
                                 <div class="dropdown-header">Options:</div>
                                 <a class="dropdown-item" href="{{ url_for('prof.profile', username=user.username) }}">Visit
                                     profile</a>
+                                {% if user.block|int == 0 %}
                                 <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
+                                {% else %}
+                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
+                                {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ratingModal">
                                         Rate user

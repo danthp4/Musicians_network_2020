@@ -164,14 +164,13 @@
     {% endwith %}
 
     <div class="feed">
-        <!-- Dropdown Card Example -->
         {% for user in profiles %}
             <!-- Dropdown Card Example -->
             <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <div class="profile-user-location">
-                        {% if user.profile_image = '' %}
+                        {% if user.profile_image == '' %}
                         <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
                                                                             style="max-height: 6vh"
                                                                             src=".../static/img/blank_user.png">
@@ -228,8 +227,11 @@
                                 <a class="dropdown-item"
                                    href="{{ url_for('prof.profile', username=user.username) }}">Visit
                                     profile</a>
-                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block
-                                    Account</a>
+                                {% if user.block|int == 0 %}
+                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
+                                {% else %}
+                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
+                                {% endif %}
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ratingModal">
                                     Rate user

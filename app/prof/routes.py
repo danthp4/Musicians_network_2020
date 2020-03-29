@@ -21,15 +21,15 @@ def profile(username):
         relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
         genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(
             Genre.genre_name)
-        # check if it's musician
+        # check account type
         musician = Musician.query.filter_by(profile_id=user.profile_id).first()
         venue = Venue.query.filter_by(profile_id=user.profile_id).first()
         
         if musician is not None:
-            return render_template('musicians_profile.html', user=user, genres=genres, musician=musician)
+            return render_template('musicians_profile.html', user=user, genres=genres, musician=musician, admin=admin)
         elif venue is not None:
             medias = Media.query.filter_by(venue_id=venue.venue_id).all()
-            return render_template('venue_profile.html', user=user, genres=genres, venue=venue, medias=medias)
+            return render_template('venue_profile.html', user=user, genres=genres, venue=venue, medias=medias, admin=admin)
         else:
             flash('User {} is not properly registered.'.format(username))
             return redirect(url_for('main.index'))

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %} Home {% endblock %}
+{% block title %} Search Results {% endblock %}
 {% block navbar_items %}
     <!-- Nav Item - Alerts -->
                     <li class="nav-item dropdown no-arrow mx-1">
@@ -145,7 +145,7 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Profiles</h1>
+            <h1 class="h3 mb-0 text-gray-800"> '{{ term }}' {{ search_type }} Search Results</h1>
         </div>
 
         {% with messages = get_flashed_messages() %}
@@ -159,34 +159,273 @@
         {% endwith %}
 
         <div class="feed">
-            {% for user in results %}
-            <!-- Dropdown Card Example -->
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle" style="max-height: 6vh" src="../static/img/blank_user.png">
-                        {{ user.username }}</h6>
-                    <div class="dropdown no-arrow">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                           aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                             aria-labelledby="dropdownMenuLink">
-                            <div class="dropdown-header">Options:</div>
-                            <a class="dropdown-item" href="#">Visit profile</a>
-                            <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Rate user</a>
+            {% if search_type == 'Artists' %}
+                {% for user in results %}
+                <!-- Dropdown Card Example -->
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <div class="profile-user-location">
+                            <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                            style="max-height: 6vh"
+                                                                            src="../static/img/blank_user.png">
+                                {{ user.username }}
+                                <div class="location">
+                                    <p>- {{ user.location }}</p>
+                                </div>
+                            </h6>
+                            {% if user.block|int == 1 %}
+                                <span class="badge badge-danger">Blocked</span>
+                            {% endif %}
+
+                        </div>
+                        <div class="genre-group">
+                            <div class="genre-title">
+                                <p>Artist genres:</p>
+                            </div>
+                            {% for relation in relations %}
+                                {% if relation.profile_id == user.profile_id %}
+                                    {% for genre in genres %}
+                                        {% if genre.genre_id == relation.genre_id %}
+                                            <span class="badge badge-primary">
+                                                {{ genre.genre_name }}
+                                            </span>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div>
+                            <div class="rating">
+                                {% for i in range( 5 - user.rating|int) %}
+                                    <span class="fa fa-star"></span>
+                                {% endfor %}
+                                {% for i in range(user.rating|int) %}
+                                    <span class="fa fa-star checked"></span>
+                                {% endfor %}
+                            </div>
+                            <div class="dropdown no-arrow" style="display:inline-block">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                    aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown-header">Options:</div>
+                                    <a class="dropdown-item" href="{{ url_for('prof.profile', username=user.username) }}">Visit profile</a>
+                                    {% if user.block|int == 0 %}
+                                    <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
+                                    {% else %}
+                                    <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
+                                    {% endif %}
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ratingModal">
+                                        Rate user
+                                    </a>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+
+                    <!-- Card Body -->
+                    <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
+                            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/{{ user.sc_id }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=flase&show_reposts=false&show_teaser=flase"></iframe>
+                    <div class="description-container">
+                        <div class="description-title">
+                            <p>Artist description:</p>
+                        </div>
+                        <div class="description">
+                            {{ user.profile_description }}
+                        </div>
+
+
+                    </div>
                 </div>
-                <!-- Card Body -->
-                <div class="card-body">
-                    {{ user.profile_description}}
+                {% endfor %}
+            {% else %}
+                {% for user in results %}
+                <!-- Dropdown Card Example -->
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <div class="profile-user-location">
+                            {% if user.profile_image == '' %}
+                            <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                                style="max-height: 6vh"
+                                                                                src=".../static/img/blank_user.png">
+                            {% else %}
+                            <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                            style="max-height: 6vh"
+                                                                            src="{{ user.profile_image }}">
+                            {% endif %}
+                                {{ user.username }}
+                                <div class="location">
+                                    <p>- {{ user.location }}</p>
+                                </div>
+                            </h6>
+                            {% if user.block|int == 1 %}
+                                <span class="badge badge-danger">Blocked</span>
+                            {% endif %}
+
+                        </div>
+                        <div class="genre-group">
+                            <div class="genre-title">
+                                <p>Venue genres:</p>
+                            </div>
+                            {% for relation in relations %}
+                                {% if relation.profile_id == user.profile_id %}
+                                    <span class="badge badge-primary">
+                                        {% for genre in genres %}
+                                            {% if genre.genre_id == relation.genre_id %}
+                                                {{ genre.genre_name }}
+                                            {% endif %}
+                                        {% endfor %}
+                                        </span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+
+                        <div>
+                            <div class="rating">
+                                {% for i in range( 5 - user.rating|int) %}
+                                    <span class="fa fa-star"></span>
+                                {% endfor %}
+                                {% for i in range(user.rating|int) %}
+                                    <span class="fa fa-star checked"></span>
+                                {% endfor %}
+                            </div>
+                            <div class="dropdown no-arrow" style="display:inline-block">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                    aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown-header">Options:</div>
+                                    <a class="dropdown-item"
+                                    href="{{ url_for('prof.profile', username=user.username) }}">Visit
+                                        profile</a>
+                                    {% if user.block|int == 0 %}
+                                    <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
+                                    {% else %}
+                                    <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
+                                    {% endif %}
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ratingModal">
+                                        Rate user
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+
+                    <div class="gallery-containter">
+                        <!-- Grid row -->
+
+                        <div class="row">
+
+                            <!-- Grid column -->
+                            <div class="col">
+                                {% for media in media %}
+                                    {% if media.media_type == 'youtube' and  user.venue_id == media.venue_id %}
+                                        <!--Modal: Name-->
+                                        <div class="modal fade" id="modal{{ user.profile_id }}" tabindex="-1" role="dialog"
+                                            aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
+
+                                                <!--Content-->
+                                                <div class="modal-content">
+
+                                                    <!--Body-->
+                                                    <div class="modal-body mb-0 p-0">
+                                                        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
+                                                            <iframe class="embed-responsive-item"
+                                                                    src="https://www.youtube.com/embed/{{ media.media_content }}"
+                                                                    allowfullscreen></iframe>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <!--Footer-->
+                                                    <div class="modal-footer justify-content-center">
+                                                        <span class="mr-4">Spread the word!</span>
+                                                        <a type="button" class="btn-floating btn-sm btn-fb"><i
+                                                                class="fab fa-facebook-f"></i></a>
+                                                        <!--Twitter-->
+                                                        <a type="button" class="btn-floating btn-sm btn-tw"><i
+                                                                class="fab fa-twitter"></i></a>
+                                                        <!--Google +-->
+                                                        <a type="button" class="btn-floating btn-sm btn-gplus"><i
+                                                                class="fab fa-google-plus-g"></i></a>
+                                                        <!--Linkedin-->
+                                                        <a type="button" class="btn-floating btn-sm btn-ins"><i
+                                                                class="fab fa-linkedin-in"></i></a>
+
+                                                        <button type="button"
+                                                                class="btn btn-outline-primary btn-rounded btn-md ml-4"
+                                                                data-dismiss="modal">Close
+                                                        </button>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <!--Modal: Name-->
+                                {% for media in media %}
+                                    {% if media.venue_id == user.venue_id and media.media_type == 'image' %}
+                                        <a><img class="img-fluid-venue z-depth-1"
+                                                src="{{ media.media_content }}" alt="video"
+                                                data-toggle="modal"
+                                                data-target="#modal{{ user.profile_id }}"></a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <div class="col">
+                                <!--Modal: Name-->
+                                <div class="description-container">
+                                    <div class="venue-container">
+                            <span>
+                                <div class="venue-title">Venue type:</div>
+                                <div class="venue-information">
+                                    <span class="badge badge-primary"
+                                        style="background-color: lightslategray;">{{ user.venue_type }}</span>
+                                </div>
+                            </span>
+                                        <span>
+                                <div class="venue-title">Venue Capacity:</div>
+                                    <div class="venue-information">
+                                        <span class="badge badge-primary"
+                                            style="background-color: lightslategray;">{{ user.venue_capacity }}</span>
+                                    </div>
+                            </span>
+                                    </div>
+                                    <div class="description-title">
+                                        <p>Venue description:</p>
+                                    </div>
+                                    <div class="description">
+                                        {{ user.profile_description }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Grid column -->
+
+
+                        </div>
+                        <!-- Grid row -->
+                    </div>
+                    </span>
                 </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
 
             <!-- /.container-fluid -->
         </div>
