@@ -122,9 +122,6 @@ def search_results():
         genres = Genre.query.all()
         if term == "":
             return redirect('/')
-        elif not Profile.query.join(Musician).filter(Profile.username.contains(term), Profile.block == 0):
-            flash('No user found {} that {}.'.format(msg, category))
-            return render_template('search_results.html', results=results)
         else:
             admin = Administrator.query.join(Profile).filter_by(profile_id=current_user.profile_id).first()
             if admin is None:
@@ -133,6 +130,7 @@ def search_results():
                 block_filter = 1
             
             if search_type == 'Artists':
+                media = None
                 if category == 'Name':
                     results = Profile.query.join(Musician).filter(Profile.username.contains(term)
                                                         , Profile.block <= block_filter).with_entities(
@@ -207,6 +205,10 @@ def search_results():
                                                                             Venue.venue_id,
                                                                             Profile.profile_image)
                     msg = 'with'
+            if not results:
+                flash('No user found {} that {}.'.format(msg, category))
+                return render_template('search_results.html', results=results, term=term, relations=relations, 
+                                                            genres=genres, search_type=search_type, media=media)
             return render_template('search_results.html', results=results, term=term, relations=relations, 
                                                             genres=genres, search_type=search_type, media=media)
     else:
@@ -222,10 +224,12 @@ def block(username):
         user = Profile.query.filter_by(username=username).first()
         if user.block == 0:
             user.block = 1
+            flash("Account {} is successfully blocked.".format(username))
         else:
-            user.block == 0
+            user.block = 0
+            flash("Account {} is successfully unblocked.".format(username))
         db.session.commit()
-        flash("Account {} is successfully blocked.".format(username))
+        
     else:
         flash("You are not authorised to remove users from Musician's Network. Please contact Administrators")
     return redirect(url_for('main.index'))
