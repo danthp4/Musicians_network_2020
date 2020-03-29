@@ -75,7 +75,6 @@ class Media(db.Model):
 class Administrator(db.Model):
     __tablename__ = "Administrator"
     admin_id = db.Column(db.Integer, autoincrement=True, nullable=False, primary_key=True)
-    admin_name = db.Column(db.Text, nullable=False)
     profile_id = db.Column(db.Integer, db.ForeignKey('Profile.profile_id'), nullable=False)
 
 

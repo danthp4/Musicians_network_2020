@@ -113,15 +113,14 @@ def edit_profile():
                     db.session.add(media)
 
                 if adaptive_form.youtube.data != '':
-                    if media_counter(Media, 'youtube', venue.venue_id) < 3:
-                        url = adaptive_form.youtube.data
-                        # Now remove unnecessary characters from string
-                        url = url.lstrip('https://www.youtube.com/watch?v ').split("&", 1)[0].lstrip('=')
-                        media = Media(venue_id=venue.venue_id, media_type='youtube', media_content=url)
-                        db.session.add(media)
-                    else:
+                    if media_counter(Media, 'youtube', venue.venue_id) >= 1:
                         # delete youtube link and replace
                         Media.query.filter_by(venue_id=venue.venue_id, media_type='youtube').delete()
+                    url = adaptive_form.youtube.data
+                    # Now remove unnecessary characters from string
+                    url = url.lstrip('https://www.youtube.com/watch?v ').split("&", 1)[0].lstrip('=')
+                    media = Media(venue_id=venue.venue_id, media_type='youtube', media_content=url)
+                    db.session.add(media)
             db.session.commit()
             return redirect(url_for('prof.profile', username=user.username))
         except IntegrityError:
