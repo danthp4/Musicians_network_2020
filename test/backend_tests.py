@@ -232,12 +232,22 @@ class TestMain(BaseTestCase):
 class TestAuth(BaseTestCase):
 
     def test_registration_form_displays(self):
+        """
+           GIVEN a Flask application
+           WHEN the '/register' s page is requested (GET)
+           THEN check the response is valid (200 status code)
+       """
         target_url = url_for('auth.register')
         response = self.client.get(target_url)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Create an account!', response.data)
 
     def test_register_musician_success(self):
+        """
+               GIVEN a Flask application
+               WHEN the new data is used to register (post)
+               THEN check the response is valid (200 status code)
+               """
         count = Profile.query.count()
         response = self.client.post(url_for('auth.register'), data=dict(
             username=self.musician_data.get('username'),
@@ -254,6 +264,11 @@ class TestAuth(BaseTestCase):
 
 
     def test_register_musician_with_existing_username(self):
+        """
+               GIVEN a Flask application
+               WHEN the registered data is used to register (post)
+               THEN check the response is valid (200 status code)
+               """
         count = Profile.query.count()
         response = self.client.post(url_for('auth.register'), data=dict(
             username=self.existing_data.get('username'),
@@ -270,6 +285,11 @@ class TestAuth(BaseTestCase):
         self.assertIn(b'An account is already registered for that email.', response.data)
 
     def test_register_musician_with_no_input(self):
+        """
+           GIVEN a Flask application
+           WHEN the none is used to register (post)
+           THEN check the response is valid (200 status code)
+       """
         count = Profile.query.count()
         response = self.client.post(url_for('auth.register'), data=dict(
             username=self.none_data.get('username'),
@@ -285,25 +305,50 @@ class TestAuth(BaseTestCase):
         self.assertIn(b'This field is required.', response.data)
 
     def test_login_succeeds_with_valid_details(self):
+        """
+           GIVEN a Flask application
+           WHEN the registered data is used to login
+           THEN check the response is valid
+       """
         response = self.login(email='vizon@ucl.ac.uk', password='vizon')
         self.assertIn(b'Profiles', response.data)
 
 
     def test_login_fails_with_invalid_details(self):
+        """
+           GIVEN a Flask application
+           WHEN the unregistered is used to login
+           THEN check the response is valid
+           """
         response = self.login(email='dil@ucl.com', password='dil')
         self.assertIn(b'Invalid email/password combination', response.data)
 
-    def test_login_succeeds_with_no_details(self):
+    def test_login_fails_with_no_details(self):
+        """
+           GIVEN a Flask application
+           WHEN the none is used to login
+           THEN check the response is valid
+       """
         response = self.login(email=None, password=None)
         self.assertIn(b'This field is required.', response.data)
 
     def test_logout_valid(self):
+        """
+            GIVEN a Flask application
+            WHEN the user has signed in and wants to logout
+            THEN check the response is valid
+        """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
         redirect_url = url_for('main.index')
         response = self.client.get('/logout/')
         self.assertRedirects(response, redirect_url, b"Welcome to Musician's Network!.")
 
     def test_logout_invalid(self):
+        """
+           GIVEN a Flask application
+           WHEN the user has not signed in and wants to logout
+           THEN check the response is valid
+       """
         redirect_url = url_for('auth.login')
         response = self.client.get('/logout/')
         self.assertRedirects(response, redirect_url, b"You must be logged in to view that page.")
@@ -312,6 +357,11 @@ class TestAuth(BaseTestCase):
 class TestProf(BaseTestCase):
 
     def test_setting_form_displays(self):
+        """
+           GIVEN a Flask application
+           WHEN the user has signed in and wants reset the setting
+           THEN check the response is valid
+       """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
         target_url = url_for('prof.settings')
         response = self.client.get(target_url)
@@ -319,6 +369,11 @@ class TestProf(BaseTestCase):
         self.assertIn(b'Edit Personal Information', response.data)
 
     def test_setting_edit_success_with_unregistered_name(self):
+        """
+          GIVEN a Flask application
+          WHEN the user has signed in and wants reset the username with an unregistered name
+          THEN check the response is valid
+        """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
         count = Profile.query.count()
         response = self.client.post(url_for('prof.settings'), data=dict(
@@ -334,6 +389,11 @@ class TestProf(BaseTestCase):
         self.assertIn(b'Profiles', response.data)
 
     def test_setting_edit_unsuccess_with_registered_name(self):
+        """
+         GIVEN a Flask application
+         WHEN the user has signed in and wants reset the username with a registered name
+         THEN check the response is valid
+       """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
         count = Profile.query.count()
         response = self.client.post(url_for('prof.settings'), data=dict(
@@ -349,10 +409,20 @@ class TestProf(BaseTestCase):
         self.assertIn(b'An account is already registered for that username.', response.data)
 
     def test_go_profile_without_login(self):
+        """
+            GIVEN a Flask application
+            WHEN visitors wants to go to 'their profile'with out login
+            THEN check the response is valid
+       """
         response = self.client.get(url_for('prof.profile', username='bryan'))
         self.assertEqual(response.status_code, 302)
 
     def test_edit_profile_form_display_success_for_musician(self):
+        """
+             GIVEN a Flask application
+             WHEN the user has signed in and wants to see the own profile
+             THEN check the response is valid
+       """
         self.login(email='bryan@ucl.ac.uk', password='bryan')
         target_url = url_for('prof.edit_profile')
         response = self.client.get(target_url)
@@ -360,6 +430,11 @@ class TestProf(BaseTestCase):
         self.assertIn(b'Birthdate', response.data)
 
     def test_edit_profile_form_display_success_for_venue(self):
+        """
+              GIVEN a Flask application
+              WHEN the venue has signed in and wants to edit the profile
+              THEN check the response is valid
+        """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
         target_url = url_for('prof.edit_profile')
         response = self.client.get(target_url)
@@ -367,6 +442,11 @@ class TestProf(BaseTestCase):
         self.assertIn(b'Venue Capacity', response.data)
 
     def test_edit_profile_with_data_success_for_musician(self):
+        """
+            GIVEN a Flask application
+            WHEN the musician has signed in and wants to edit the profile with full information
+            THEN check the response is valid
+        """
         self.login(email='bryan@ucl.ac.uk', password='bryan')
         count = Profile.query.count()
         response = self.client.post(url_for('prof.edit_profile'), data=dict(
@@ -385,7 +465,13 @@ class TestProf(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'', response.data)
 
-    def test_edit_profile_without__data_success_for_musician(self):
+    def test_edit_profile_without_data_success_for_musician(self):
+        """
+            GIVEN a Flask application
+            WHEN the musician has signed in and wants to have a look in editing profile
+            but doesnt want to change anything
+            THEN check the response is valid
+        """
         self.login(email='bryan@ucl.ac.uk', password='bryan')
         count = Profile.query.count()
         response = self.client.post(url_for('prof.edit_profile'), data=dict(
@@ -402,7 +488,6 @@ class TestProf(BaseTestCase):
         count2 = Profile.query.count()
         self.assertEqual(count2 - count, 0)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'', response.data)
 
 
 
