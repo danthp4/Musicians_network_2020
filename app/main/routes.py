@@ -13,8 +13,7 @@ bp_about = Blueprint('about', __name__, url_prefix='/about')
 @bp_main.route('/', methods=['GET', 'POST'])
 def index():
     if current_user.is_authenticated:
-        admin = Administrator.query.join(Profile).filter(Administrator.profile_id ==
-                                                         current_user.profile_id).first()
+        admin = Administrator.query.join(Profile).filter_by(profile_id=current_user.profile_id).first()
         form = RatingForm()
         # show non-blocked musicians only for users
         if admin is None:
