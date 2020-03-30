@@ -167,11 +167,11 @@
                             <div class="location">
                                 <p>- {{ user.location }}</p>
                             </div>
+                            {% if admin %}
+                            <span class="badge badge-info">Admin</span>
+                            {% endif %}
                         </h6>
-                        {% if admin %}
-                                <span class="badge badge-info">Admin</span>
-                        {% endif %}
-
+                        
                     </div>
                     <div class="genre-group">
                         <div class="genre-title">
@@ -210,12 +210,13 @@
                                 <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Rate user</a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#rating{{ user.profile_id }}">
+                                    Rate user
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
-
 
                 <!-- Card Body -->
                 <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
@@ -227,8 +228,79 @@
                     <div class="description">
                         {{ user.profile_description }}
                     </div>
+                </div>
 
+                <!-- Card Footer -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="genre-group">
+                        <div class="description-title">
+                            <p>Birthdate:</p>
+                        </div>
+                        <span class="description">
+                            {{ musician.birthdate }}
+                        </span>
 
+                    </div>
+
+                    <div class="genre-group">
+                        <div class="genre-title">
+                            <p>Gender:</p>
+                        </div>
+                        <div class="description">
+                            {% if musician.gender == 1 %}
+                                <span class="badge badge-secondary">
+                                    Male
+                                </span>
+                            {% else %}
+                                <span class="badge badge-secondary">
+                                    Female
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class = "genre-group">
+                        <div class="genre-title">
+                            <p>Availability:</p>
+                        </div>
+                        <div class="description">
+                            {% if musician.availability == 1 %}
+                                <span class="badge badge-success">
+                                    Available
+                                </span>
+                            {% else %}
+                                <span class="badge badge-secondary">
+                                    Unavailable
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- /.rating modal -->
+            <div class="modal fade" id="rating{{ user.profile_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">What do you think of {{ user.username }}?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Rate {{ user.username }} from 1 (left) to 5 (right) and then click the 
+                            rate button!
+                        </div>
+
+                        <div class="rating">
+                            {% for i in range( 1 , 6 ) %}
+                                <a href="{{ url_for('main.rate', username=user.username, rate_value=i) }}" 
+                                    class="fa fa-star"></a>
+                            {% endfor %}
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>

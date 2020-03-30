@@ -141,7 +141,7 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Profiles</h1>
+            <h1 class="h3 mb-0 text-gray-800">Profile</h1>
         </div>
 
         {% with messages = get_flashed_messages() %}
@@ -156,21 +156,27 @@
 
         <div class="feed">
             <!-- Dropdown Card Example -->
-            <span class="card shadow mb-4">
+            <div class="card shadow mb-4">
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <div class="profile-user-location">
+                        {% if user.profile_image == '' %}
                         <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
                                                                            style="max-height: 6vh"
-                                                                           src="{{ user.profile_image }}">
+                                                                           src=".../static/img/blank_user.png">
+                        {% else %}
+                        <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                            style="max-height: 6vh"
+                                                                            src="{{ user.profile_image }}">
+                        {% endif %}
                             {{ user.username }}
                             <div class="location">
                                 <p>- {{ user.location }}</p>
                             </div>
+                            {% if user.block|int == 1 %}
+                                <span class="badge badge-danger">Blocked</span>
+                            {% endif %}
                         </h6>
-                        {% if user.block|int == 1 %}
-                            <span class="badge badge-danger">Blocked</span>
-                        {% endif %}
 
                     </div>
                     <div class="genre-group">
@@ -210,31 +216,29 @@
                                 <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ratingModal">
-                                        Rate user
-                                    </a>
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#rating{{ user.profile_id }}">
+                                    Rate user
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Card Body -->
-
                 <div class="gallery-containter">
                     <!-- Grid row -->
 
                     <div class="row">
 
-                                <!-- Grid column -->
-                                <div class="col">
-                                    {% for media in medias %}
-                                        {% if media.media_type == 'youtube' %}
-                                            <!--Modal: Name-->
-                                            <div class="modal fade" id="modal2" tabindex="-1" role="dialog"
-                                                 aria-labelledby="myModalLabel"
-                                                 aria-hidden="true">
-                                            <div class="modal-dialog modal-lg" role="document">
-
+                        <!-- Grid column -->
+                        <div class="col">
+                            {% for media in medias %}
+                                {% if media.media_type == 'youtube' %}
+                                    <!--Modal: Name-->
+                                    <div class="modal fade" id="modal{{ user.profile_id }}" tabindex="-1" role="dialog"
+                                            aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                        
                                             <!--Content-->
                                             <div class="modal-content">
 
@@ -270,67 +274,78 @@
                                                 </div>
 
                                             </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <!--/.Content-->
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                            <!--Modal: Name-->
+                            {% for media in medias %}
+                                {% if media.media_type == 'image' %}
+                                    <a><img class="img-fluid-venue z-depth-1"
+                                            src="{{ media.media_content }}" alt="video"
+                                            data-toggle="modal" data-target="#modal{{ user.profile_id }}"></a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    
 
-                                    </div>
-                                    </div>
-                                    <!--Modal: Name-->
-                                    {% for media in medias %}
-                                        {% if media.media_type == 'image' %}
-                                            <a><img class="img-fluid-venue z-depth-1"
-                                                    src="{{ media.media_content }}" alt="video"
-                                                    data-toggle="modal" data-target="#modal2"></a>
-                                        {% endif %}
-                                    {% endfor %}
+                        <div class="col">
+                            <div class="description-container">
+                                <div class="venue-container">
+                                    <span>
+                                        <div class="venue-title">Venue type:</div>
+                                        <div class="venue-information">
+                                            <span class="badge badge-primary"
+                                                style="background-color: lightslategray;">{{ venue.venue_type }}</span>
+                                        </div>
+                                    </span>
+                                    <span>
+                                        <div class="venue-title">Venue Capacity:</div>
+                                            <div class="venue-information">
+                                                <span class="badge badge-primary"
+                                                    style="background-color: lightslategray;">{{ venue.venue_capacity }}</span>
+                                            </div>
+                                    </span>
                                 </div>
-                                <div class="col">
-
-
-                                            <div class="description-container">
-                    <div class="venue-container">
-                        <span>
-                            <div class="venue-title">Venue type:</div>
-                            <div class="venue-information">
-                                <span class="badge badge-primary"
-                                      style="background-color: lightslategray;">{{ venue.venue_type }}</span>
+                                <div class="description-title">
+                                    <p>Venue description:</p>
+                                </div>
+                                <div class="description">
+                                    {{ user.profile_description }}
+                                </div>
                             </div>
-                        </span>
-                        <span>
-                            <div class="venue-title">Venue Capacity:</div>
-                                <div class="venue-information">
-                                    <span class="badge badge-primary"
-                                          style="background-color: lightslategray;">{{ venue.venue_capacity }}</span>
-                                </div>
-                        </span>
-                    </div>
-                    <div class="description-title">
-                        <p>Venue description:</p>
-                    </div>
-                    <div class="description">
-                        {{ user.profile_description }}
+                        </div>
+
                     </div>
                 </div>
+            </div>
 
-                                        </div>
-                        <!--/.Content-->
+            <!-- /.rating modal -->
+            <div class="modal fade" id="rating{{ user.profile_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">What do you think of {{ user.username }}?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Rate {{ user.username }} from 1 (left) to 5 (right) and then click the 
+                            rate button!
+                        </div>
 
-                                    </div>
-                                </div>
-                <!--Modal: Name-->
+                        <div class="rating">
+                            {% for i in range( 1 , 6 ) %}
+                                <a href="{{ url_for('main.rate', username=user.username, rate_value=i) }}" 
+                                    class="fa fa-star"></a>
+                            {% endfor %}
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
 
-
-        </div>
-        <!-- Grid column -->
-
-    </div>
-    <!-- Grid row -->
-    </div>
-    </span>
-    </div>
-    </div>
-    <!-- /.container-fluid -->
     </div>
     <!-- End of Main Content -->
 {% endblock %}

@@ -162,7 +162,7 @@ class TestMain(BaseTestCase):
         Test that view profile is inaccessible without login
         and redirects to login page and then the profile
         """
-        target_url = url_for('main.venues')
+        target_url = url_for('main.index',account='venues')
         response = self.client.get(target_url)
         self.assertEqual(response.status_code, 302)
 
@@ -339,7 +339,7 @@ class TestAuth(BaseTestCase):
             THEN check the response is valid
         """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
-        redirect_url = url_for('main.index')
+        redirect_url = url_for('main.index',account='musicians')
         response = self.client.get('/logout/')
         self.assertRedirects(response, redirect_url, b"Welcome to Musician's Network!.")
 

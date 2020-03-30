@@ -52,7 +52,3 @@ class SettingsForm(FlaskForm):
         if user is not None:
             raise ValidationError('An account is already registered for that email.')
 
-
-class RatingForm(FlaskForm):
-    rating = SelectField(u'Rating', choices=[('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')])
-    submit = SubmitField('Rate!')

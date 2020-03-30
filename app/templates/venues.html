@@ -149,8 +149,8 @@
     </div>
 
     <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="{{ url_for('main.index') }}">Musicians</a></li>
-        <li class="page-item"><a class="page-link" href="{{ url_for('main.venues') }}">Venues</a></li>
+        <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='musicians') }}">Musicians</a></li>
+        <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='venues') }}">Venues</a></li>
     </ul>
 
     {% with messages = get_flashed_messages() %}
@@ -183,10 +183,10 @@
                             <div class="location">
                                 <p>- {{ user.location }}</p>
                             </div>
-                        </h6>
-                        {% if user.block|int == 1 %}
+                            {% if user.block|int == 1 %}
                             <span class="badge badge-danger">Blocked</span>
-                        {% endif %}
+                            {% endif %}
+                        </h6>
 
                     </div>
                     <div class="genre-group">
@@ -201,7 +201,7 @@
                                             {{ genre.genre_name }}
                                         {% endif %}
                                     {% endfor %}
-                                     </span>
+                                </span>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -233,7 +233,7 @@
                                 <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#ratingModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#rating{{ user.profile_id }}">
                                     Rate user
                                 </a>
                             </div>
@@ -242,7 +242,6 @@
                 </div>
 
                 <!-- Card Body -->
-
                 <div class="gallery-containter">
                     <!-- Grid row -->
 
@@ -266,7 +265,6 @@
                                                         <iframe class="embed-responsive-item"
                                                                 src="https://www.youtube.com/embed/{{ media.media_content }}"
                                                                 allowfullscreen></iframe>
-
                                                     </div>
                                                 </div>
 
@@ -307,24 +305,26 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
+                    
+
                         <div class="col">
                             <!--Modal: Name-->
                             <div class="description-container">
                                 <div class="venue-container">
-                        <span>
-                            <div class="venue-title">Venue type:</div>
-                            <div class="venue-information">
-                                <span class="badge badge-primary"
-                                      style="background-color: lightslategray;">{{ user.venue_type }}</span>
-                            </div>
-                        </span>
                                     <span>
-                            <div class="venue-title">Venue Capacity:</div>
-                                <div class="venue-information">
-                                    <span class="badge badge-primary"
-                                          style="background-color: lightslategray;">{{ user.venue_capacity }}</span>
-                                </div>
-                        </span>
+                                        <div class="venue-title">Venue type:</div>
+                                        <div class="venue-information">
+                                            <span class="badge badge-primary"
+                                                style="background-color: lightslategray;">{{ user.venue_type }}</span>
+                                        </div>
+                                    </span>
+                                    <span>
+                                        <div class="venue-title">Venue Capacity:</div>
+                                            <div class="venue-information">
+                                                <span class="badge badge-primary"
+                                                    style="background-color: lightslategray;">{{ user.venue_capacity }}</span>
+                                            </div>
+                                    </span>
                                 </div>
                                 <div class="description-title">
                                     <p>Venue description:</p>
@@ -334,20 +334,38 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- Grid column -->
-
 
                     </div>
-                    <!-- Grid row -->
                 </div>
-                </span>
+            </div>
+
+            <!-- /.rating modal -->
+            <div class="modal fade" id="rating{{ user.profile_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">What do you think of {{ user.username }}?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Rate {{ user.username }} from 1 (left) to 5 (right) and then click the 
+                            rate button!
+                        </div>
+
+                        <div class="rating">
+                            {% for i in range( 1 , 6 ) %}
+                                <a href="{{ url_for('main.rate', username=user.username, rate_value=i) }}" 
+                                    class="fa fa-star"></a>
+                            {% endfor %}
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
         {% endfor %}
 
-
-
-        <!-- /.container-fluid -->
     </div>
-    {% include "rating.html" %}
     <!-- End of Main Content -->
 {% endblock %}

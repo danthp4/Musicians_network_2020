@@ -1,7 +1,8 @@
-{% block content %}
+{% extends "home.html" %}
+{% block modal %}
 
     <!-- /.rating modal -->
-    <div class="modal fade" id="ratingModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="rating{{ user.profile_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -14,17 +15,14 @@
                 <div class="modal-body">Please leave a rating from 1 to 5 and then click the rate button to leave
                     feedback!
                 </div>
-                <form method="post" enctype="multipart/form-data" novalidate>
-                    {{ form.hidden_tag() }}
-                    <div class="form-group" style ="padding: 10px;">
-                        {{ form.rating.label }}{{ form.rating(class_="form-control form-control-user") }}
-                    </div>
-                </form>
-                <div class="modal-footer">
-                    {{ form.submit(class_="btn btn-primary") }}
+
+                <div class="rating">
+                    {% for i in range( 5 ) %}
+                        <a href='#' class="fa fa-star"></a>
+                    {% endfor %}
                 </div>
+                
             </div>
         </div>
     </div>
-    <!-- /.rating modal -->
 {% endblock %}

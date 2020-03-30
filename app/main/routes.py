@@ -3,8 +3,7 @@ from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
 
 from app import db
-from app.models import Profile, Profile_Genre, Genre, Musician, Venue, Administrator, Media
-from app.prof.forms import RatingForm
+from app.models import Profile, Profile_Genre, Genre, Musician, Venue, Administrator, Media, Profile_Rate
 
 bp_main = Blueprint('main', __name__)
 bp_about = Blueprint('about', __name__, url_prefix='/about')
@@ -14,13 +13,17 @@ bp_about = Blueprint('about', __name__, url_prefix='/about')
 def index():
     if current_user.is_authenticated:
         admin = Administrator.query.join(Profile).filter_by(profile_id=current_user.profile_id).first()
-        form = RatingForm()
+        relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
+        genres = Genre.query.all()
+        admin_users = Administrator.query.filter(Administrator.profile_id != current_user.profile_id).all()
         # show non-blocked musicians for users and all users for admins
         if admin is None:
             block_filter = 0
         else:
             block_filter = 1
-        profiles = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id
+        account = request.args.get('account')
+        if account != 'venues':
+            profiles = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id
                                                         , Profile.block <= block_filter).with_entities(
                                                                                     Profile.username,
                                                                                     Profile.location,
@@ -29,35 +32,10 @@ def index():
                                                                                     Musician.sc_id,
                                                                                     Profile.profile_description,
                                                                                     Profile.block)
-        relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
-        genres = Genre.query.all()
-        admin_users = Administrator.query.filter(Administrator.profile_id != current_user.profile_id).all()
-
-        user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
-        form.rating.data = user.rating
-        if request.method == 'POST' and form.validate():
-            user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
-            try:
-                user.rating(form.rating.data)
-                db.session.commit()
-            except IntegrityError:
-                flash('error')
-
-        return render_template('home.html', profiles=profiles, relations=relations, genres=genres, 
-                                            form=form, admin=admin_users)
-    else:
-        return render_template('index.html')
-
-
-@bp_main.route('/venues', methods=['GET', 'POST'])
-@login_required
-def venues():
-    admin = Administrator.query.join(Profile).filter_by(profile_id=current_user.profile_id).first()
-    if admin is None:
-        block_filter = 0
-    else:
-        block_filter = 1
-    profiles = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id,
+            return render_template('home.html', profiles=profiles, relations=relations, genres=genres, 
+                                                admin=admin_users)
+        else:
+            profiles = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id,
                                                 Profile.block <= block_filter).with_entities(
                                                                                 Venue.venue_capacity,
                                                                                 Profile.username,
@@ -68,22 +46,11 @@ def venues():
                                                                                 Venue.venue_type, Profile.block,
                                                                                 Venue.venue_id,
                                                                                 Profile.profile_image)
-
-    relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
-    genres = Genre.query.all()
-    media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
-    form = RatingForm()
-    user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
-    form.rating.data = user.rating
-    if request.method == 'POST' and form.validate():
-        user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
-        try:
-            user.rating(form.rating.data)
-            db.session.commit()
-        except IntegrityError:
-            flash('error')
-
-    return render_template('venues.html', profiles=profiles, relations=relations, genres=genres, form=form, media=media)
+            media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
+            return render_template('venues.html', profiles=profiles, relations=relations, 
+                                                    genres=genres, media=media, admin=admin_users)
+    else:
+        return render_template('index.html')
 
 
 @bp_about.route('/musicians')
@@ -212,24 +179,63 @@ def search_results():
             return render_template('search_results.html', results=results, term=term, relations=relations, 
                                                             genres=genres, search_type=search_type, media=media)
     else:
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.index',account='musicians'))
 
 
-@bp_main.route('/block/<username>')
+@bp_main.route('/block')
 @login_required
-def block(username):
+def block():
+    username = request.args.get('username')
     admin = Administrator.query.join(Profile).filter(Administrator.profile_id ==
                                                      current_user.profile_id).first()
     if admin is not None:
-        user = Profile.query.filter_by(username=username).first()
-        if user.block == 0:
-            user.block = 1
-            flash("Account {} is successfully blocked.".format(username))
-        else:
-            user.block = 0
-            flash("Account {} is successfully unblocked.".format(username))
-        db.session.commit()
+        try:
+            user = Profile.query.filter_by(username=username).first()
+            if user.block == 0:
+                user.block = 1
+                flash("Account {} is successfully blocked.".format(username))
+            else:
+                user.block = 0
+                flash("Account {} is successfully unblocked.".format(username))
+            db.session.commit()
+        except:
+            flash("Invalid Command. Please block through user's card",'error')
         
     else:
         flash("You are not authorised to remove users from Musician's Network. Please contact Administrators")
-    return redirect(url_for('main.index'))
+    return redirect(url_for('main.index',account='musicians'))
+
+@bp_main.route('/rate')
+@login_required
+def rate():
+    username = request.args.get('username')
+    rate_value = request.args.get('rate_value')
+    if username == current_user.username:
+        flash('You are unable to rate yourself.')
+        return redirect(url_for('main.index',account='musicians'))
+    else:
+        try:
+            target_user = Profile.query.filter_by(username=username).first()
+            relation = Profile_Rate.query.filter_by(target_id=target_user.profile_id, 
+                                                    profile_id=current_user.profile_id).first()
+            # if current_user has never rated target_user
+            if relation is None:
+                rating = Profile_Rate(profile_id=current_user.profile_id, target_id=target_user.profile_id,
+                        rate=int(rate_value))
+                db.session.add(rating)
+            else:
+                relation.rate = int(rate_value)
+            db.session.commit()
+
+            # calculate target_user's new rating by averaging
+            ratings = Profile_Rate.query.filter_by(target_id=target_user.profile_id).all()
+            total_rate, n_rates = 0, 0
+            for record in ratings:
+                total_rate += record.rate
+                n_rates += 1
+            target_user.rating = int(total_rate/n_rates)
+            db.session.commit()
+        except IntegrityError:
+            db.session.rollback()
+            flash('Unable to rate {}. Please try again.'.format(target_user.username), 'error')
+        return redirect(url_for('main.index',account='musicians'))    

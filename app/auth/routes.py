@@ -42,7 +42,7 @@ def unauthorized():
 def login():
     if current_user.is_authenticated:
         flash('You are logged in')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.index',account='musicians'))
     form = LoginForm()
     if request.method == 'POST' and form.validate():
         user = Profile.query.filter_by(email=form.email.data).first()
@@ -57,7 +57,7 @@ def login():
         if not is_safe_url(next):
             return abort(400)
         profiles = Profile.query.filter(Profile.username != current_user.username).all()
-        return redirect(next or url_for('main.index'))
+        return redirect(next or url_for('main.index',account='musicians'))
     return render_template('login.html', form=form)
 
 @bp_auth.route('/logout/')
@@ -70,7 +70,7 @@ def logout():
 def register():
     if current_user.is_authenticated:
         flash('You are logged in')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.index',account='musicians'))
     form = SignupForm(request.form)
     if request.method == 'POST' and form.validate():
         user = Profile(username=form.username.data, email=form.email.data, profile_name=None,
@@ -79,7 +79,7 @@ def register():
         user.set_password(form.password.data)
         try:
             db.session.add(user)
-            response = make_response(redirect(url_for('main.index')))
+            response = make_response(redirect(url_for('main.index',account='musicians')))
             response.set_cookie("username", form.username.data)
             user = Profile.query.filter_by(email=form.email.data).first()
             login_user(user)
@@ -96,4 +96,5 @@ def register():
         except IntegrityError:
             db.session.rollback()
             flash('Unable to register {}. Please try again.'.format(form.username.data), 'error')
+            return redirect(url_for('main.index'))
     return render_template('register.html', form=form)

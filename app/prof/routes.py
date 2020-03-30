@@ -17,25 +17,27 @@ def profile(username):
             current_user.profile_id).first()
         if user.block == 1 and admin is None:
             flash('User {} is blocked by Administrators'.format(username))
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.index',account='musicians'))
         relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
         genres = Genre.query.join(Profile_Genre).join(Profile).filter_by(username=username).with_entities(
             Genre.genre_name)
         # check account type
         musician = Musician.query.filter_by(profile_id=user.profile_id).first()
         venue = Venue.query.filter_by(profile_id=user.profile_id).first()
-        
+        user_admin = Administrator.query.filter(Administrator.profile_id == user.profile_id).first()
         if musician is not None:
-            return render_template('musicians_profile.html', user=user, genres=genres, musician=musician, admin=admin)
+            return render_template('musicians_profile.html', user=user, genres=genres,
+                                                             musician=musician, admin=user_admin)
         elif venue is not None:
             medias = Media.query.filter_by(venue_id=venue.venue_id).all()
-            return render_template('venue_profile.html', user=user, genres=genres, venue=venue, medias=medias, admin=admin)
+            return render_template('venue_profile.html', user=user, genres=genres, venue=venue, 
+                                                            medias=medias, admin=user_admin)
         else:
             flash('User {} is not properly registered.'.format(username))
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.index',account='musicians'))
     elif user is None:
         flash('User with username {} is not found.'.format(username))
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.index',account='musicians'))
     else:
         flash('Please search through main index.')
         return redirect(url_for('main.search'))
@@ -66,7 +68,7 @@ def edit_profile():
             account = 'venue'
         else:
             flash('User with username is not registered properly.')
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.index',account='musicians'))
         return render_template('edit_profile.html', form=form, user_type=account, account_form=adaptive_form)
     elif request.method == 'POST' and form.validate():
         try:
@@ -142,7 +144,7 @@ def settings():
             user.username = form.username.data
             user.email = form.email.data
             db.session.commit()
-            return redirect(url_for('main.index'))
+            return redirect(url_for('main.index',account='musicians'))
         except IntegrityError:
             flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
     return render_template('settings.html', form=form)
