@@ -4,16 +4,17 @@ from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import SubmitField, StringField, SelectField, TextAreaField, SelectMultipleField, PasswordField, \
     DateField, IntegerField
-from wtforms.validators import DataRequired, Email, EqualTo, ValidationError
+from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 
 
 class ProfileForm(FlaskForm):
-    description = TextAreaField('Profile description')
-    profile_name = StringField('Profile Name', validators=[DataRequired()])
+    description = TextAreaField('Profile description', validators=[Length(max=200)])
+    profile_name = StringField('Profile Name', validators=[DataRequired(), Length(max=50)])
     location = SelectField(u'City', choices=[('London', 'London'), ('Machester', 'Manchester'), ('Berlin', 'Berlin')])
     genre = SelectMultipleField(label='Genre', choices=[('1', 'Rock'), ('2', 'Drum and Bass'), ('3', 'Techno'),
                                                         ('4', 'Funk'), ('5', 'Disco'), ('6', 'Metal'),
-                                                        ('7', 'Hip-Hop'), ('8', 'Indie')], validators=[DataRequired()])
+                                                        ('7', 'Hip-Hop'), ('8', 'Indie')], 
+                                                        validators=[DataRequired(message='Genre Data Required')])
     profile_image = FileField('Profile Image', validators=[FileAllowed(images, 'Images only')])
     submit = SubmitField('Save')
 
@@ -28,14 +29,14 @@ class MusicianForm(FlaskForm):
 
 class VenueForm(FlaskForm):
     capacity = IntegerField('Venue Capacity')
-    venue_type = StringField('Venue Type')
+    venue_type = StringField('Venue Type', Length(max=20))
     # user can enter image file and/or embed youtube link
     venue_image = FileField('Image', validators=[FileAllowed(images, 'Images only')])
     youtube = StringField('YouTube video URL')
 
 
 class SettingsForm(FlaskForm):
-    username = StringField('New Username', validators=[DataRequired()])
+    username = StringField('New Username', validators=[DataRequired(), Length(max=20)])
     email = StringField('New Email address', validators=[DataRequired(), Email()])
     password = PasswordField('New Password',
                              validators=[DataRequired(), EqualTo('confirm', message='Passwords must match')])

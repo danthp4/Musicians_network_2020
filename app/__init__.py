@@ -9,6 +9,12 @@ db = SQLAlchemy()
 images = UploadSet('images', IMAGES)
 login_manager = LoginManager()
 
+def page_not_found(e):
+    return render_template('404.html'), 404
+
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
 def create_app(config_class=DevConfig):
     """
     Creates an application instance to run using settings from config.py
@@ -26,9 +32,15 @@ def create_app(config_class=DevConfig):
     with app.app_context():
         db.create_all()
 
+    # Register error handlers
+    app.register_error_handler(404, page_not_found)
+    app.register_error_handler(500, internal_server_error)
+
     # Register Blueprints
-    from app.main.routes import bp_main, bp_about
+    from app.main.routes import bp_main
     app.register_blueprint(bp_main)
+
+    from app.abt.routes import bp_about
     app.register_blueprint(bp_about)
 
     from app.auth.routes import bp_auth

@@ -1,12 +1,12 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import desc
 
 from app import db
 from app.models import Profile, Profile_Genre, Genre, Musician, Venue, Administrator, Media, Profile_Rate
 
 bp_main = Blueprint('main', __name__)
-bp_about = Blueprint('about', __name__, url_prefix='/about')
 
 
 @bp_main.route('/', methods=['GET', 'POST'])
@@ -15,7 +15,7 @@ def index():
         admin = Administrator.query.join(Profile).filter_by(profile_id=current_user.profile_id).first()
         relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
         genres = Genre.query.all()
-        admin_users = Administrator.query.filter(Administrator.profile_id != current_user.profile_id).all()
+        admin_users = Administrator.query.all()
         # show non-blocked musicians for users and all users for admins
         if admin is None:
             block_filter = 0
@@ -33,7 +33,7 @@ def index():
                                                                                     Profile.profile_description,
                                                                                     Profile.block)
             return render_template('home.html', profiles=profiles, relations=relations, genres=genres, 
-                                                admin=admin_users)
+                                                admins=admin_users)
         else:
             profiles = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id,
                                                 Profile.block <= block_filter).with_entities(
@@ -48,24 +48,9 @@ def index():
                                                                                 Profile.profile_image)
             media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
             return render_template('venues.html', profiles=profiles, relations=relations, 
-                                                    genres=genres, media=media, admin=admin_users)
+                                                    genres=genres, media=media, admins=admin_users)
     else:
         return render_template('index.html')
-
-
-@bp_about.route('/musicians')
-def musicians():
-    return render_template('about_musicians.html')
-
-
-@bp_about.route('/bands')
-def bands():
-    return render_template('about_bands.html')
-
-
-@bp_about.route('/venues')
-def venues():
-    return render_template('about_venues.html')
 
 
 @bp_main.route('/soundcloud_id')
@@ -233,9 +218,110 @@ def rate():
             for record in ratings:
                 total_rate += record.rate
                 n_rates += 1
-            target_user.rating = int(total_rate/n_rates)
+            target_user.rating = total_rate/n_rates
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
             flash('Unable to rate {}. Please try again.'.format(target_user.username), 'error')
         return redirect(url_for('main.index',account='musicians'))    
+
+@bp_main.route('/blocked')
+@login_required
+def blocked():
+    admin = Administrator.query.join(Profile).filter(Administrator.profile_id ==
+                                                     current_user.profile_id).first()
+    if admin is not None:
+        account = request.args.get('account')
+        relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
+        genres = Genre.query.all()
+        admin_users = Administrator.query.all()
+        term = 'Blocked'
+        if account == 'musicians':
+            media = None
+            blocked_users = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id
+                                                            , Profile.block == 1).with_entities(
+                                                                                        Profile.username,
+                                                                                        Profile.location,
+                                                                                        Profile.profile_id,
+                                                                                        Profile.rating,
+                                                                                        Musician.sc_id,
+                                                                                        Profile.profile_description,
+                                                                                        Profile.block)
+            return render_template('search_results.html', results=blocked_users, term=term, relations=relations, 
+                                                            genres=genres, search_type='Artists', 
+                                                            media=media, admins=admin_users)
+        elif account == 'venues':
+            blocked_users = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id,
+                                                Profile.block == 1).with_entities(
+                                                                                Venue.venue_capacity,
+                                                                                Profile.username,
+                                                                                Profile.location,
+                                                                                Profile.rating,
+                                                                                Profile.profile_description,
+                                                                                Profile.profile_id,
+                                                                                Venue.venue_type, Profile.block,
+                                                                                Venue.venue_id,
+                                                                                Profile.profile_image)
+            media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
+            return render_template('search_results.html', results=blocked_users, term=term, relations=relations, 
+                                                            genres=genres, search_type='Venues', 
+                                                            media=media, admins=admin_users)
+        else:
+            flash("Invalid request.",'error')
+            return redirect(url_for('main.index',account='musicians'))
+    else:
+        flash("You are not authorised to view blocked users from Musician's Network.")
+        return redirect(url_for('main.index',account='musicians'))
+
+@bp_main.route('/ratings')
+@login_required
+def ratings():
+    account = request.args.get('account')
+    upper, lower = rate_range_calculator(int(request.args.get('star')))
+    relations = Profile_Genre.query.filter(Profile_Genre.profile_id != current_user.profile_id).all()
+    genres = Genre.query.all()
+    admin_users = Administrator.query.all()
+    term = 'Rating'
+    if account == 'musicians':
+        media = None
+        results = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id
+                                                        , Profile.block == 0, Profile.rating > lower,
+                                                        Profile.rating <= upper).order_by(desc(Profile.rating)).\
+                                                                    with_entities(  Profile.username,
+                                                                                    Profile.location,
+                                                                                    Profile.profile_id,
+                                                                                    Profile.rating,
+                                                                                    Musician.sc_id,
+                                                                                    Profile.profile_description,
+                                                                                    Profile.block)
+        return render_template('search_results.html', results=results, term=term, relations=relations, 
+                                                        genres=genres, search_type='Artists', 
+                                                        media=media, admins=admin_users)
+    elif account == 'venues':
+        results = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id,
+                                            Profile.block == 0, Profile.rating > lower,
+                                                    Profile.rating <= upper).order_by(Profile.rating).\
+                                                            with_entities(  Venue.venue_capacity,
+                                                                            Profile.username,
+                                                                            Profile.location,
+                                                                            Profile.rating,
+                                                                            Profile.profile_description,
+                                                                            Profile.profile_id,
+                                                                            Venue.venue_type, Profile.block,
+                                                                            Venue.venue_id,
+                                                                            Profile.profile_image)
+        media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
+        return render_template('search_results.html', results=results, term=term, relations=relations, 
+                                                        genres=genres, search_type='Venues', 
+                                                        media=media, admins=admin_users)
+    else:
+        flash("Invalid request.",'error')
+        return redirect(url_for('main.index',account='musicians'))
+
+def rate_range_calculator(star):
+    maximum = star + 0.5
+    minimum = star - 0.5
+    if star == 0:
+        maximum = 5
+    return maximum, minimum
+    

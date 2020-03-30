@@ -12,6 +12,7 @@ bp_prof = Blueprint('prof', __name__)
 @login_required
 def profile(username):
     user = Profile.query.filter_by(username=username).first()
+    admin_users = Administrator.query.all()
     if user is not None and request.method == 'GET':
         admin = Administrator.query.join(Profile).filter(Administrator.profile_id == 
             current_user.profile_id).first()
@@ -27,11 +28,11 @@ def profile(username):
         user_admin = Administrator.query.filter(Administrator.profile_id == user.profile_id).first()
         if musician is not None:
             return render_template('musicians_profile.html', user=user, genres=genres,
-                                                             musician=musician, admin=user_admin)
+                                                             musician=musician, admin=user_admin, admins=admin_users)
         elif venue is not None:
             medias = Media.query.filter_by(venue_id=venue.venue_id).all()
             return render_template('venue_profile.html', user=user, genres=genres, venue=venue, 
-                                                            medias=medias, admin=user_admin)
+                                                            medias=medias, admin=user_admin, admins=admin_users)
         else:
             flash('User {} is not properly registered.'.format(username))
             return redirect(url_for('main.index',account='musicians'))
@@ -50,6 +51,7 @@ def edit_profile():
     user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
     musician = Musician.query.filter_by(profile_id=user.profile_id).first()
     venue = Venue.query.filter_by(profile_id=user.profile_id).first()
+    admin_users = Administrator.query.all()
     if request.method == 'GET':
         ## displays default input
         form.profile_name.data = user.profile_name
@@ -69,7 +71,8 @@ def edit_profile():
         else:
             flash('User with username is not registered properly.')
             return redirect(url_for('main.index',account='musicians'))
-        return render_template('edit_profile.html', form=form, user_type=account, account_form=adaptive_form)
+        return render_template('edit_profile.html', form=form, user_type=account, 
+                                                    account_form=adaptive_form, admins=admin_users)
     elif request.method == 'POST' and form.validate():
         try:
             ## Update user information
@@ -137,6 +140,7 @@ def edit_profile():
 @login_required
 def settings():
     form = SettingsForm()
+    admin_users = Administrator.query.all()
     if request.method == 'POST' and form.validate():
         user = Profile.query.filter_by(profile_id=current_user.profile_id).first()
         try:
@@ -147,7 +151,7 @@ def settings():
             return redirect(url_for('main.index',account='musicians'))
         except IntegrityError:
             flash('Unable to update {}. Please try again.'.format(form.username.data), 'error')
-    return render_template('settings.html', form=form)
+    return render_template('settings.html', form=form, admins=admin_users)
 
 def media_counter(Media_table, media_type, venue_id):
     medias = Media_table.query.filter_by(venue_id=venue_id, media_type=media_type).all()

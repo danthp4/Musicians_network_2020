@@ -56,23 +56,86 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Sort by
+            Filter
         </div>
 
         <!-- Nav Item - Utilities Collapse Menu -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ url_for('main.index',account='musicians') }}" data-toggle="collapse" data-target="#collapseUtilities"
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFilterm"
                aria-expanded="true" aria-controls="collapseUtilities">
-                <i class="fas fa-fw fa-wrench"></i>
-                <span>Filters</span>
+                <i class="fas fa-fw fa-table"></i>
+                <span>Artists' Filters</span>
             </a>
-            <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
+            <div id="collapseFilterm" class="collapse" aria-labelledby="headingUtilities"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
                     <h6 class="collapse-header">Categories:</h6>
-                    <a class="collapse-item" href="#">Genre</a>
-                    <a class="collapse-item" href="#">Location</a>
-                    <a class="collapse-item" href="#">Other</a>
+                    <!-- Increasing number of stars for rating filter -->
+                    {% for i in range( 1 , 6 ) %}
+                        <a class="collapse-item" href="{{ url_for('main.ratings',account='musicians',star=i) }}">
+                            {% for n in range( i ) %}
+                            <i class="fas fa fa-star"></i>
+                            {% endfor %}
+                        </a>
+                    {% endfor %}
+                    {% for admin in admins %}
+                        {% if admin.profile_id == current_user.profile_id %}
+                            <a class="collapse-item" href="{{ url_for('main.blocked',account='musicians') }}">Blocked Artists</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </li>
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFilterv"
+                aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Venues' Filters</span>
+            </a>
+            <div id="collapseFilterv" class="collapse" aria-labelledby="headingUtilities"
+                    data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Categories:</h6>
+                    <!-- Increasing number of stars for rating filter -->
+                    {% for i in range( 1 , 6 ) %}
+                        <a class="collapse-item" href="{{ url_for('main.ratings',account='venues',star=i) }}">
+                            {% for n in range( i ) %}
+                            <i class="fas fa fa-star"></i>
+                            {% endfor %}
+                        </a>
+                    {% endfor %}
+                    {% for admin in admins %}
+                        {% if admin.profile_id == current_user.profile_id %}
+                            <a class="collapse-item" href="{{ url_for('main.blocked',account='venues') }}">Blocked Venues</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </li>
+
+        <!-- Divider -->
+        <hr class="sidebar-divider d-none d-md-block">
+
+        <!-- Nav Item - Utilities Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSort"
+               aria-expanded="true" aria-controls="collapseUtilities">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Sort</span>
+            </a>
+            <div id="collapseSort" class="collapse" aria-labelledby="headingUtilities"
+                 data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Categories:</h6>
+                    <!-- Increasing number of stars for rating filter -->
+                    <a class="collapse-item" href="{{ url_for('main.ratings',account='musicians',star='0') }}">
+                        Musician Rating
+                    </a>
+                    <a class="collapse-item" href="{{ url_for('main.ratings',account='venues',star='0') }}">
+                        Venue Rating
+                    </a>
                 </div>
             </div>
         </li>
@@ -84,27 +147,23 @@
         <div class="sidebar-heading">
             Information
         </div>
-
-        {% block pages_collapse %}
-    <!-- Nav Item - Pages Collapse Menu -->
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-           aria-expanded="true" aria-controls="collapsePages">
-            <i class="fas fa-fw fa-folder"></i>
-            <span>About</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <a class="collapse-item" href="{{ url_for('about.musicians') }}">For musicians</a>
-                <a class="collapse-item" href="{{ url_for('about.bands') }}">For bands</a>
-                <a class="collapse-item" href="{{ url_for('about.venues') }}">For venues</a>
-                <div class="collapse-divider"></div>
+        
+        <!-- Nav Item - Pages Collapse Menu -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
+            aria-expanded="true" aria-controls="collapsePages">
+                <i class="fas fa-fw fa-folder"></i>
+                <span>About</span>
+            </a>
+            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="{{ url_for('about.musicians') }}">For musicians</a>
+                    <a class="collapse-item" href="{{ url_for('about.bands') }}">For bands</a>
+                    <a class="collapse-item" href="{{ url_for('about.venues') }}">For venues</a>
+                    <div class="collapse-divider"></div>
+                </div>
             </div>
-        </div>
-    </li>
-{% endblock %}
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block">
+        </li>
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">

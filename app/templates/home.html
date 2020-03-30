@@ -149,7 +149,7 @@
         </div>
 
         <ul class="pagination justify-content-center">
-            <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='musicians') }}">Musicians</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='musicians') }}">Artists</a></li>
             <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='venues') }}">Venues</a></li>
         </ul>
 
@@ -180,9 +180,11 @@
                                 {% if user.block|int == 1 %}
                                     <span class="badge badge-danger">Blocked</span>
                                 {% endif %}
-                                {% if admin.profile_id == user.profile_id %}
-                                    <span class="badge badge-info">Admin</span>
-                                {% endif %}
+                                {% for admin in admins %}
+                                    {% if admin.profile_id == user.profile_id %}
+                                        <span class="badge badge-info">Admin</span>
+                                    {% endif %}
+                                {% endfor %}
                             </h6>
 
                         </div>
