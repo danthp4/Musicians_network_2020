@@ -344,31 +344,8 @@
                 </div>
             </div>
 
-            <!-- /.rating modal -->
-            <div class="modal fade" id="rating{{ user.profile_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">What do you think of {{ user.username }}?</h5>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">Rate {{ user.username }} from 1 (left) to 5 (right) and then click the 
-                            rate button!
-                        </div>
-
-                        <div class="rating">
-                            {% for i in range( 1 , 6 ) %}
-                                <a href="{{ url_for('main.rate', username=user.username, rate_value=i) }}" 
-                                    class="fa fa-star"></a>
-                            {% endfor %}
-                        </div>
-                        
-                    </div>
-                </div>
-            </div>
+           {% include "ratings.html" %}
+            
         {% endfor %}
         <!-- /.container-fluid -->
     </div>
