@@ -22,17 +22,7 @@
             <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='venues') }}">Venues</a>
             </li>
         </ul>
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert alert-danger" role="alert">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
+        {% include "flashed_msg.html" %}
         <div class="feed">
             {% for user in profiles %}
                 <!-- Dropdown Card Example -->
