@@ -1,20 +1,24 @@
-from app import images
-from app.models import Profile
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import SubmitField, StringField, SelectField, TextAreaField, SelectMultipleField, PasswordField, \
     DateField, IntegerField
 from wtforms.validators import DataRequired, Email, EqualTo, ValidationError, Length
 
+from app import images
+from app.models import Profile
+
 
 class ProfileForm(FlaskForm):
     description = TextAreaField('Profile description', validators=[Length(max=200)])
     profile_name = StringField('Profile Name', validators=[DataRequired(), Length(max=50)])
-    location = SelectField(u'City', choices=[('London', 'London'), ('Machester', 'Manchester'), ('Berlin', 'Berlin')])
+    location = SelectField(u'City',
+                           choices=[('London', 'London'), ('Manchester', 'Manchester'), ('Birmingham', 'Birmingham'),
+                                    ('Berlin', 'Berlin'), ('Cologne', 'Cologne'), ('NYC', 'NYC'), ('Tokyo', 'Tokyo'),
+                                    ('Singapore', 'Singapore'), ('Sydney', 'Sydney')])
     genre = SelectMultipleField(label='Genre', choices=[('1', 'Rock'), ('2', 'Drum and Bass'), ('3', 'Techno'),
                                                         ('4', 'Funk'), ('5', 'Disco'), ('6', 'Metal'),
-                                                        ('7', 'Hip-Hop'), ('8', 'Indie')], 
-                                                        validators=[DataRequired(message='Genre Data Required')])
+                                                        ('7', 'Hip-Hop'), ('8', 'Indie')],
+                                validators=[DataRequired(message='Genre Data Required')])
     profile_image = FileField('Profile Image', validators=[FileAllowed(images, 'Images only')])
     submit = SubmitField('Save')
 
@@ -52,4 +56,3 @@ class SettingsForm(FlaskForm):
         user = Profile.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('An account is already registered for that email.')
-

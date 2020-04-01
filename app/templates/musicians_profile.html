@@ -87,6 +87,43 @@
                 <iframe width="100%" height="300" scrolling="no" frameborder="no" allow="autoplay"
                         src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/users/{{ musician.sc_id }}&color=%23ff5500&auto_play=false&hide_related=false&show_comments=false&show_user=flase&show_reposts=false&show_teaser=flase"></iframe>
                 <div class="description-container">
+                    <div class="venue-container">
+                                    <span>
+                                        <div class="venue-title">Birthdate:</div>
+                                        <div class="venue-information">
+                                            <span class="badge badge-primary"
+                                                  style="background-color: lightslategray;">{{ musician.birthdate }}</span>
+                                        </div>
+                                    </span>
+                                    <span>
+                                        <div class="venue-title">Gender:</div>
+                                            <div class="venue-information">
+                                                {% if musician.gender == 1 %}
+                                                    <span class="badge badge-secondary">
+                                                        Male
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge badge-secondary">
+                                                        Female
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                    </span>
+                                    <span>
+                                        <div class="venue-title">Availability:</div>
+                                            <div class="venue-information">
+                                                {% if musician.availability == 1 %}
+                                                    <span class="badge badge-success">
+                                                        Available
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge badge-secondary">
+                                                        Unavailable
+                                                    </span>
+                                                {% endif %}
+                                            </div>
+                                    </span>
+                    </div>
                     <div class="description-title">
                         <p>Artist description:</p>
                     </div>
@@ -94,80 +131,6 @@
                         {{ user.profile_description }}
                     </div>
                 </div>
-
-                <!-- Card Footer -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <div class="genre-group">
-                        <div class="description-title">
-                            <p>Birthdate:</p>
-                        </div>
-                        <span class="description">
-                            {{ musician.birthdate }}
-                        </span>
-
-                    </div>
-
-                    <div class="genre-group">
-                        <div class="genre-title">
-                            <p>Gender:</p>
-                        </div>
-                        <div class="description">
-                            {% if musician.gender == 1 %}
-                                <span class="badge badge-secondary">
-                                    Male
-                                </span>
-                            {% else %}
-                                <span class="badge badge-secondary">
-                                    Female
-                                </span>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                    <div class="genre-group">
-                        <div class="genre-title">
-                            <p>Availability:</p>
-                        </div>
-                        <div class="description">
-                            {% if musician.availability == 1 %}
-                                <span class="badge badge-success">
-                                    Available
-                                </span>
-                            {% else %}
-                                <span class="badge badge-secondary">
-                                    Unavailable
-                                </span>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- /.rating modal -->
-            <div class="modal fade" id="rating{{ user.profile_id }}" tabindex="-1" role="dialog"
-                 aria-labelledby="exampleModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">What do you think
-                                of {{ user.username }}?</h5>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">Rate {{ user.username }} from 1 (left) to 5 (right) and then click the
-                            rate button!
-                        </div>
-
-                        <div class="rating">
-                            {% for i in range( 1 , 6 ) %}
-                                <a href="{{ url_for('main.rate', username=user.username, rate_value=i) }}"
-                                   class="fa fa-star"></a>
-                            {% endfor %}
-                        </div>
-
-                    </div>
                 </div>
             </div>
         </div>
