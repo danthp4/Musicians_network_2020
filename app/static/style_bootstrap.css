@@ -11840,7 +11840,7 @@ body.sidebar-toggled footer.sticky-footer {
 .rating {
     display: inline-block;
     padding-right: 2.5pc;
-    
+
 }
 
 .location {
@@ -11892,7 +11892,7 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .genre {
-    display:inline-block;
+    display: inline-block;
     padding-left: 10px;
 }
 
@@ -11902,16 +11902,17 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .genre-group {
-    display:inline-block;
+    display: inline-block;
 }
 
 .gallery-containter {
     padding: 1pc;
 }
 
-.venue-pic-col{
+.venue-pic-col {
 
 }
+
 .venue-information {
     display: inline-block;
     font-size: 13px;
@@ -11940,7 +11941,7 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .embed-id {
-    max-width:25%;
-    display:inline-block;
+    max-width: 25%;
+    display: inline-block;
     min-width: 25pc;
 }
