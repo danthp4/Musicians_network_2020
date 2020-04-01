@@ -28,11 +28,11 @@ def profile(username):
         user_admin = Administrator.query.filter(Administrator.profile_id == user.profile_id).first()
         if musician is not None:
             return render_template('musicians_profile.html', user=user, genres=genres,
-                                                             musician=musician, admin=user_admin, admins=admin_users)
+                                                             musician=musician, admin=user_admin)
         elif venue is not None:
             medias = Media.query.filter_by(venue_id=venue.venue_id).all()
             return render_template('venue_profile.html', user=user, genres=genres, venue=venue, 
-                                                            medias=medias, admin=user_admin, admins=admin_users)
+                                                            medias=medias, admin=user_admin)
         else:
             flash('User {} is not properly registered.'.format(username))
             return redirect(url_for('main.index',account='musicians'))

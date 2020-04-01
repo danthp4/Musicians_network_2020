@@ -31,7 +31,7 @@ def index():
                 Profile.rating,
                 Musician.sc_id,
                 Profile.profile_description,
-                Profile.block)
+                Profile.block, Profile.profile_image)
             return render_template('home.html', profiles=profiles, relations=relations, genres=genres,
                                    admins=admin_users)
         else:

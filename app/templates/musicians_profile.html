@@ -22,13 +22,19 @@
                 <!-- Card Header - Dropdown -->
                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                     <div class="profile-user-location">
-                        <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
-                                                                           style="max-height: 6vh"
-                                                                           src="{{ user.profile_image }}">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            {% if user.profile_image is none or user.profile_image == "" %}
+                                <img class="img-profile rounded-circle" style="max-height: 6vh" src="../static/img/blank_user.png">
+                            {% else %}
+                                <img class="img-profile rounded-circle" style="max-height: 6vh" src="{{ user.profile_image }}">
+                            {% endif %}
                             {{ user.username }}
                             <div class="location">
                                 <p>- {{ user.location }}</p>
                             </div>
+                            {% if user.block|int == 1 %}
+                                <span class="badge badge-danger">Blocked</span>
+                            {% endif %}
                             {% if admin %}
                                 <span class="badge badge-info">Admin</span>
                             {% endif %}

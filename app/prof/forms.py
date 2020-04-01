@@ -33,7 +33,7 @@ class MusicianForm(FlaskForm):
 
 class VenueForm(FlaskForm):
     capacity = IntegerField('Venue Capacity')
-    venue_type = StringField('Venue Type', Length(max=20))
+    venue_type = StringField('Venue Type', validators=[Length(max=20)])
     # user can enter image file and/or embed youtube link
     venue_image = FileField('Image', validators=[FileAllowed(images, 'Images only')])
     youtube = StringField('YouTube video URL')
