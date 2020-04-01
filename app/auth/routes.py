@@ -56,7 +56,6 @@ def login():
         next = request.args.get('next')
         if not is_safe_url(next):
             return abort(400)
-        profiles = Profile.query.filter(Profile.username != current_user.username).all()
         return redirect(next or url_for('main.index',account='musicians'))
     return render_template('login.html', form=form)
 

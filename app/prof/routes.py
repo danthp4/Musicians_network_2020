@@ -77,6 +77,11 @@ def edit_profile():
         try:
             ## Update user information
             if form.profile_image.data is not None:
+                if user.profile_image != '' or user.profile_image is not None:
+                    import os
+                    file_path = images.path(os.path.basename(user.profile_image))
+                    os.remove(file_path)
+                    venue_image.delete()
                 filename = images.save(request.files['profile_image'])
                 url = images.url(filename)
                 user.profile_image = url
@@ -95,7 +100,6 @@ def edit_profile():
             if musician is not None:
                 adaptive_form = MusicianForm()
                 musician.gender = int(adaptive_form.gender.data)
-                print(adaptive_form.birthdate.data)
                 musician.birthdate = adaptive_form.birthdate.data
                 musician.availability = int(adaptive_form.availability.data)
                 musician.sc_id = adaptive_form.sc_id.data
