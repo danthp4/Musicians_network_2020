@@ -17,8 +17,7 @@ class ProfileForm(FlaskForm):
                                     ('Singapore', 'Singapore'), ('Sydney', 'Sydney')])
     genre = SelectMultipleField(label='Genre', choices=[('1', 'Rock'), ('2', 'Drum and Bass'), ('3', 'Techno'),
                                                         ('4', 'Funk'), ('5', 'Disco'), ('6', 'Metal'),
-                                                        ('7', 'Hip-Hop'), ('8', 'Indie')],
-                                validators=[DataRequired(message='Genre Data Required')])
+                                                        ('7', 'Hip-Hop'), ('8', 'Indie')])
     profile_image = FileField('Profile Image', validators=[FileAllowed(images, 'Images only')])
     submit = SubmitField('Save')
 

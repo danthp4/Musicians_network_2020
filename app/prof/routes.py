@@ -81,21 +81,20 @@ def edit_profile():
                     import os
                     file_path = images.path(os.path.basename(user.profile_image))
                     os.remove(file_path)
-                    venue_image.delete()
                 filename = images.save(request.files['profile_image'])
                 url = images.url(filename)
                 user.profile_image = url
             user.profile_name = form.profile_name.data
             user.profile_description = form.description.data
             user.location = form.location.data
-            # Delete existing record with current profile_id then update with new one
-            Profile_Genre.query.filter_by(profile_id=current_user.profile_id).delete()
-            # Iterate over chosen Genre and update Musician/Genre table
-            genre_list = form.genre.data
-            for genre in genre_list:
-                relation = Profile_Genre(profile_id=current_user.profile_id, genre_id=int(genre))
-                db.session.add(relation)
-                db.session.commit()
+            if len(form.genre.data) != 0:
+                # Delete existing record with current profile_id then update with new one
+                Profile_Genre.query.filter_by(profile_id=current_user.profile_id).delete()
+                # Iterate over chosen Genre and update Musician/Genre table
+                for genre in form.genre.data:
+                    relation = Profile_Genre(profile_id=current_user.profile_id, genre_id=int(genre))
+                    db.session.add(relation)
+                    db.session.commit()
 
             if musician is not None:
                 adaptive_form = MusicianForm()
