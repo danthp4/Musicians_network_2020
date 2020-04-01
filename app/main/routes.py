@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_required, current_user
-from sqlalchemy.exc import IntegrityError
 from sqlalchemy import desc
+from sqlalchemy.exc import IntegrityError
 
 from app import db
 from app.models import Profile, Profile_Genre, Genre, Musician, Venue, Administrator, Media, Profile_Rate
@@ -24,31 +24,31 @@ def index():
         account = request.args.get('account')
         if account != 'venues':
             profiles = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id
-                                                        , Profile.block <= block_filter).with_entities(
-                                                                                    Profile.username,
-                                                                                    Profile.location,
-                                                                                    Profile.profile_id,
-                                                                                    Profile.rating,
-                                                                                    Musician.sc_id,
-                                                                                    Profile.profile_description,
-                                                                                    Profile.block)
-            return render_template('home.html', profiles=profiles, relations=relations, genres=genres, 
-                                                admins=admin_users)
+                                                           , Profile.block <= block_filter).with_entities(
+                Profile.username,
+                Profile.location,
+                Profile.profile_id,
+                Profile.rating,
+                Musician.sc_id,
+                Profile.profile_description,
+                Profile.block)
+            return render_template('home.html', profiles=profiles, relations=relations, genres=genres,
+                                   admins=admin_users)
         else:
             profiles = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id,
-                                                Profile.block <= block_filter).with_entities(
-                                                                                Venue.venue_capacity,
-                                                                                Profile.username,
-                                                                                Profile.location,
-                                                                                Profile.rating,
-                                                                                Profile.profile_description,
-                                                                                Profile.profile_id,
-                                                                                Venue.venue_type, Profile.block,
-                                                                                Venue.venue_id,
-                                                                                Profile.profile_image)
+                                                        Profile.block <= block_filter).with_entities(
+                Venue.venue_capacity,
+                Profile.username,
+                Profile.location,
+                Profile.rating,
+                Profile.profile_description,
+                Profile.profile_id,
+                Venue.venue_type, Profile.block,
+                Venue.venue_id,
+                Profile.profile_image)
             media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
-            return render_template('venues.html', profiles=profiles, relations=relations, 
-                                                    genres=genres, media=media, admins=admin_users)
+            return render_template('venues.html', profiles=profiles, relations=relations,
+                                   genres=genres, media=media, admins=admin_users)
     else:
         return render_template('index.html')
 
@@ -80,91 +80,91 @@ def search_results():
                 block_filter = 0
             else:
                 block_filter = 1
-            
+
             if search_type == 'Artists':
                 media = None
                 if category == 'Name':
                     results = Profile.query.join(Musician).filter(Profile.username.contains(term)
-                                                        , Profile.block <= block_filter).with_entities(
-                                                                                        Profile.username,
-                                                                                        Profile.location,
-                                                                                        Profile.profile_id,
-                                                                                        Profile.rating,
-                                                                                        Musician.sc_id,
-                                                                                        Profile.profile_description,
-                                                                                        Profile.block)
+                                                                  , Profile.block <= block_filter).with_entities(
+                        Profile.username,
+                        Profile.location,
+                        Profile.profile_id,
+                        Profile.rating,
+                        Musician.sc_id,
+                        Profile.profile_description,
+                        Profile.block)
                     msg = 'with'
                 elif category == 'Location':
                     results = Profile.query.join(Musician).filter(Profile.location.contains(term)
-                                            , Profile.block <= block_filter).with_entities(
-                                                                                Profile.username,
-                                                                                Profile.location,
-                                                                                Profile.profile_id,
-                                                                                Profile.rating,
-                                                                                Musician.sc_id,
-                                                                                Profile.profile_description,
-                                                                                Profile.block)
+                                                                  , Profile.block <= block_filter).with_entities(
+                        Profile.username,
+                        Profile.location,
+                        Profile.profile_id,
+                        Profile.rating,
+                        Musician.sc_id,
+                        Profile.profile_description,
+                        Profile.block)
                     msg = 'in'
                 elif category == 'Genre':
                     results = Profile.query.join(Profile_Genre).join(Genre).join(Musician).filter(
-                                    Genre.genre_name.contains(term), Profile.block <= block_filter
-                                                                ).with_entities(Profile.username,
-                                                                                Profile.location,
-                                                                                Profile.profile_id,
-                                                                                Profile.rating,
-                                                                                Musician.sc_id,
-                                                                                Profile.profile_description,
-                                                                                Profile.block)
+                        Genre.genre_name.contains(term), Profile.block <= block_filter
+                    ).with_entities(Profile.username,
+                                    Profile.location,
+                                    Profile.profile_id,
+                                    Profile.rating,
+                                    Musician.sc_id,
+                                    Profile.profile_description,
+                                    Profile.block)
                     msg = 'with'
             else:
                 media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
                 if category == 'Name':
                     results = Profile.query.join(Venue).filter(Profile.username.contains(term),
-                                            Profile.block <= block_filter).with_entities(
-                                                                            Venue.venue_capacity,
-                                                                            Profile.username,
-                                                                            Profile.location,
-                                                                            Profile.rating,
-                                                                            Profile.profile_description,
-                                                                            Profile.profile_id,
-                                                                            Venue.venue_type, Profile.block,
-                                                                            Venue.venue_id,
-                                                                            Profile.profile_image)
+                                                               Profile.block <= block_filter).with_entities(
+                        Venue.venue_capacity,
+                        Profile.username,
+                        Profile.location,
+                        Profile.rating,
+                        Profile.profile_description,
+                        Profile.profile_id,
+                        Venue.venue_type, Profile.block,
+                        Venue.venue_id,
+                        Profile.profile_image)
                     msg = 'with'
                 elif category == 'Location':
                     results = Profile.query.join(Venue).filter(Profile.location.contains(term),
-                                            Profile.block <= block_filter).with_entities(
-                                                                            Venue.venue_capacity,
-                                                                            Profile.username,
-                                                                            Profile.location,
-                                                                            Profile.rating,
-                                                                            Profile.profile_description,
-                                                                            Profile.profile_id,
-                                                                            Venue.venue_type, Profile.block,
-                                                                            Venue.venue_id,
-                                                                            Profile.profile_image)
+                                                               Profile.block <= block_filter).with_entities(
+                        Venue.venue_capacity,
+                        Profile.username,
+                        Profile.location,
+                        Profile.rating,
+                        Profile.profile_description,
+                        Profile.profile_id,
+                        Venue.venue_type, Profile.block,
+                        Venue.venue_id,
+                        Profile.profile_image)
                     msg = 'in'
                 elif category == 'Genre':
                     results = Profile.query.join(Profile_Genre).join(Genre).join(Venue).filter(
-                                    Genre.genre_name.contains(term), Profile.block <= block_filter
-                                                            ).with_entities(Venue.venue_capacity,
-                                                                            Profile.username,
-                                                                            Profile.location,
-                                                                            Profile.rating,
-                                                                            Profile.profile_description,
-                                                                            Profile.profile_id,
-                                                                            Venue.venue_type, Profile.block,
-                                                                            Venue.venue_id,
-                                                                            Profile.profile_image)
+                        Genre.genre_name.contains(term), Profile.block <= block_filter
+                    ).with_entities(Venue.venue_capacity,
+                                    Profile.username,
+                                    Profile.location,
+                                    Profile.rating,
+                                    Profile.profile_description,
+                                    Profile.profile_id,
+                                    Venue.venue_type, Profile.block,
+                                    Venue.venue_id,
+                                    Profile.profile_image)
                     msg = 'with'
             if not results:
                 flash('No user found {} that {}.'.format(msg, category))
-                return render_template('search_results.html', results=results, term=term, relations=relations, 
-                                                            genres=genres, search_type=search_type, media=media)
-            return render_template('search_results.html', results=results, term=term, relations=relations, 
-                                                            genres=genres, search_type=search_type, media=media)
+                return render_template('search_results.html', results=results, term=term, relations=relations,
+                                       genres=genres, search_type=search_type, media=media)
+            return render_template('search_results.html', results=results, term=term, relations=relations,
+                                   genres=genres, search_type=search_type, media=media)
     else:
-        return redirect(url_for('main.index',account='musicians'))
+        return redirect(url_for('main.index', account='musicians'))
 
 
 @bp_main.route('/block')
@@ -184,11 +184,12 @@ def block():
                 flash("Account {} is successfully unblocked.".format(username))
             db.session.commit()
         except:
-            flash("Invalid Command. Please block through user's card",'error')
-        
+            flash("Invalid Command. Please block through user's card", 'error')
+
     else:
         flash("You are not authorised to remove users from Musician's Network. Please contact Administrators")
-    return redirect(url_for('main.index',account='musicians'))
+    return redirect(url_for('main.index', account='musicians'))
+
 
 @bp_main.route('/rate')
 @login_required
@@ -197,16 +198,16 @@ def rate():
     rate_value = request.args.get('rate_value')
     if username == current_user.username:
         flash('You are unable to rate yourself.')
-        return redirect(url_for('main.index',account='musicians'))
+        return redirect(url_for('main.index', account='musicians'))
     else:
         try:
             target_user = Profile.query.filter_by(username=username).first()
-            relation = Profile_Rate.query.filter_by(target_id=target_user.profile_id, 
+            relation = Profile_Rate.query.filter_by(target_id=target_user.profile_id,
                                                     profile_id=current_user.profile_id).first()
             # if current_user has never rated target_user
             if relation is None:
                 rating = Profile_Rate(profile_id=current_user.profile_id, target_id=target_user.profile_id,
-                        rate=int(rate_value))
+                                      rate=int(rate_value))
                 db.session.add(rating)
             else:
                 relation.rate = int(rate_value)
@@ -218,12 +219,13 @@ def rate():
             for record in ratings:
                 total_rate += record.rate
                 n_rates += 1
-            target_user.rating = total_rate/n_rates
+            target_user.rating = total_rate / n_rates
             db.session.commit()
         except IntegrityError:
             db.session.rollback()
             flash('Unable to rate {}. Please try again.'.format(target_user.username), 'error')
-        return redirect(url_for('main.index',account='musicians'))    
+        return redirect(url_for('main.index', account='musicians'))
+
 
 @bp_main.route('/blocked')
 @login_required
@@ -239,39 +241,40 @@ def blocked():
         if account == 'musicians':
             media = None
             blocked_users = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id
-                                                            , Profile.block == 1).with_entities(
-                                                                                        Profile.username,
-                                                                                        Profile.location,
-                                                                                        Profile.profile_id,
-                                                                                        Profile.rating,
-                                                                                        Musician.sc_id,
-                                                                                        Profile.profile_description,
-                                                                                        Profile.block)
-            return render_template('search_results.html', results=blocked_users, term=term, relations=relations, 
-                                                            genres=genres, search_type='Artists', 
-                                                            media=media, admins=admin_users)
+                                                                , Profile.block == 1).with_entities(
+                Profile.username,
+                Profile.location,
+                Profile.profile_id,
+                Profile.rating,
+                Musician.sc_id,
+                Profile.profile_description,
+                Profile.block)
+            return render_template('search_results.html', results=blocked_users, term=term, relations=relations,
+                                   genres=genres, search_type='Artists',
+                                   media=media, admins=admin_users)
         elif account == 'venues':
             blocked_users = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id,
-                                                Profile.block == 1).with_entities(
-                                                                                Venue.venue_capacity,
-                                                                                Profile.username,
-                                                                                Profile.location,
-                                                                                Profile.rating,
-                                                                                Profile.profile_description,
-                                                                                Profile.profile_id,
-                                                                                Venue.venue_type, Profile.block,
-                                                                                Venue.venue_id,
-                                                                                Profile.profile_image)
+                                                             Profile.block == 1).with_entities(
+                Venue.venue_capacity,
+                Profile.username,
+                Profile.location,
+                Profile.rating,
+                Profile.profile_description,
+                Profile.profile_id,
+                Venue.venue_type, Profile.block,
+                Venue.venue_id,
+                Profile.profile_image)
             media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
-            return render_template('search_results.html', results=blocked_users, term=term, relations=relations, 
-                                                            genres=genres, search_type='Venues', 
-                                                            media=media, admins=admin_users)
+            return render_template('search_results.html', results=blocked_users, term=term, relations=relations,
+                                   genres=genres, search_type='Venues',
+                                   media=media, admins=admin_users)
         else:
-            flash("Invalid request.",'error')
-            return redirect(url_for('main.index',account='musicians'))
+            flash("Invalid request.", 'error')
+            return redirect(url_for('main.index', account='musicians'))
     else:
         flash("You are not authorised to view blocked users from Musician's Network.")
-        return redirect(url_for('main.index',account='musicians'))
+        return redirect(url_for('main.index', account='musicians'))
+
 
 @bp_main.route('/ratings')
 @login_required
@@ -285,38 +288,39 @@ def ratings():
     if account == 'musicians':
         media = None
         results = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id
-                                                        , Profile.block == 0, Profile.rating > lower,
-                                                        Profile.rating <= upper).order_by(desc(Profile.rating)).\
-                                                                    with_entities(  Profile.username,
-                                                                                    Profile.location,
-                                                                                    Profile.profile_id,
-                                                                                    Profile.rating,
-                                                                                    Musician.sc_id,
-                                                                                    Profile.profile_description,
-                                                                                    Profile.block)
-        return render_template('search_results.html', results=results, term=term, relations=relations, 
-                                                        genres=genres, search_type='Artists', 
-                                                        media=media, admins=admin_users)
+                                                      , Profile.block == 0, Profile.rating > lower,
+                                                      Profile.rating <= upper).order_by(desc(Profile.rating)). \
+            with_entities(Profile.username,
+                          Profile.location,
+                          Profile.profile_id,
+                          Profile.rating,
+                          Musician.sc_id,
+                          Profile.profile_description,
+                          Profile.block)
+        return render_template('search_results.html', results=results, term=term, relations=relations,
+                               genres=genres, search_type='Artists',
+                               media=media, admins=admin_users)
     elif account == 'venues':
         results = Profile.query.join(Venue).filter(Venue.profile_id != current_user.profile_id,
-                                            Profile.block == 0, Profile.rating > lower,
-                                                    Profile.rating <= upper).order_by(Profile.rating).\
-                                                            with_entities(  Venue.venue_capacity,
-                                                                            Profile.username,
-                                                                            Profile.location,
-                                                                            Profile.rating,
-                                                                            Profile.profile_description,
-                                                                            Profile.profile_id,
-                                                                            Venue.venue_type, Profile.block,
-                                                                            Venue.venue_id,
-                                                                            Profile.profile_image)
+                                                   Profile.block == 0, Profile.rating > lower,
+                                                   Profile.rating <= upper).order_by(Profile.rating). \
+            with_entities(Venue.venue_capacity,
+                          Profile.username,
+                          Profile.location,
+                          Profile.rating,
+                          Profile.profile_description,
+                          Profile.profile_id,
+                          Venue.venue_type, Profile.block,
+                          Venue.venue_id,
+                          Profile.profile_image)
         media = Media.query.join(Venue).filter(Venue.profile_id != current_user.profile_id).all()
-        return render_template('search_results.html', results=results, term=term, relations=relations, 
-                                                        genres=genres, search_type='Venues', 
-                                                        media=media, admins=admin_users)
+        return render_template('search_results.html', results=results, term=term, relations=relations,
+                               genres=genres, search_type='Venues',
+                               media=media, admins=admin_users)
     else:
-        flash("Invalid request.",'error')
-        return redirect(url_for('main.index',account='musicians'))
+        flash("Invalid request.", 'error')
+        return redirect(url_for('main.index', account='musicians'))
+
 
 def rate_range_calculator(star):
     maximum = star + 0.5
@@ -324,4 +328,3 @@ def rate_range_calculator(star):
     if star == 0:
         maximum = 5
     return maximum, minimum
-    

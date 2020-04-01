@@ -1,184 +1,54 @@
 {% extends "base.html" %}
 {% block title %} Musician's Network {% endblock %}
 {% block navbar_items %}
-    <!-- Nav Item - Alerts -->
-    <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-bell fa-fw"></i>
-            <!-- Counter - Alerts -->
-            <span class="badge badge-danger badge-counter">3+</span>
-        </a>
-        <!-- Dropdown - Alerts -->
-        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-             aria-labelledby="alertsDropdown">
-            <h6 class="dropdown-header">
-                Alerts Center
-            </h6>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                        <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">ALERT ONE DATE</div>
-                    <span class="font-weight-bold">ALERT ONE</span>
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                        <i class="fas fa-donate text-white"></i>
-                    </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">ALERT TWO DATE</div>
-                    ALERT TWO
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                        <i class="fas fa-exclamation-triangle text-white"></i>
-                    </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">ALERT 3</div>
-                    ALERT 3 DATE
-                </div>
-            </a>
-            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-        </div>
-    </li>
-
-    <!-- Nav Item - Messages -->
-    <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-envelope fa-fw"></i>
-            <!-- Counter - Messages -->
-            <span class="badge badge-danger badge-counter">7</span>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-             aria-labelledby="messagesDropdown">
-            <h6 class="dropdown-header">
-                Message Center
-            </h6>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60"
-                         alt="">
-                    <div class="status-indicator bg-success"></div>
-                </div>
-                <div class="font-weight-bold">
-                    <div class="text-truncate">MESSAGE ONE
-                    </div>
-                    <div class="small text-gray-500">MESSAGE ONE AUTHOR · WHEN</div>
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60"
-                         alt="">
-                    <div class="status-indicator"></div>
-                </div>
-                <div>
-                    <div class="text-truncate">MESSAGE TWO
-                    </div>
-                    <div class="small text-gray-500">MESSAGE TWO AUTHOR · WHEN</div>
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60"
-                         alt="">
-                    <div class="status-indicator bg-warning"></div>
-                </div>
-                <div>
-                    <div class="text-truncate">MESSAGE THREE
-                    </div>
-                    <div class="small text-gray-500">MESSAGE THREE AUTHOR · WHEN</div>
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                         alt="">
-                    <div class="status-indicator bg-success"></div>
-                </div>
-                <div>
-                    <div class="text-truncate">MESSAGE FOUR
-                    </div>
-                    <div class="small text-gray-500">MESSAGE FOUR AUTHOR · WHEN</div>
-                </div>
-            </a>
-            <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-        </div>
-    </li>
+    {% include "nav_alerts.html" %}
 {% endblock %}
 {% block navbar_dropdown_title %}Account{% endblock %}
 {% block nav_dropdown_options %}
-    <a class="dropdown-item" href="{{ url_for('prof.profile', username=current_user.username) }}">
-        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-        Profile
-    </a>
-    <a class="dropdown-item" href="{{ url_for('prof.edit_profile') }}">
-        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-        Edit Profile
-    </a>
-    <a class="dropdown-item" href="{{ url_for('prof.settings') }}">
-        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-        Settings
-    </a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-        Logout
-    </a>
+    {% include "account_settings.html" %}
 {% endblock %}
-
 {% block content %}
     <!-- Begin Page Content -->
     <div class="container-fluid">
 
-    <!-- Page Heading -->
-    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-        <h1 class="h3 mb-0 text-gray-800">Venues</h1>
-    </div>
+        <!-- Page Heading -->
+        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">Venues</h1>
+        </div>
 
-    <ul class="pagination justify-content-center">
-        <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='musicians') }}">Artists</a></li>
-        <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='venues') }}">Venues</a></li>
-    </ul>
+        <ul class="pagination justify-content-center">
+            <li class="page-item"><a class="page-link"
+                                     href="{{ url_for('main.index',account='musicians') }}">Artists</a></li>
+            <li class="page-item"><a class="page-link" href="{{ url_for('main.index',account='venues') }}">Venues</a>
+            </li>
+        </ul>
 
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            <div class="alert alert-danger" role="alert">
-                {% for message in messages %}
-                    {{ message }}
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
 
-    <div class="feed">
-        {% for user in profiles %}
-            <!-- Dropdown Card Example -->
-            <div class="card shadow mb-4">
-                <!-- Card Header - Dropdown -->
-                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                    <div class="profile-user-location">
-                        {% if user.profile_image == '' %}
-                        <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
-                                                                            style="max-height: 6vh"
-                                                                            src=".../static/img/blank_user.png">
-                        {% else %}
-                        <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
-                                                                           style="max-height: 6vh"
-                                                                           src="{{ user.profile_image }}">
-                        {% endif %}
+        <div class="feed">
+            {% for user in profiles %}
+                <!-- Dropdown Card Example -->
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <div class="profile-user-location">
+                            {% if user.profile_image == '' %}
+                                <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                                   style="max-height: 6vh"
+                                                                                   src=".../static/img/blank_user.png">
+                            {% else %}
+                                <h6 class="m-0 font-weight-bold text-primary"><img class="img-profile rounded-circle"
+                                                                                   style="max-height: 6vh"
+                                                                                   src="{{ user.profile_image }}">
+                            {% endif %}
                             {{ user.username }}
                             <div class="location">
                                 <p>- {{ user.location }}</p>
@@ -191,163 +61,168 @@
                                     <span class="badge badge-info">Admin</span>
                                 {% endif %}
                             {% endfor %}
-                        </h6>
+                            </h6>
 
-                    </div>
-                    <div class="genre-group">
-                        <div class="genre-title">
-                            <p>Venue genres:</p>
                         </div>
-                        {% for relation in relations %}
-                            {% if relation.profile_id == user.profile_id %}
-                                <span class="badge badge-primary">
+                        <div class="genre-group">
+                            <div class="genre-title">
+                                <p>Venue genres:</p>
+                            </div>
+                            {% for relation in relations %}
+                                {% if relation.profile_id == user.profile_id %}
+                                    <span class="badge badge-primary">
                                     {% for genre in genres %}
                                         {% if genre.genre_id == relation.genre_id %}
                                             {{ genre.genre_name }}
                                         {% endif %}
                                     {% endfor %}
                                 </span>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-
-                    <div>
-                        <div class="rating">
-                            {% for i in range( 5 - user.rating|int) %}
-                                <span class="fa fa-star"></span>
-                            {% endfor %}
-                            {% for i in range(user.rating|int) %}
-                                <span class="fa fa-star checked"></span>
+                                {% endif %}
                             {% endfor %}
                         </div>
-                        <div class="dropdown no-arrow" style="display:inline-block">
-                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                               data-toggle="dropdown"
-                               aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                 aria-labelledby="dropdownMenuLink">
-                                <div class="dropdown-header">Options:</div>
-                                <a class="dropdown-item"
-                                   href="{{ url_for('prof.profile', username=user.username) }}">Visit
-                                    profile</a>
-                                {% if user.block|int == 0 %}
-                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
-                                {% else %}
-                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
-                                {% endif %}
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#rating{{ user.profile_id }}">
-                                    Rate user
+
+                        <div>
+                            <div class="rating">
+                                {% for i in range( 5 - user.rating|int) %}
+                                    <span class="fa fa-star"></span>
+                                {% endfor %}
+                                {% for i in range(user.rating|int) %}
+                                    <span class="fa fa-star checked"></span>
+                                {% endfor %}
+                            </div>
+                            <div class="dropdown no-arrow" style="display:inline-block">
+                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                   data-toggle="dropdown"
+                                   aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                 </a>
+                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                     aria-labelledby="dropdownMenuLink">
+                                    <div class="dropdown-header">Options:</div>
+                                    <a class="dropdown-item"
+                                       href="{{ url_for('prof.profile', username=user.username) }}">Visit
+                                        profile</a>
+                                    {% if user.block|int == 0 %}
+                                        <a class="dropdown-item"
+                                           href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
+                                    {% else %}
+                                        <a class="dropdown-item"
+                                           href="{{ url_for('main.block', username=user.username) }}">Unblock
+                                            Account</a>
+                                    {% endif %}
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" data-toggle="modal"
+                                       data-target="#rating{{ user.profile_id }}">
+                                        Rate user
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Card Body -->
-                <div class="gallery-containter">
-                    <!-- Grid row -->
+                    <!-- Card Body -->
+                    <div class="gallery-containter">
+                        <!-- Grid row -->
 
-                    <div class="row">
+                        <div class="row">
 
-                        <!-- Grid column -->
-                        <div class="col">
-                            {% for media in media %}
-                                {% if media.media_type == 'youtube' and  user.venue_id == media.venue_id %}
-                                    <!--Modal: Name-->
-                                    <div class="modal fade" id="modal{{ user.profile_id }}" tabindex="-1" role="dialog"
-                                         aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg" role="document">
+                            <!-- Grid column -->
+                            <div class="col">
+                                {% for media in media %}
+                                    {% if media.media_type == 'youtube' and  user.venue_id == media.venue_id %}
+                                        <!--Modal: Name-->
+                                        <div class="modal fade" id="modal{{ user.profile_id }}" tabindex="-1"
+                                             role="dialog"
+                                             aria-labelledby="myModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-lg" role="document">
 
-                                            <!--Content-->
-                                            <div class="modal-content">
+                                                <!--Content-->
+                                                <div class="modal-content">
 
-                                                <!--Body-->
-                                                <div class="modal-body mb-0 p-0">
-                                                    <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
-                                                        <iframe class="embed-responsive-item"
-                                                                src="https://www.youtube.com/embed/{{ media.media_content }}"
-                                                                allowfullscreen></iframe>
+                                                    <!--Body-->
+                                                    <div class="modal-body mb-0 p-0">
+                                                        <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
+                                                            <iframe class="embed-responsive-item"
+                                                                    src="https://www.youtube.com/embed/{{ media.media_content }}"
+                                                                    allowfullscreen></iframe>
+                                                        </div>
                                                     </div>
+
+                                                    <!--Footer-->
+                                                    <div class="modal-footer justify-content-center">
+                                                        <span class="mr-4">Spread the word!</span>
+                                                        <a type="button" class="btn-floating btn-sm btn-fb"><i
+                                                                class="fab fa-facebook-f"></i></a>
+                                                        <!--Twitter-->
+                                                        <a type="button" class="btn-floating btn-sm btn-tw"><i
+                                                                class="fab fa-twitter"></i></a>
+                                                        <!--Google +-->
+                                                        <a type="button" class="btn-floating btn-sm btn-gplus"><i
+                                                                class="fab fa-google-plus-g"></i></a>
+                                                        <!--Linkedin-->
+                                                        <a type="button" class="btn-floating btn-sm btn-ins"><i
+                                                                class="fab fa-linkedin-in"></i></a>
+
+                                                        <button type="button"
+                                                                class="btn btn-outline-primary btn-rounded btn-md ml-4"
+                                                                data-dismiss="modal">Close
+                                                        </button>
+
+                                                    </div>
+
                                                 </div>
-
-                                                <!--Footer-->
-                                                <div class="modal-footer justify-content-center">
-                                                    <span class="mr-4">Spread the word!</span>
-                                                    <a type="button" class="btn-floating btn-sm btn-fb"><i
-                                                            class="fab fa-facebook-f"></i></a>
-                                                    <!--Twitter-->
-                                                    <a type="button" class="btn-floating btn-sm btn-tw"><i
-                                                            class="fab fa-twitter"></i></a>
-                                                    <!--Google +-->
-                                                    <a type="button" class="btn-floating btn-sm btn-gplus"><i
-                                                            class="fab fa-google-plus-g"></i></a>
-                                                    <!--Linkedin-->
-                                                    <a type="button" class="btn-floating btn-sm btn-ins"><i
-                                                            class="fab fa-linkedin-in"></i></a>
-
-                                                    <button type="button"
-                                                            class="btn btn-outline-primary btn-rounded btn-md ml-4"
-                                                            data-dismiss="modal">Close
-                                                    </button>
-
-                                                </div>
-
                                             </div>
                                         </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                            <!--Modal: Name-->
-                            {% for media in media %}
-                                {% if media.venue_id == user.venue_id and media.media_type == 'image' %}
-                                    <a><img class="img-fluid-venue z-depth-1"
-                                            src="{{ media.media_content }}" alt="video"
-                                            data-toggle="modal"
-                                            data-target="#modal{{ user.profile_id }}"></a>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    
+                                    {% endif %}
+                                {% endfor %}
+                                <!--Modal: Name-->
+                                {% for media in media %}
+                                    {% if media.venue_id == user.venue_id and media.media_type == 'image' %}
+                                        <a><img class="img-fluid-venue z-depth-1"
+                                                src="{{ media.media_content }}" alt="video"
+                                                data-toggle="modal"
+                                                data-target="#modal{{ user.profile_id }}"></a>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
 
-                        <div class="col">
-                            <!--Modal: Name-->
-                            <div class="description-container">
-                                <div class="venue-container">
+
+                            <div class="col">
+                                <!--Modal: Name-->
+                                <div class="description-container">
+                                    <div class="venue-container">
                                     <span>
                                         <div class="venue-title">Venue type:</div>
                                         <div class="venue-information">
                                             <span class="badge badge-primary"
-                                                style="background-color: lightslategray;">{{ user.venue_type }}</span>
+                                                  style="background-color: lightslategray;">{{ user.venue_type }}</span>
                                         </div>
                                     </span>
-                                    <span>
+                                        <span>
                                         <div class="venue-title">Venue Capacity:</div>
                                             <div class="venue-information">
                                                 <span class="badge badge-primary"
-                                                    style="background-color: lightslategray;">{{ user.venue_capacity }}</span>
+                                                      style="background-color: lightslategray;">{{ user.venue_capacity }}</span>
                                             </div>
                                     </span>
-                                </div>
-                                <div class="description-title">
-                                    <p>Venue description:</p>
-                                </div>
-                                <div class="description">
-                                    {{ user.profile_description }}
+                                    </div>
+                                    <div class="description-title">
+                                        <p>Venue description:</p>
+                                    </div>
+                                    <div class="description">
+                                        {{ user.profile_description }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
                 </div>
-            </div>
 
-           {% include "ratings.html" %}
-            
-        {% endfor %}
-        <!-- /.container-fluid -->
-    </div>
-    <!-- End of Main Content -->
+                {% include "ratings.html" %}
+
+            {% endfor %}
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
 {% endblock %}

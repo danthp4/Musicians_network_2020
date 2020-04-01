@@ -1,140 +1,12 @@
 {% extends "base.html" %}
 {% block title %} Musician's Network {% endblock %}
 {% block navbar_items %}
-    <!-- Nav Item - Alerts -->
-    <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-bell fa-fw"></i>
-            <!-- Counter - Alerts -->
-            <span class="badge badge-danger badge-counter">3+</span>
-        </a>
-        <!-- Dropdown - Alerts -->
-        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-             aria-labelledby="alertsDropdown">
-            <h6 class="dropdown-header">
-                Alerts Center
-            </h6>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="mr-3">
-                    <div class="icon-circle bg-primary">
-                        <i class="fas fa-file-alt text-white"></i>
-                    </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">ALERT ONE DATE</div>
-                    <span class="font-weight-bold">ALERT ONE</span>
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="mr-3">
-                    <div class="icon-circle bg-success">
-                        <i class="fas fa-donate text-white"></i>
-                    </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">ALERT TWO DATE</div>
-                    ALERT TWO
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="mr-3">
-                    <div class="icon-circle bg-warning">
-                        <i class="fas fa-exclamation-triangle text-white"></i>
-                    </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">ALERT 3</div>
-                    ALERT 3 DATE
-                </div>
-            </a>
-            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
-        </div>
-    </li>
-
-    <!-- Nav Item - Messages -->
-    <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fas fa-envelope fa-fw"></i>
-            <!-- Counter - Messages -->
-            <span class="badge badge-danger badge-counter">7</span>
-        </a>
-        <!-- Dropdown - Messages -->
-        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-             aria-labelledby="messagesDropdown">
-            <h6 class="dropdown-header">
-                Message Center
-            </h6>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60"
-                         alt="">
-                    <div class="status-indicator bg-success"></div>
-                </div>
-                <div class="font-weight-bold">
-                    <div class="text-truncate">MESSAGE ONE
-                    </div>
-                    <div class="small text-gray-500">MESSAGE ONE AUTHOR · WHEN</div>
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60"
-                         alt="">
-                    <div class="status-indicator"></div>
-                </div>
-                <div>
-                    <div class="text-truncate">MESSAGE TWO
-                    </div>
-                    <div class="small text-gray-500">MESSAGE TWO AUTHOR · WHEN</div>
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60"
-                         alt="">
-                    <div class="status-indicator bg-warning"></div>
-                </div>
-                <div>
-                    <div class="text-truncate">MESSAGE THREE
-                    </div>
-                    <div class="small text-gray-500">MESSAGE THREE AUTHOR · WHEN</div>
-                </div>
-            </a>
-            <a class="dropdown-item d-flex align-items-center" href="#">
-                <div class="dropdown-list-image mr-3">
-                    <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                         alt="">
-                    <div class="status-indicator bg-success"></div>
-                </div>
-                <div>
-                    <div class="text-truncate">MESSAGE FOUR
-                    </div>
-                    <div class="small text-gray-500">MESSAGE FOUR AUTHOR · WHEN</div>
-                </div>
-            </a>
-            <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
-        </div>
-    </li>
+    {% include "nav_alerts.html" %}
 {% endblock %}
 {% block navbar_dropdown_title %}Account{% endblock %}
 {% block nav_dropdown_options %}
-    <a class="dropdown-item" href="{{ url_for('prof.edit_profile') }}">
-        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-        Edit Profile
-    </a>
-    <a class="dropdown-item" href="{{ url_for('prof.settings') }}">
-        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-        Settings
-    </a>
-    <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-        Logout
-    </a>
+    {% include "account_settings.html" %}
 {% endblock %}
-
 {% block content %}
     <!-- Begin Page Content -->
     <div class="container-fluid">
@@ -168,10 +40,10 @@
                                 <p>- {{ user.location }}</p>
                             </div>
                             {% if admin %}
-                            <span class="badge badge-info">Admin</span>
+                                <span class="badge badge-info">Admin</span>
                             {% endif %}
                         </h6>
-                        
+
                     </div>
                     <div class="genre-group">
                         <div class="genre-title">
@@ -205,12 +77,15 @@
                                 <a class="dropdown-item" href="{{ url_for('prof.profile', username=user.username) }}">Visit
                                     profile</a>
                                 {% if user.block|int == 0 %}
-                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block Account</a>
+                                    <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Block
+                                        Account</a>
                                 {% else %}
-                                <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock Account</a>
+                                    <a class="dropdown-item" href="{{ url_for('main.block', username=user.username) }}">Unblock
+                                        Account</a>
                                 {% endif %}
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#rating{{ user.profile_id }}">
+                                <a class="dropdown-item" href="#" data-toggle="modal"
+                                   data-target="#rating{{ user.profile_id }}">
                                     Rate user
                                 </a>
                             </div>
@@ -259,7 +134,7 @@
                         </div>
                     </div>
 
-                    <div class = "genre-group">
+                    <div class="genre-group">
                         <div class="genre-title">
                             <p>Availability:</p>
                         </div>
@@ -279,27 +154,29 @@
             </div>
 
             <!-- /.rating modal -->
-            <div class="modal fade" id="rating{{ user.profile_id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
+            <div class="modal fade" id="rating{{ user.profile_id }}" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">What do you think of {{ user.username }}?</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">What do you think
+                                of {{ user.username }}?</h5>
                             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
                         </div>
-                        <div class="modal-body">Rate {{ user.username }} from 1 (left) to 5 (right) and then click the 
+                        <div class="modal-body">Rate {{ user.username }} from 1 (left) to 5 (right) and then click the
                             rate button!
                         </div>
 
                         <div class="rating">
                             {% for i in range( 1 , 6 ) %}
-                                <a href="{{ url_for('main.rate', username=user.username, rate_value=i) }}" 
-                                    class="fa fa-star"></a>
+                                <a href="{{ url_for('main.rate', username=user.username, rate_value=i) }}"
+                                   class="fa fa-star"></a>
                             {% endfor %}
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
