@@ -1,39 +1,31 @@
 {% extends "base.html" %}
 {% block title %} Home {% endblock %}
-
-
-
 {% block content %}
     <!-- Begin Page Content -->
     <div class="container-fluid">
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert alert-danger" role="alert">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
-
+        {% include "flashed_msg.html" %}
         <div class="feed">
             <!-- Dropdown Card Example -->
-            <div class="card shadow card-img mb-4 min-vh-100"  style="background-image: url('../static/img/184569401422345.jpg')">
+            <div class="card shadow card-img mb-4 min-vh-100"
+                 style="background-image: url('../static/img/184569401422345.jpg')">
                 <!-- Card Header - Dropdown -->
                 <div class="py-3 d-flex flex-row align-items-center justify-content-between">
                     <h1 class="col-12 h1 font-weight-bold text-white">Musician's Network</h1></div>
-                    <div class="py-3 d-flex flex-row align-items-center justify-content-between">
-                        <p class="text-white col-12" style="font-size: x-large"><b>Welcome to Musician's Network!</b><br>
-                        We are the world's first social networking site for musicians, bands and venue operators. This is the
-                    perfect platform for musicians to find other musicians or find a venue to perform
-                    at and kick-start your career. If you own a venue or plane events and are looking for live entertainment, a huge
-                    range of artists and bands are waiting for you!</p>
-                                    </div>
+                <div class="py-3 d-flex flex-row align-items-center justify-content-between">
+                    <p class="text-white col-12" style="font-size: x-large"><b>Welcome to Musician's Network!</b><br>
+                        We are the world's first social networking site for musicians, bands and venue operators. This
+                        is the
+                        perfect platform for musicians to find other musicians or find a venue to perform
+                        at and kick-start your career. If you own a venue or plane events and are looking for live
+                        entertainment, a huge
+                        range of artists and bands are waiting for you!</p>
+                </div>
 
                 <!-- Card Body -->
                 <!-- Card Body -->
                 <div class="py-3 d-flex flex-row align-items-center justify-content-between text-white col-12">
-                    <a href="{{ url_for('auth.register') }}"> <h4 class="h4 text-white font-weight-bold">Start your journey here</h4>
+                    <a href="{{ url_for('auth.register') }}"><h4 class="h4 text-white font-weight-bold">Start your
+                        journey here</h4>
                     </a>
                 </div>
             </div>

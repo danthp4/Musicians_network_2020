@@ -47,10 +47,10 @@ class BaseTestCase(TestCase):
             follow_redirects=True
         )
 
-    def search(self, term, category):
+    def search(self, search_term, search_type, category):
         return self.client.post(
             '/search',
-            data=dict(term=term, category=category),
+            data=dict(search_term=search_term, search_type=search_type, category=category),
             follow_redirects=True
         )
 
@@ -189,45 +189,51 @@ class TestMain(BaseTestCase):
         response = self.client.get('/search')
         self.assertRedirects(response, redirect_url, b'You must be logged in to view that page.')
 
-    """
-    def test_search_username_when_user_logged_in(self):
-        ""
-             GIVEN a Flask application
-             WHEN the ‘Name' is selected and user searches existing name
-             THEN the search results show profile card with searched name
-             ""
-        self.login(email='vizon@ucl.ac.uk', password='vizon')
-        response = self.client.get(url_for('main.search'), data=dict(
-            term='bryan',
-            category='Name'
-        ), follow_redirects=True)
-        self.assertIn(b"bryan", response.data)
-
-    def test_search_location_when_user_logged_in(self):
-        ""
+    def test_search_name_when_user_logged_in(self):
+        """
              GIVEN a Flask application
              WHEN the ‘Location' is selected and user searches existing location
              THEN the search results show profile card with searched location
-         ""
+         """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
-        response = self.search(term='mike', category='Name')
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b"No user found with that Name.", response.data)
-
-    def test_search_genre_when_user_logged_in(self):
-        ""
-             GIVEN a Flask application
-             WHEN the ‘Genre' is selected and user searches existing genre
-             THEN the search results show profile card with searched genre
-         ""
-        self.login(email='vizon@ucl.ac.uk', password='vizon')
-        response = self.client.post(url_for('main.search'), data=dict(
-            term='mike',
+        response = self.client.post('/search', data=dict(
+            search_term='bryan',
+            search_type='Artists',
             category='Name',
         ), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'No user found with that Name.', response.data)
-"""
+        self.assertIn(b"'bryan' Artists Search Results", response.data)
+
+    def test_search_location_when_user_logged_in(self):
+        """
+             GIVEN a Flask application
+             WHEN the ‘Location' is selected and user searches existing location
+             THEN the search results show profile card with searched location
+         """
+        self.login(email='vizon@ucl.ac.uk', password='vizon')
+        response = self.client.post('/search', data=dict(
+            search_term='London',
+            search_type='Artists',
+            category='Location',
+        ), follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"bryan", response.data)
+
+    def test_search_genre_when_user_logged_in(self):
+        """
+             GIVEN a Flask application
+             WHEN the ‘Genre' is selected and user searches existing genre
+             THEN the search results show profile card with searched genre
+         """
+        self.login(email='vizon@ucl.ac.uk', password='vizon')
+        response = self.client.post('/search', data=dict(
+            search_term='Drum and Bass',
+            search_type='Artists',
+            category='Genre',
+        ), follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"'Drum and Bass' Artists Search Results", response.data)
+
 
 class TestAuth(BaseTestCase):
 
