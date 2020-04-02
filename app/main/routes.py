@@ -173,6 +173,10 @@ def block():
     if admin is not None:
         try:
             user = Profile.query.filter_by(username=username).first()
+            if Administrator.query.filter(Administrator.profile_id ==
+                                            user.profile_id).first() is not None:
+                flash("You are unable to block another admin.")
+                return redirect(url_for('main.index', account='musicians'))
             if user.block == 0:
                 user.block = 1
                 flash("Account {} is successfully blocked.".format(username))
