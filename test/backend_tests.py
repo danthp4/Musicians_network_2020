@@ -310,6 +310,26 @@ class TestAuth(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'This field is required.', response.data)
 
+    def test_register_with_username_more_than_20_str(self):
+        """
+           GIVEN a Flask application
+           WHEN the none is used to register (post)
+           THEN check the response is valid (200 status code)
+       """
+        count = Profile.query.count()
+        response = self.client.post(url_for('auth.register'), data=dict(
+            username='abcdefghijklmnopqrstuvwxyz',
+            email=self.none_data.get('email'),
+            password=self.none_data.get('password'),
+            confirm=self.none_data.get('confirm'),
+            option=self.none_data.get('option'),
+            submit=self.none_data.get('submit')
+        ), follow_redirects=True)
+        count2 = Profile.query.count()
+        self.assertEqual(count2 - count, 0)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Field cannot be longer than 20 characters.', response.data)
+
     def test_login_succeeds_with_valid_details(self):
         """
            GIVEN a Flask application
@@ -494,6 +514,41 @@ class TestProf(BaseTestCase):
         count2 = Profile.query.count()
         self.assertEqual(count2 - count, 0)
         self.assertEqual(response.status_code, 200)
+
+    def test_edit_profile_with_overlong_description_and_name(self):
+        """
+            GIVEN a Flask application
+            WHEN the musician has signed in and wants to edit the profile with full information
+            THEN check the response is valid
+        """
+        self.login(email='bryan@ucl.ac.uk', password='bryan')
+        count = Profile.query.count()
+        response = self.client.post(url_for('prof.edit_profile'), data=dict(
+            description="Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Suspendisse potenti.",
+            profile_name="Vestibulum ante ipsum primis in faucibus "
+                         "orci luctus et ultrices posuere cubilia Curae;"
+                         " Phasellus luctus sed magna at condimentum. ",
+            location=self.new_profile_data.get('password'),
+            genre=self.new_profile_data.get('confirm'),
+            profile_image=self.new_profile_data.get('submit'),
+            birthdate=self.new_profile_data.get(' birthdate'),
+            availability=self.new_profile_data.get('availability'),
+            sc_id=self.new_profile_data.get('sc_id'),
+            submit=self.new_profile_data.get('submit')
+        ), follow_redirects=True)
+        count2 = Profile.query.count()
+        self.assertEqual(count2 - count, 0)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Field cannot be longer than 20 characters.', response.data)
+        self.assertIn(b'Field cannot be longer than 200 characters.', response.data)
 
 
 
