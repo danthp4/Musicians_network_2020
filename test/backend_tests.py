@@ -20,16 +20,23 @@ class BaseTestCase(TestCase):
 
         # create test data
         self.user_musician = Profile(profile_id='2', email='bryan@ucl.ac.uk', username='bryan', profile_name=None,
-                                     profile_description=None, location='London', rating=None, profile_image=None,
+                                     profile_description='Lorem ipsum dolor sit amet, '
+                                                         'consectetur adipiscing elit. '
+                                                         'Maecenas ac metus a erat facilisis dignissim.',
+                                     location='London', rating=None, profile_image=None,
                                      block='0')
         self.user_venue = Profile(profile_id='1', email='vizon@ucl.ac.uk', username='vizon', profile_name=None,
                                   profile_description=None, location=None, rating=None, profile_image=None, block='0')
+        self.genre = Genre(genre_id='1', genre_name='Rock')
+        self.genre_profile = Profile_Genre(profile_id='2', genre_id='1')
         self.venue = Venue(venue_id='1', venue_capacity=None, venue_type=None, profile_id='1')
         self.musician = Musician(musician_id='1', gender='1', profile_id='2', birthdate=None, availability=None,
                                  sc_id=None)
         self.user_venue.set_password('vizon')
         self.user_musician.set_password('bryan')
         db.session.add(self.user_musician)
+        db.session.add(self.genre)
+        db.session.add(self.genre_profile)
         db.session.add(self.user_venue)
         db.session.add(self.venue)
         db.session.add(self.musician)
@@ -197,12 +204,12 @@ class TestMain(BaseTestCase):
          """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
         response = self.client.post('/search', data=dict(
-            search_term='bryan',
+            search_term='bry',
             search_type='Artists',
             category='Name',
         ), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"'bryan' Artists Search Results", response.data)
+        self.assertIn(b'bryan', response.data)
 
     def test_search_location_when_user_logged_in(self):
         """
@@ -227,12 +234,12 @@ class TestMain(BaseTestCase):
          """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
         response = self.client.post('/search', data=dict(
-            search_term='Drum and Bass',
+            search_term='Rock',
             search_type='Artists',
             category='Genre',
         ), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b"'Drum and Bass' Artists Search Results", response.data)
+        self.assertIn(b"bryan", response.data)
 
 
 class TestAuth(BaseTestCase):
@@ -442,6 +449,19 @@ class TestProf(BaseTestCase):
        """
         response = self.client.get(url_for('prof.profile', username='bryan'))
         self.assertEqual(response.status_code, 302)
+
+    def test_go_profile_with_logined(self):
+        """
+            GIVEN a Flask application
+            WHEN visitors wants to go to 'their profile'with out login
+            THEN check the response is valid
+       """
+        self.login(email='bryan@ucl.ac.uk', password='bryan')
+        response = self.client.get(url_for('prof.profile', username='bryan'))
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Lorem ipsum dolor sit amet, "
+                      b"consectetur adipiscing elit. "
+                      b"Maecenas ac metus a erat facilisis dignissim.", response.data)
 
     def test_edit_profile_form_display_success_for_musician(self):
         """
