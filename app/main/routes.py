@@ -17,10 +17,7 @@ def index():
         genres = Genre.query.all()
         admin_users = Administrator.query.all()
         # show non-blocked musicians for users and all users for admins
-        if admin is None:
-            block_filter = 0
-        else:
-            block_filter = 1
+        block_filter = 0 if admin is None else 1
         account = request.args.get('account')
         if account != 'venues':
             profiles = Profile.query.join(Musician).filter(Musician.profile_id != current_user.profile_id
@@ -76,10 +73,7 @@ def search_results():
             return redirect('/')
         else:
             admin = Administrator.query.join(Profile).filter_by(profile_id=current_user.profile_id).first()
-            if admin is None:
-                block_filter = 0
-            else:
-                block_filter = 1
+            block_filter = 0 if admin is None else 1
 
             if search_type == 'Artists':
                 media = None
@@ -157,7 +151,10 @@ def search_results():
                                     Venue.venue_id,
                                     Profile.profile_image)
                     msg = 'with'
-            if not results:
+            
+            try:
+                results[0].username
+            except:
                 flash('No user found {} that {}.'.format(msg, category))
                 return render_template('search_results.html', results=results, term=term, relations=relations,
                                        genres=genres, search_type=search_type, media=media)
