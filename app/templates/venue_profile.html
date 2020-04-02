@@ -19,6 +19,13 @@
         <!-- Dropdown Card Example -->
         <div class="card shadow mb-4">
             <!-- Card Header - Dropdown -->
+            {% if user.profile_name is not none or user.profile_name != "" %}
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h5 class="m-0 font-weight-bold text-secondary">
+                        {{ user.profile_name }}
+                    </h5>
+                </div>
+            {% endif %}
             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                 <div class="profile-user-location">
                     <h6 class="m-0 font-weight-bold text-primary">

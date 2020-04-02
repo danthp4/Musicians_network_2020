@@ -52,22 +52,22 @@ def edit_profile():
     musician = Musician.query.filter_by(profile_id=user.profile_id).first()
     venue = Venue.query.filter_by(profile_id=user.profile_id).first()
     admin_users = Administrator.query.all()
+    if musician is not None:
+        adaptive_form = MusicianForm()
+        account = 'musician'
+    elif venue is not None:
+        adaptive_form = VenueForm()
+        account = 'venue'
     if request.method == 'GET':
         ## displays default input
         form.profile_name.data = user.profile_name
         form.description.data = user.profile_description
         form.location.data = user.location
-        if musician is not None:
-            adaptive_form = MusicianForm()
-            # y, m, d = musician.birthdate[:4], musician.birthdate[5:7], musician.birthdate[8:]
-            # adaptive_form.birthdate.data = str(y+'/'+m+'/'+d)
+        if account == 'musician':
             adaptive_form.sc_id.data = musician.sc_id
-            account = 'musician'
-        elif venue is not None:
-            adaptive_form = VenueForm()
+        elif account == 'venue':
             adaptive_form.capacity.data = venue.venue_capacity
             adaptive_form.venue_type.data = venue.venue_type
-            account = 'venue'
         else:
             flash('User with username is not registered properly.')
             return redirect(url_for('main.index',account='musicians'))
@@ -134,8 +134,8 @@ def edit_profile():
         except IntegrityError:
             db.session.rollback()
             flash('Unable to update {}. Please try again.'.format(current_user.username), 'error')
-    flash('Something went wrong. Please try again later.', 'error')
-    return redirect(url_for('prof.edit_profile'))
+    return render_template('edit_profile.html', form=form, user_type=account, 
+                                                    account_form=adaptive_form, admins=admin_users)
 
 
 # A place to edit personal information (username, email, password)

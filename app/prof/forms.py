@@ -10,7 +10,7 @@ from app.models import Profile
 
 class ProfileForm(FlaskForm):
     description = TextAreaField('Profile description', validators=[Length(max=200)])
-    profile_name = StringField('Profile Name', validators=[DataRequired(), Length(max=50)])
+    profile_name = StringField('Profile Name', validators=[DataRequired(), Length(max=20)])
     location = SelectField(u'City',
                            choices=[('London', 'London'), ('Manchester', 'Manchester'), ('Birmingham', 'Birmingham'),
                                     ('Berlin', 'Berlin'), ('Cologne', 'Cologne'), ('NYC', 'NYC'), ('Tokyo', 'Tokyo'),
