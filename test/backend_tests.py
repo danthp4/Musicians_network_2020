@@ -241,6 +241,21 @@ class TestMain(BaseTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"bryan", response.data)
 
+    def test_search_not_nonexistent_information(self):
+        """
+             GIVEN a Flask application
+             WHEN the ‘Genre' is selected and user searches existing genre
+             THEN the search results show profile card with searched genre
+         """
+        self.login(email='vizon@ucl.ac.uk', password='vizon')
+        response = self.client.post('/search', data=dict(
+            search_term='Tom',
+            search_type='Artists',
+            category='Name',
+        ), follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b"No user found with that Name.", response.data)
+
 
 class TestAuth(BaseTestCase):
 
