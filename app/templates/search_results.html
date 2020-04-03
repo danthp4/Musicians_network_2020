@@ -26,15 +26,17 @@
                             <div class="profile-user-location">
                                 <h6 class="m-0 font-weight-bold text-primary">
                                     {% if user.profile_image is none or user.profile_image == "" %}
-                                        <img class="img-profile rounded-circle" style="max-height: 6vh" src="../static/img/blank_user.png">
+                                        <img class="img-profile rounded-circle" style="max-height: 6vh"
+                                             src="../static/img/blank_user.png">
                                     {% else %}
-                                        <img class="img-profile rounded-circle" style="max-height: 6vh" src="{{ user.profile_image }}">
+                                        <img class="img-profile rounded-circle" style="max-height: 6vh"
+                                             src="{{ user.profile_image }}">
                                     {% endif %}
                                     {{ user.username }}
                                     <div class="location">
                                         <p>- {{ user.location }}</p>
                                     </div>
-                                
+
                                     {% if user.block|int == 1 %}
                                         <span class="badge badge-danger">Blocked</span>
                                     {% endif %}
@@ -94,7 +96,7 @@
                                         {% endif %}
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#" data-toggle="modal"
-                                           data-target="#ratingModal">
+                                           data-target="#rating{{ user.profile_id }}">
                                             Rate user
                                         </a>
                                     </div>
@@ -117,6 +119,7 @@
 
                         </div>
                     </div>
+                    {% include "ratings.html" %}
                 {% endfor %}
             {% else %}
                 {% for user in results %}
@@ -126,23 +129,25 @@
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <div class="profile-user-location">
                                 <h6 class="m-0 font-weight-bold text-primary">
-                                {% if user.profile_image is none or user.profile_image == "" %}
-                                    <img class="img-profile rounded-circle" style="max-height: 6vh" src="../static/img/blank_user.png">
-                                {% else %}
-                                    <img class="img-profile rounded-circle" style="max-height: 6vh" src="{{ user.profile_image }}">
-                                {% endif %}
-                                {{ user.username }}
-                                <div class="location">
-                                    <p>- {{ user.location }}</p>
-                                </div>
-                                {% if user.block|int == 1 %}
-                                    <span class="badge badge-danger">Blocked</span>
-                                {% endif %}
-                                {% for admin in admins %}
-                                    {% if admin.profile_id == user.profile_id %}
-                                        <span class="badge badge-info">Admin</span>
+                                    {% if user.profile_image is none or user.profile_image == "" %}
+                                        <img class="img-profile rounded-circle" style="max-height: 6vh"
+                                             src="../static/img/blank_user.png">
+                                    {% else %}
+                                        <img class="img-profile rounded-circle" style="max-height: 6vh"
+                                             src="{{ user.profile_image }}">
                                     {% endif %}
-                                {% endfor %}
+                                    {{ user.username }}
+                                    <div class="location">
+                                        <p>- {{ user.location }}</p>
+                                    </div>
+                                    {% if user.block|int == 1 %}
+                                        <span class="badge badge-danger">Blocked</span>
+                                    {% endif %}
+                                    {% for admin in admins %}
+                                        {% if admin.profile_id == user.profile_id %}
+                                            <span class="badge badge-info">Admin</span>
+                                        {% endif %}
+                                    {% endfor %}
                                 </h6>
                             </div>
                             <div class="genre-group">
@@ -194,7 +199,7 @@
                                         {% endif %}
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#" data-toggle="modal"
-                                           data-target="#ratingModal">
+                                           data-target="#rating{{ user.profile_id }}">
                                             Rate user
                                         </a>
                                     </div>
@@ -302,10 +307,14 @@
                         </div>
                         </span>
                     </div>
+                    {% include "ratings.html" %}
+
                 {% endfor %}
             {% endif %}
 
             <!-- /.container-fluid -->
+
         </div>
+
         <!-- End of Main Content -->
 {% endblock %}
