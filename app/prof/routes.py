@@ -77,7 +77,7 @@ def edit_profile():
         try:
             ## Update user information
             if form.profile_image.data is not None:
-                if user.profile_image != '' or user.profile_image is not None:
+                if user.profile_image != '' and user.profile_image is not None:
                     import os
                     file_path = images.path(os.path.basename(user.profile_image))
                     os.remove(file_path)
