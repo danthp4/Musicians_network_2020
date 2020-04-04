@@ -310,8 +310,8 @@ class TestAuth(BaseTestCase):
         count2 = Profile.query.count()
         self.assertEqual(count2 - count, 0)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'An account is already registered for that username.', response.data)
-        self.assertIn(b'An account is already registered for that email.', response.data)
+        self.assertIn(b'An account is registered for that username.', response.data)
+        self.assertIn(b'An account is registered for that email.', response.data)
 
     def test_register_musician_with_no_input(self):
         """
@@ -455,7 +455,7 @@ class TestProf(BaseTestCase):
         count2 = Profile.query.count()
         self.assertEqual(count2 - count, 0)
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'An account is already registered for that username.', response.data)
+        self.assertIn(b'Account is registered for that username.', response.data)
 
     def test_go_profile_without_login(self):
         """
@@ -568,7 +568,87 @@ class TestProf(BaseTestCase):
                         "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
                         "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
                         "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
-                        "Suspendisse potenti.",
+                        "Suspendisse potenti."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus."
+                        "Proin interdum, sem sed pharetra vestibulum,"
+                        "ligula orci tempus sem, eget congue erat arcu vel nulla."
+                        "Nunc lobortis interdum dui eu accumsan."
+                        "Proin ultrices rutrum magna, eget euismod ligula fermentum sollicitudin."
+                        "Morbi non faucibus mi. Maecenas in auctor ex. Nulla facilisi."
+                        "Integer pharetra elementum ligula, nec dictum nibh scelerisque id."
+                        "Sed mollis fringilla diam et molestie. Aliquam quis condimentum nulla."
+                        "Sed odio magna, malesuada et facilisis in, rhoncus eget lacus.",
             profile_name="Vestibulum ante ipsum primis in faucibus "
                          "orci luctus et ultrices posuere cubilia Curae;"
                          " Phasellus luctus sed magna at condimentum. ",
