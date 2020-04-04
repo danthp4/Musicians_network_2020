@@ -11,7 +11,7 @@ from app.models import Profile
 
 class ProfileForm(FlaskForm):
     description = TextAreaField('Profile description',
-                                validators=[Length(max=200)])
+                                validators=[Length(max=1000)])
     profile_name = StringField('Profile Name', validators=[DataRequired(),
                                Length(max=20)])
     location = SelectField(u'City',
