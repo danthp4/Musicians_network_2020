@@ -664,7 +664,7 @@ class TestProf(BaseTestCase):
         self.assertEqual(count2 - count, 0)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Field cannot be longer than 20 characters.', response.data)
-        self.assertIn(b'Field cannot be longer than 200 characters.', response.data)
+        self.assertIn(b'Field cannot be longer than 1000 characters.', response.data)
 
 
 
