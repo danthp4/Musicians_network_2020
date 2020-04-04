@@ -9,11 +9,14 @@ db = SQLAlchemy()
 images = UploadSet('images', IMAGES)
 login_manager = LoginManager()
 
+
 def page_not_found(e):
     return render_template('404.html'), 404
 
+
 def internal_server_error(e):
     return render_template('500.html'), 500
+
 
 def create_app(config_class=DevConfig):
     """
@@ -24,11 +27,11 @@ def create_app(config_class=DevConfig):
     app.config.from_object(config_class)
     login_manager.init_app(app)
 
-
     # Initialise the database and create tables
     db.init_app(app)
     configure_uploads(app, images)
-    from app.models import Profile, Musician, Venue, Media, Administrator, Genre, Profile_Genre
+    from app.models import Profile, Musician, Venue, Media, \
+        Administrator, Genre, Profile_Genre
     with app.app_context():
         db.create_all()
 
