@@ -169,11 +169,11 @@ class TestMain(BaseTestCase):
         Test that view profile is inaccessible without login
         and redirects to login page and then the profile
         """
-        target_url = url_for('main.index',account='venues')
+        target_url = url_for('main.index', account='venues')
         response = self.client.get(target_url)
-        self.assertEqual(response.status_code, 302)
+        self.assertNotIn(b"Venue genres", response.data)
 
-    def test_venue_displays_when_user_logged_in(self):
+    def test_profile_displays_when_user_logged_in(self):
         """
             GIVEN a Flask application
             WHEN the 'venues' page is requested with a logged in user
@@ -181,7 +181,8 @@ class TestMain(BaseTestCase):
             Note: This is an integration test rather than a unit test as it tests a sequence of interacting behaviours
         """
         self.login(email='bryan@ucl.ac.uk', password='bryan')
-        response = self.client.get('/venues')
+        target_url = url_for('main.index', account='venues')
+        response = self.client.get(target_url)
         self.assertEqual(response.status_code, 200)
         self.assertIn(b"Venue genres", response.data)
 
@@ -387,7 +388,7 @@ class TestAuth(BaseTestCase):
             THEN check the response is valid
         """
         self.login(email='vizon@ucl.ac.uk', password='vizon')
-        redirect_url = url_for('main.index',account='musicians')
+        redirect_url = url_for('main.index')
         response = self.client.get('/logout/')
         self.assertRedirects(response, redirect_url, b"Welcome to Musician's Network!.")
 
