@@ -94,6 +94,8 @@ class BaseTestCase(TestCase):
     # Provides the details for a musician.
     musician_data = dict(username='daniel', email='daniel@ucl.ac.uk',
                          password='daniel', confirm='daniel', option='m', submit='Register')
+    venue_data= dict(username='dillon', email='dillon@ucl.ac.uk',
+                     password='dillon', confirm='dillon', option='v', submit='Register')
     existing_data = dict(username='vizon', email='vizon@ucl.ac.uk',
                          password='vizon', confirm='vizon', option='v', submit='Register')
     none_data = dict(username=None, email=None, password=None, confirm=None, option=None, submit='Register')
@@ -285,6 +287,26 @@ class TestAuth(BaseTestCase):
             confirm=self.musician_data.get('confirm'),
             option=self.musician_data.get('option'),
             submit=self.musician_data.get('submit')
+        ), follow_redirects=True)
+        count2 = Profile.query.count()
+        self.assertEqual(count2 - count, 1)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Profiles', response.data)
+
+    def test_register_venue_success(self):
+        """
+               GIVEN a Flask application
+               WHEN the new data is used to register (post)
+               THEN check the response is valid (200 status code)
+               """
+        count = Profile.query.count()
+        response = self.client.post(url_for('auth.register'), data=dict(
+            username=self.venue_data.get('username'),
+            email=self.venue_data.get('email'),
+            password=self.venue_data.get('password'),
+            confirm=self.venue_data.get('confirm'),
+            option=self.venue_data.get('option'),
+            submit=self.venue_data.get('submit')
         ), follow_redirects=True)
         count2 = Profile.query.count()
         self.assertEqual(count2 - count, 1)
